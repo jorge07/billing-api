@@ -11,7 +11,6 @@ export default class App {
         @multiInject("application.query.handler")
         private readonly queryHandlers: Application.IQueryHandler[],
     ) {
-
         const commands = new Map<any, Application.ICommandHandler>();
         const queries = new Map<any, Application.IQueryHandler>();
 

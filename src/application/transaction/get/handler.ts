@@ -15,14 +15,14 @@ export default class Get implements Application.IQueryHandler {
         try {
             const transaction = await this.repository.get(request.uuid);
             if (!transaction) {
-                throw new Error(`Transaction not found for ${request.uuid}`)
+                throw new Error(`Transaction not found for ${request.uuid}`);
             }
             return {
                 data: transaction,
                 meta: [],
             };
         } catch (error) {
-            return {
+            throw {
                 code: 404,
                 message: error.message,
                 meta: [],

@@ -1,12 +1,12 @@
 import * as bodyParser from "body-parser";
-import express, { Response, Request } from "express";
+import express, { Request, Response } from "express";
 import { Server } from "http";
 import { inject, injectable } from "inversify";
 import CreateCommand from "../../application/transaction/create/command";
 import App from "../../infrastructure/shared/app/index";
 import Log from "../../infrastructure/shared/audit/logger";
-import get from "./routing/get";
 import create from "./routing/create";
+import get from "./routing/get";
 
 @injectable()
 export default class HTTPServer {
@@ -21,7 +21,7 @@ export default class HTTPServer {
         this.express = express();
         this.express.use(
             bodyParser.json({
-                type: "application/*+json",
+                type: "application/json",
             }),
         );
         this.bindRouting();
@@ -61,5 +61,10 @@ export default class HTTPServer {
     private bindRouting(): void {
         create(this.express, this.app);
         get(this.express, this.app);
+    }
+
+    
+    public getExpress(): express.Express {
+        return this.express;
     }
 }

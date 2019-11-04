@@ -17,10 +17,12 @@
     "@types/express": "^4.17.1",
     "@types/jest": "^24.0.19",
     "@types/node": "^12.11.1",
+    "@types/supertest": "^2.0.8",
     "eslint": "^6.5.1",
     "eslint-plugin-import": "^2.18.2",
     "jest": "^24.9.0",
     "nodemon": "^1.19.4",
+    "supertest": "^4.0.2",
     "ts-jest": "^24.1.0",
     "ts-node": "^8.4.1",
     "tslint": "^5.20.0",
@@ -28,7 +30,7 @@
   },
   "scripts": {
     "start:dev": "node --inspect=5858 -r ts-node/register ./src/ui/http/index.ts",
-    "dev": "nodemon --config etc/env/dev/nodemon.js",
+    "dev": "nodemon",
     "build": "./node_modules/typescript/bin/tsc --project tsconfig.json",
     "lint": "./node_modules/tslint/bin/tslint -c etc/env/dev/tslint.json --fix 'src/**/*.ts' ",
     "test": "NODE_ENV=test jest"

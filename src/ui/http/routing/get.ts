@@ -1,17 +1,20 @@
-import { Express, Response, Request } from 'express';
-import App from '../../../infrastructure/shared/app/index';
-import GetOne from '../../../application/transaction/get/query';
+import { Express, Request, Response } from "express";
+import GetOne from "../../../application/transaction/get/query";
+import App from "../../../infrastructure/shared/app/index";
 
-export default ({ get }: Express, { handle }: App) => get("/transaction/:uuid", async (req: Request, res: Response) => {
-    const { uuid } = req.params;
+export default (express: Express, app: App) => express.get(
+    "/transaction/:uuid",
+    async (req: Request, res: Response) => {
+        const { uuid } = req.params;
 
-    try {
-        const transaction = await handle(new GetOne(
-            uuid
-        ));
+        try {
+            const transaction = await app.ask(new GetOne(
+                uuid,
+            ));
 
-        res.status(200).send(transaction);
-    } catch(err) {
-        res.status(404).send(err.message);
-    }
-});
+            res.status(200).send(transaction);
+        } catch (err) {
+            res.status(404).send(err.message);
+        }
+    },
+);
