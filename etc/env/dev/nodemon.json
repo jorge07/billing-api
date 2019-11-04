@@ -1,0 +1,7 @@
+
+{
+    "ignore": ["**/*.test.ts", "**/*.js", "**/*.spec.ts", ".git", "node_modules"],
+    "watch": ["src"],
+    "exec": "yarn run lint && yarn run start:dev",
+    "ext": "ts"
+}
