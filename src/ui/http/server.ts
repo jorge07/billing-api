@@ -34,6 +34,10 @@ export default class HTTPServer {
        });
     }
 
+    public getExpress(): express.Express {
+        return this.express;
+    }
+
     private stopWatch(): void {
         const sigs = [
             "SIGINT",
@@ -61,10 +65,5 @@ export default class HTTPServer {
     private bindRouting(): void {
         create(this.express, this.app);
         get(this.express, this.app);
-    }
-
-    
-    public getExpress(): express.Express {
-        return this.express;
     }
 }
