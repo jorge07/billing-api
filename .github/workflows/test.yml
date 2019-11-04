@@ -3,7 +3,7 @@ name: Tests
 on: [push]
 
 jobs:
-  build:
+  lint:
 
     runs-on: ubuntu-latest
 
@@ -17,7 +17,7 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: yarn install, build, and test
+    - name: yarn install and lint
       run: |
         yarn install
         yarn test --coverage
