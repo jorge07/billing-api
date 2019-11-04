@@ -20,6 +20,6 @@ jobs:
     - name: yarn install, build, and test
       run: |
         yarn install
-        yarn test
+        yarn test --coverage
       env:
         CI: true
