@@ -8,6 +8,8 @@ import { EventStore } from 'hollywood-js';
 import Transaction from '../../src/domain/transaction/transaction';
 import HTTPServer from '../../src/ui/http/server';
 import { IContainerServiceItem } from './items/service';
+import LoggerMiddleware from '../../src/application/middlewares/loggerMiddleware';
+import InMemoryMiddlewareCache from '../../src/application/middlewares/InMemoryMiddlewareCache';
 
 export const services: Map<string, IContainerServiceItem> = new Map([
     [
@@ -27,8 +29,21 @@ export const services: Map<string, IContainerServiceItem> = new Map([
         ]}
     ],
     [
-        "app", 
-        { instance: App }
+        "application.command.middleware",
+        {
+            collection: [
+                LoggerMiddleware,
+            ]
+        }
+    ],
+    [
+        "application.query.middleware",
+        {
+            collection: [
+                InMemoryMiddlewareCache,
+                LoggerMiddleware,
+            ]
+        }
     ],
     [
         "domain.transaction.repository", 
@@ -57,6 +72,10 @@ export const services: Map<string, IContainerServiceItem> = new Map([
                 container.get<number>("eventStore.margin"),
             ))
         }
+    ],
+    [
+        "app", 
+        { instance: App }
     ],
     [
         "ui.httpServer", 

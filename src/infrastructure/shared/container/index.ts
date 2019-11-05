@@ -16,20 +16,41 @@ function bindParameters(container: Container, parameters: ParametersList): void 
     );
 }
 
+function eventListenerOrSubscriber(container: Container, serviceDefinition: IContainerServiceItem, key: string) {
+    if (serviceDefinition.listener) {
+        container.get<EventStore.EventBus>("infrastructure.eventBus").addListener(container.get(key));
+    }
+
+    if (serviceDefinition.subscriber) {
+        container.get<EventStore.EventBus>("infrastructure.eventBus").attach(
+            serviceDefinition.subscriber,
+            container.get(key),
+        );
+    }
+}
+
 function bindServices(container: Container, services: ServiceList): void {
 
     services.forEach((serviceDefinition: IContainerServiceItem, key: string) => {
         if (serviceDefinition.custom) {
+
             container.bind(key).toDynamicValue(serviceDefinition.custom).inSingletonScope();
-            return;
-        }
-        if (serviceDefinition.collection) {
+
+        } else if (serviceDefinition.collection) {
+
             serviceDefinition.collection.forEach((item: any) => {
                 container.bind(key).to(item).inSingletonScope();
             });
+
+        } else {
+
+            container.bind(key).to(serviceDefinition.instance).inSingletonScope();
+        }
+
+        if (serviceDefinition.listener || serviceDefinition.subscriber) {
+            eventListenerOrSubscriber(container, serviceDefinition, key);
             return;
         }
-        container.bind(key).to(serviceDefinition.instance).inSingletonScope();
     });
 }
 

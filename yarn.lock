@@ -1828,8 +1828,8 @@ has@^1.0.1, has@^1.0.3:
     function-bind "^1.1.1"
 
 hollywood-js@^1.5.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/hollywood-js/-/hollywood-js-1.7.0.tgz#acedaa1b27f09bec034a05330544ebf825d1291f"
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/hollywood-js/-/hollywood-js-1.8.2.tgz#b4251f6fc3e086d975cbdf4fc2edbfa88f2cafdc"
   dependencies:
     reflect-metadata "^0.1.13"
 
