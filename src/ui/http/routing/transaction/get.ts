@@ -1,6 +1,6 @@
 import { Express, Request, Response } from "express";
-import GetOne from "../../../application/transaction/get/query";
-import App from "../../../infrastructure/shared/app/index";
+import App from '../../../../infrastructure/shared/app/index';
+import GetOne from '../../../../application/transaction/get/query';
 
 export default (express: Express, app: App) => express.get(
     "/transaction/:uuid",

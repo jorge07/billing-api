@@ -3,13 +3,20 @@ import Log from '../../src/infrastructure/shared/audit/logger';
 import Get from '../../src/application/transaction/get/handler';
 import App from '../../src/infrastructure/shared/app';
 import InMemoryTransactionRepository from '../../tests/src/infrastructure/transaction/inMemoryRepository';
-import { interfaces } from 'inversify';
+import { interfaces, decorate, injectable } from 'inversify';
 import { EventStore } from 'hollywood-js';
 import Transaction from '../../src/domain/transaction/transaction';
 import HTTPServer from '../../src/ui/http/server';
 import { IContainerServiceItem } from './items/service';
 import LoggerMiddleware from '../../src/application/middlewares/loggerMiddleware';
 import InMemoryMiddlewareCache from '../../src/application/middlewares/InMemoryMiddlewareCache';
+
+decorate(injectable(), EventStore.InMemoryEventStore);
+decorate(injectable(), EventStore.InMemorySnapshotStoreDBAL);
+decorate(injectable(), EventStore.EventListener);
+decorate(injectable(), EventStore.EventSubscriber);
+decorate(injectable(), EventStore.EventStore);
+decorate(injectable(), EventStore.EventBus);
 
 export const services: Map<string, IContainerServiceItem> = new Map([
     [

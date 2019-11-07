@@ -1,6 +1,6 @@
 import { Express, Request, Response } from "express";
-import CreateCommand from "../../../application/transaction/create/command";
-import App from "../../../infrastructure/shared/app/index";
+import App from '../../../../infrastructure/shared/app/index';
+import CreateCommand from '../../../../application/transaction/create/command';
 
 export default (express: Express, app: App) => express.post(
     "/transaction",

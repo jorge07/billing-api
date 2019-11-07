@@ -1,10 +1,4 @@
-import "reflect-metadata";
-import CreateCommand from "../../application/transaction/create/command";
-import Create from "../../application/transaction/create/handler";
-import GetOne from "../../application/transaction/get/query";
-import Kernel from "../../infrastructure/kernel";
-import App from "../../infrastructure/shared/app";
-import Log from "../../infrastructure/shared/audit/logger";
+import Kernel from "../../kernel";
 
 const kernel = new Kernel(false);
 

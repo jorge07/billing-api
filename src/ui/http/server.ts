@@ -2,11 +2,10 @@ import * as bodyParser from "body-parser";
 import express, { Request, Response } from "express";
 import { Server } from "http";
 import { inject, injectable } from "inversify";
-import CreateCommand from "../../application/transaction/create/command";
 import App from "../../infrastructure/shared/app/index";
 import Log from "../../infrastructure/shared/audit/logger";
-import create from "./routing/create";
-import get from "./routing/get";
+import transactionPost from "./routing/transaction/post";
+import transactionGet from "./routing/transaction/get";
 
 @injectable()
 export default class HTTPServer {
@@ -63,7 +62,7 @@ export default class HTTPServer {
     }
 
     private bindRouting(): void {
-        create(this.express, this.app);
-        get(this.express, this.app);
+        transactionGet(this.express, this.app);
+        transactionPost(this.express, this.app);
     }
 }
