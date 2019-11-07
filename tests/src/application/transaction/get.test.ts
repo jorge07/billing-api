@@ -1,4 +1,4 @@
-import Kernel from "../../../../src/infrastructure/kernel";
+import Kernel from "../../../../src/kernel";
 import CreateCommand from '../../../../src/application/transaction/create/command';
 import Transaction from '../../../../src/domain/transaction/transaction';
 import { Application } from "hollywood-js";

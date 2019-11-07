@@ -1,5 +1,5 @@
 import request from "supertest";
-import Kernel from '../../../../../src/infrastructure/kernel';
+import Kernel from '../../../../../src/kernel';
 import InMemoryTransactionRepository from "../../../infrastructure/transaction/inMemoryRepository";
 import Transaction from "../../../../../src/domain/transaction/transaction";
 
