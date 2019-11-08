@@ -1,6 +1,6 @@
-import listenerBinder from './listenerBinder';
-import { Container } from 'inversify';
-import { ServiceList, IContainerServiceItem } from '../../../../../config/container/items/service';
+import { Container } from "inversify";
+import { IContainerServiceItem, ServiceList } from "../../../../../config/container/items/service";
+import listenerBinder from "./listenerBinder";
 
 export default function serviceBinder(container: Container, services: ServiceList): void {
 

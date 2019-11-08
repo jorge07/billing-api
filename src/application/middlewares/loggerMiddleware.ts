@@ -1,9 +1,9 @@
 import IMiddleware from "hollywood-js/src/Application/Bus/Middelware";
-import Log from "../../infrastructure/shared/audit/logger";
+import { ILog } from "../../infrastructure/shared/audit/logger";
 
 export default class LoggerMiddleware implements IMiddleware {
 
-    constructor(private readonly logger: Log) {}
+    constructor(private readonly logger: ILog) {}
 
     public async execute(command: any, next: (command: any) => any) {
 

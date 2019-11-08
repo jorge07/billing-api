@@ -4,9 +4,9 @@ import { IContainerServiceItem, ServiceList } from "../config/container/items/se
 import { parameters } from "../config/container/parameters";
 import { services } from "../config/container/services";
 import { testServices } from "../config/container/test";
-import HTTPServer from "./ui/http/server";
 import App from "./infrastructure/shared/app/";
 import configureContainer from "./infrastructure/shared/container/index";
+import HTTPServer from "./ui/http/server";
 
 export default class Kernel {
     public readonly app: App;

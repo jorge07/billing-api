@@ -1,18 +1,23 @@
 import { Express, Request, Response } from "express";
-import App from '../../../../infrastructure/shared/app/index';
-import CreateCommand from '../../../../application/transaction/create/command';
+import CreateCommand from "../../../../application/transaction/create/command";
+import App from "../../../../infrastructure/shared/app/index";
+import { IRoute } from "../index";
 
-export default (express: Express, app: App) => express.post(
-    "/transaction",
-    async (req: Request, res: Response) => {
-        const { uuid, product, price } = req.body;
+export default function create(app: App): IRoute {
+    return {
 
-        await app.handle(new CreateCommand(
-            uuid,
-            product,
-            price,
-        ));
+        action: async (req: Request, res: Response) => {
+            const { uuid, product, price } = req.body;
 
-        res.status(201).send();
-    },
-);
+            await app.handle(new CreateCommand(
+                uuid,
+                product,
+                price,
+            ));
+
+            res.status(201).send();
+        },
+        method: "post",
+        path: "/transaction",
+    };
+}

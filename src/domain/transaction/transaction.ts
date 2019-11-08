@@ -1,10 +1,11 @@
 import { Domain } from "hollywood-js";
 import TransactionWasCreated from "./events/transactionWasCreated";
 import { TransactionID } from "./transactionId";
+import Price from "./valueObject/price";
 
 export default class Transaction extends Domain.EventSourced {
 
-    public static create(uuid: TransactionID, product: string, price: string): Transaction {
+    public static create(uuid: TransactionID, product: string, price: Price): Transaction {
         const instance = new Transaction(uuid);
 
         instance.raise(new TransactionWasCreated(
@@ -16,8 +17,8 @@ export default class Transaction extends Domain.EventSourced {
         return instance;
     }
 
-    protected price?: string;
-    protected product?: string;
+    private price?: Price;
+    private product?: string;
 
     constructor(uuid: TransactionID) {
         super(uuid);

@@ -1,6 +1,6 @@
-import { Container } from 'inversify';
-import { IContainerServiceItem } from '../../../../../config/container/items/service';
-import { EventStore } from 'hollywood-js';
+import { EventStore } from "hollywood-js";
+import { Container } from "inversify";
+import { IContainerServiceItem } from "../../../../../config/container/items/service";
 
 export default function listenerBinder(container: Container, serviceDefinition: IContainerServiceItem, key: string) {
     if (serviceDefinition.listener) {

@@ -4,8 +4,8 @@ import { Server } from "http";
 import { inject, injectable } from "inversify";
 import App from "../../infrastructure/shared/app/index";
 import Log from "../../infrastructure/shared/audit/logger";
-import transactionPost from "./routing/transaction/post";
-import transactionGet from "./routing/transaction/get";
+import errorHandler from "./middleware/errorHandler";
+import { IRoute, routes } from "./routing";
 
 @injectable()
 export default class HTTPServer {
@@ -23,7 +23,9 @@ export default class HTTPServer {
                 type: "application/json",
             }),
         );
+
         this.bindRouting();
+        this.express.use(errorHandler);
         this.stopWatch();
     }
 
@@ -61,8 +63,24 @@ export default class HTTPServer {
         });
     }
 
+    private wrapAsyncRoutes(action: (req: Request, res: Response) => Promise<void>) {
+        return (req: Request, res: Response, next: (err: any) => void) => action(req, res).catch(next);
+      }
+
     private bindRouting(): void {
-        transactionGet(this.express, this.app);
-        transactionPost(this.express, this.app);
+        routes.forEach((context) => {
+            const route: IRoute = context(this.app);
+
+            switch (route.method.toLocaleLowerCase()) {
+                case "get":
+                    this.express.get(route.path, this.wrapAsyncRoutes(route.action));
+                    break;
+                case "post":
+                    this.express.post(route.path, this.wrapAsyncRoutes(route.action));
+                    break;
+                default:
+                    throw new Error("No valid method for:" + JSON.stringify(route));
+            }
+        });
     }
 }

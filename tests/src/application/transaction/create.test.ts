@@ -19,7 +19,7 @@ describe("Create Transaction", () => {
     
     test("Create Transactiona valid and get collected by the event bus", async () => {
         expect.assertions(4);
-        await kernel.app.handle(new CreateCommand("111", "", ""));
+        await kernel.app.handle(new CreateCommand("111", "", { amount: 12, currency: "EUR" }));
         const repository = kernel.container.get<InMemoryTransactionRepository>('domain.transaction.repository');
         const transaction = await repository.get("111") as Transaction;
 

@@ -19,7 +19,14 @@ describe("POST /transaction", () => {
   it("Create a transaction", async () => {
     await request(kernel.http.getExpress())
       .post("/transaction")
-      .send({uuid: 111, price: "test", product: "test"})
+      .send({
+        uuid: 111, 
+        price: { 
+          amount: 12, 
+          currency: "EUR" 
+        }, 
+        product: "test"
+      })
       .set('Accept', 'application/json')
       .expect(201);
 

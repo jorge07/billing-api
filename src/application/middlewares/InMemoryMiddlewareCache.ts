@@ -17,4 +17,8 @@ export default class InMemoryMiddlewareCache implements IMiddleware {
 
         return result;
     }
+
+    public flush() {
+        this.cache = {};
+    }
 }
