@@ -4,6 +4,7 @@ import Transaction from '../../../../src/domain/transaction/transaction';
 import { Application } from "hollywood-js";
 import InMemoryTransactionRepository from '../../infrastructure/transaction/inMemoryRepository';
 import GetOne from '../../../../src/application/transaction/get/query';
+import Price from '../../../../src/domain/transaction/valueObject/price';
 
 describe("Get Transaction", () => {
 
@@ -12,8 +13,9 @@ describe("Get Transaction", () => {
     beforeEach(async () => {
         kernel.container.snapshot();
         const repository = kernel.container.get<InMemoryTransactionRepository>('domain.transaction.repository');
-        await repository.save(Transaction.create("111", "", ""));
+        await repository.save(Transaction.create("111", "", new Price(1, 'EUR')));
     })
+    
     afterEach(() => {
         kernel.container.restore();
     });
