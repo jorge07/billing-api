@@ -4,7 +4,7 @@ import App from "../../../../infrastructure/shared/app/index";
 import { IRoute } from "../index";
 
 export default function get(app: App): IRoute {
-    return {,
+    return {
         action: async (req: Request, res: Response) => {
             const { uuid } = req.params;
 
