@@ -1,6 +1,6 @@
 import { Express, Request, Response } from "express";
-import InvalidArgumentException from "../../../infrastructure/shared/exceptions/invalidArgumentException";
-import NotFoundException from "../../../infrastructure/shared/exceptions/notFoundException";
+import InvalidArgumentException from 'domain/shared/exceptions/invalidArgumentException';
+import NotFoundException from 'domain/shared/exceptions/notFoundException';
 
 export default function errorHandler(err: any, req: Request, res: Response, next: () => void) {
     switch (true) {

@@ -1,15 +1,20 @@
-import Create from '../../src/application/transaction/create/handler';
-import Log from '../../src/infrastructure/shared/audit/logger';
-import Get from '../../src/application/transaction/get/handler';
-import App from '../../src/infrastructure/shared/app';
-import InMemoryTransactionRepository from '../../tests/src/infrastructure/transaction/inMemoryRepository';
+import Create from 'application/transaction/create/handler';
+import Log from 'infrastructure/shared/audit/logger';
+import Get from 'application/transaction/get/handler';
+import App from 'application/index';
 import { interfaces, decorate, injectable } from 'inversify';
 import { EventStore } from 'hollywood-js';
-import Transaction from '../../src/domain/transaction/transaction';
-import HTTPServer from '../../src/ui/http/server';
+import Transaction from 'domain/transaction/transaction';
+import HTTPServer from 'ui/http/server';
 import { IContainerServiceItem } from './items/service';
-import LoggerMiddleware from '../../src/application/middlewares/loggerMiddleware';
-import InMemoryMiddlewareCache from '../../src/application/middlewares/InMemoryMiddlewareCache';
+import LoggerMiddleware from 'application/middlewares/loggerMiddleware';
+import InMemoryMiddlewareCache from 'application/middlewares/InMemoryMiddlewareCache';
+import InMemoryTransactionRepository from '../../tests/infrastructure/transaction/inMemoryRepository';
+import { getRepository, Connection, Repository } from 'typeorm';
+import { Events } from 'infrastructure/shared/eventStore/mapping/events';
+import PostgresEventStoreDBAL from 'infrastructure/shared/eventStore/dbal';
+import PostgresClient from 'infrastructure/shared/postgres/postgresClient';
+import * as config from 'config';
 
 decorate(injectable(), EventStore.InMemoryEventStore);
 decorate(injectable(), EventStore.InMemorySnapshotStoreDBAL);
@@ -17,6 +22,8 @@ decorate(injectable(), EventStore.EventListener);
 decorate(injectable(), EventStore.EventSubscriber);
 decorate(injectable(), EventStore.EventStore);
 decorate(injectable(), EventStore.EventBus);
+decorate(injectable(), Repository);
+decorate(injectable(), Connection);
 
 export const services: Map<string, IContainerServiceItem> = new Map([
     [
@@ -61,8 +68,34 @@ export const services: Map<string, IContainerServiceItem> = new Map([
         { instance: EventStore.EventBus }
     ],
     [
+        "infrastructure.orm.postgresConnection", 
+        { 
+            constant: true,
+            async: async () => {
+                const connection = new PostgresClient(Object.assign({}, config.get('orm.writeModel')));
+                
+                try {
+                    await connection.connect();
+                } catch (err) {
+                    throw new Error('PG connection error: ' + err.message);
+                }
+
+                return { connected: true }
+            }
+        }
+    ],
+    [
+        "infrastructure.eventStore.postgresConnection", 
+        { custom: ({ container } : interfaces.Context) => {
+                // Ensure connection is always present
+                container.get('infrastructure.orm.postgresConnection');            
+                return getRepository<Events>(Events);
+            }
+        }
+    ],
+    [
         "infrastructure.eventStore.DBAL", 
-        { instance: EventStore.InMemoryEventStore }
+        { instance: PostgresEventStoreDBAL }
     ],
     [
         "infrastructure.eventStore.snapshotStoreDBAL", 

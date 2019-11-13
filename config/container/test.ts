@@ -1,11 +1,16 @@
 import { IContainerServiceItem, ServiceList } from './items/service';
-import InMemoryTransactionRepository from '../../tests/src/infrastructure/transaction/inMemoryRepository';
-import EventCollectorListener from '../../tests/src/infrastructure/shared/EventCollectorListener';
+import InMemoryTransactionRepository from '../../tests/infrastructure/transaction/inMemoryRepository';
+import EventCollectorListener from '../../tests/infrastructure/shared/EventCollectorListener';
+import { EventStore } from 'hollywood-js';
 
 export const testServices: ServiceList = new Map([
     [
         "domain.transaction.repository",
         { instance: InMemoryTransactionRepository }
+    ],
+    [
+        "infrastructure.eventStore.DBAL", 
+        { instance: EventStore.InMemoryEventStore }
     ],
     [
         "infrastructure.shared.eventCollector", 

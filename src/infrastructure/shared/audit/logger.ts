@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import winston, { Logger } from "winston";
+import * as winston from "winston";
 
 export interface ILog {
     info(message: string, ...meta: any[]): void;
@@ -9,7 +9,7 @@ export interface ILog {
 
 @injectable()
 export default class Log implements ILog {
-    private readonly winston: Logger;
+    private readonly winston: winston.Logger;
     constructor(
         @inject("logLevel") level: string,
     ) {

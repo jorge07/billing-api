@@ -1,7 +1,7 @@
 import { Express, Request, Response } from "express";
 import CreateCommand from "../../../../application/transaction/create/command";
-import App from "../../../../infrastructure/shared/app/index";
 import { IRoute } from "../index";
+import App from '../../../../application/index';
 
 export default function create(app: App): IRoute {
     return {

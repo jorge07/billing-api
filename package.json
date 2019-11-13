@@ -1,50 +1,64 @@
 {
-  "name": "api",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "dependencies": {
-    "body-parser": "^1.19.0",
-    "config": "^3.2.3",
-    "express": "^4.17.1",
-    "hollywood-js": "^1.5.0",
-    "inversify": "^5.0.1",
-    "reflect-metadata": "^0.1.13",
-    "winston": "^3.2.1"
-  },
-  "devDependencies": {
-    "@types/config": "^0.0.34",
-    "@types/express": "^4.17.1",
-    "@types/jest": "^24.0.19",
-    "@types/node": "^12.11.1",
-    "@types/supertest": "^2.0.8",
-    "eslint": "^6.5.1",
-    "eslint-plugin-import": "^2.18.2",
-    "jest": "^24.9.0",
-    "nodemon": "^1.19.4",
-    "supertest": "^4.0.2",
-    "ts-jest": "^24.1.0",
-    "ts-node": "^8.4.1",
-    "tslint": "^5.20.0",
-    "typescript": "^3.6.4"
-  },
-  "scripts": {
-    "start:dev": "node --inspect=5858 -r ts-node/register ./src/ui/http/index.ts",
-    "dev": "nodemon",
-    "build": "./node_modules/typescript/bin/tsc --project tsconfig.json",
-    "lint": "./node_modules/tslint/bin/tslint -c etc/env/dev/tslint.json --fix 'src/**/*.ts' ",
-    "test": "NODE_ENV=test jest"
-  },
-  "jest": {
-    "transform": {
-      ".(ts|tsx)": "ts-jest"
-    },
-    "testRegex": "(/tests/.*(test|spec)).(ts|tsx|js)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json"
-    ]
-  }
+   "name": "api",
+   "version": "1.0.0",
+   "main": "index.js",
+   "license": "MIT",
+   "dependencies": {
+      "body-parser": "^1.19.0",
+      "config": "^3.2.3",
+      "express": "^4.17.1",
+      "hollywood-js": "^1.5.0",
+      "inversify": "^5.0.1",
+      "mysql": "^2.14.1",
+      "pg": "^7.12.1",
+      "reflect-metadata": "^0.1.10",
+      "tsconfig-paths": "^3.9.0",
+      "typeorm": "0.2.20",
+      "winston": "^3.2.1"
+   },
+   "devDependencies": {
+      "@types/config": "^0.0.34",
+      "@types/express": "^4.17.1",
+      "@types/jest": "^24.0.19",
+      "@types/node": "^8.0.29",
+      "@types/supertest": "^2.0.8",
+      "eslint": "^6.5.1",
+      "eslint-plugin-import": "^2.18.2",
+      "jest": "^24.9.0",
+      "nodemon": "^1.19.4",
+      "supertest": "^4.0.2",
+      "ts-jest": "^24.1.0",
+      "ts-node": "3.3.0",
+      "tslint": "^5.20.0",
+      "typescript": "3.3.3333"
+   },
+   "scripts": {
+      "deps:up": "docker-compose -f etc/env/dev/elastic.yaml -f etc/env/dev/postgres.yaml -f etc/env/dev/rabbitmq.yaml up",
+      "deps:rm": "docker-compose -f etc/env/dev/elastic.yaml -f etc/env/dev/postgres.yaml -f etc/env/dev/rabbitmq.yaml rm -v",
+      "start:dev": "node --inspect=5858 -r ts-node/register -r tsconfig-paths/register ./src/ui/http/index.ts",
+      "dev:run": "node --inspect=5858 -r ts-node/register -r tsconfig-paths/register ",
+      "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+      "typeorm:writeModel:migration:generate": "yarn typeorm -f config/packages/orm/writeModel/config.ts  -c writeModel migration:generate -n",
+      "dev": "yarn deps:up && nodemon",
+      "build": "./node_modules/typescript/bin/tsc --project tsconfig.json",
+      "lint": "./node_modules/tslint/bin/tslint -c etc/env/dev/tslint.json --fix 'src/**/*.ts' ",
+      "test": "NODE_ENV=test jest",
+      "start": "ts-node src/index.ts"
+   },
+   "jest": {
+      "preset": "ts-jest",
+      "moduleDirectories": [
+         "node_modules",
+         "src"
+       ],
+      "transform": {
+         ".(ts|tsx)": "ts-jest"
+      },
+      "testRegex": "(./tests/.*(test|spec)).(ts|js)$",
+      "moduleFileExtensions": [
+         "ts",
+         "js",
+         "json"
+      ]
+   }
 }
