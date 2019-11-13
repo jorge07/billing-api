@@ -18,6 +18,7 @@ describe("GET /transaction/:uuid", () => {
   afterEach(() => {
       kernel.container.restore();
   });
+  
   it("Get /111", async () => {
     await transactionRepository.save(Transaction.create("111", "uuu", new Price(1, "EUR")));
 

@@ -13,6 +13,17 @@ export const testServices: ServiceList = new Map([
         { instance: EventStore.InMemoryEventStore }
     ],
     [
+        "infrastructure.orm.postgresConnection", 
+        { 
+            constant: true,
+            async: async () => {
+
+                return { connected: true }
+            }
+        }
+    ],
+    
+    [
         "infrastructure.shared.eventCollector", 
         { instance: EventCollectorListener, listener: true }
     ],

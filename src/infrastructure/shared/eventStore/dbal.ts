@@ -1,7 +1,7 @@
 import { Domain, EventStore } from "hollywood-js";
 import { inject, injectable } from "inversify";
-import { Events } from './mapping/events';
 import { Repository, SelectQueryBuilder } from "typeorm";
+import { Events } from "./mapping/events";
 
 @injectable()
 export default class PostgresEventStoreDBAL implements EventStore.IEventStoreDBAL {
@@ -16,21 +16,21 @@ export default class PostgresEventStoreDBAL implements EventStore.IEventStoreDBA
 
     public async loadFromTo(aggregateId: string, from?: number, to?: number): Promise<Domain.DomainEventStream> {
         return new Domain.DomainEventStream(
-            await this.getManyQuery(aggregateId, from, to).getMany()
+            await this.getManyQuery(aggregateId, from, to).getMany(),
         );
     }
- 
+
     public async append(aggregateId: string, stream: Domain.DomainEventStream): Promise<void> {
         try {
             await this.repository.save(
-                stream.events.map((message) => (Events.fromDomainMessage(message))), 
+                stream.events.map((message) => (Events.fromDomainMessage(message))),
                 {
                     transaction: true,
-                }
+                },
             );
          } catch (err) {
              throw new Error("Cant store events: " + err.message);
-         }    
+         }
     }
 
     private getManyQuery(aggregateId: Domain.AggregateRootId, from?: number, to?: number): SelectQueryBuilder<Events> {

@@ -1,6 +1,6 @@
-import { interfaces } from 'inversify';
-import { ServiceList, IContainerServiceItem } from '../../../../../../config/container/items/service';
-import { EventStore } from 'hollywood-js';
+import { EventStore } from "hollywood-js";
+import { interfaces } from "inversify";
+import { IContainerServiceItem, ServiceList } from "../../../../../../config/container/items/service";
 
 export default function attachListenersAndSubscribers(serviceList: ServiceList, container: interfaces.Container): void {
     for (const serviceDefinitionItem of serviceList) {

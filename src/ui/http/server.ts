@@ -3,10 +3,10 @@ import { Express, Request, Response } from "express";
 import * as express from "express";
 import { Server } from "http";
 import { inject, injectable } from "inversify";
+import App from "../../application/index";
 import Log from "../../infrastructure/shared/audit/logger";
 import errorHandler from "./middleware/errorHandler";
 import { IRoute, routes } from "./routing";
-import App from '../../application/index';
 
 @injectable()
 export default class HTTPServer {

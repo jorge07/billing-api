@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
+import App from "../../../application/index";
 import get from "./transaction/get";
 import create from "./transaction/post";
-import App from '../../../application/index';
 
 type Context = (app: App) => IRoute;
 

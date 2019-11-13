@@ -1,5 +1,5 @@
-import { ServiceList, IContainerServiceItem } from '../../../../../../config/container/items/service';
-import { AsyncContainerModule, interfaces } from 'inversify';
+import { AsyncContainerModule, interfaces } from "inversify";
+import { IContainerServiceItem, ServiceList } from "../../../../../../config/container/items/service";
 
 export default function addModules(serviceList: ServiceList, modules: AsyncContainerModule[]): void {
     for (const serviceDefinitionItem of serviceList) {
@@ -41,4 +41,3 @@ function module(serviceDefinition: IContainerServiceItem, key: string): AsyncCon
         }
     });
 }
-
