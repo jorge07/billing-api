@@ -36,7 +36,16 @@ export const testServices: ServiceList = new Map([
         { instance: GenericInMemoryRepository }
     ],
     [
-        "infrastructure.orm.postgresConnection",  // Fake connection on tests to avoid connections
+        "infrastructure.orm.readModel.postgresConnection",  // Fake connection on tests to avoid connections
+        { 
+            constant: true,
+            async: async () => {
+                return { connected: true }
+            }
+        }
+    ],
+    [
+        "infrastructure.orm.writeModel.postgresConnection",  // Fake connection on tests to avoid connections
         { 
             constant: true,
             async: async () => {
