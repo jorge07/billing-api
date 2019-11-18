@@ -7,7 +7,7 @@ import { Events } from "./mapping/events";
 export default class PostgresEventStoreDBAL implements EventStore.IEventStoreDBAL {
 
     constructor(
-        @inject("infrastructure.eventStore.postgresConnection") private readonly repository: Repository<Events>,
+        @inject("infrastructure.eventStore.postgresRepository") private readonly repository: Repository<Events>,
     ) { }
 
     public async load(aggregateId: string, from?: number): Promise<Domain.DomainEventStream> {

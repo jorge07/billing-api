@@ -1,9 +1,9 @@
-import KernelFactory from "./src/kernel";
-import PostgresEventStoreDBAL from './src/infrastructure/shared/eventStore/dbal';
+import KernelFactory from "../src/kernel";
+import PostgresEventStoreDBAL from 'infrastructure/shared/eventStore/dbal';
 import { EventStore } from 'hollywood-js';
 import Transaction from "domain/transaction/transaction";
-import CreateCommand from './src/application/transaction/create/command';
-import GetOne from './src/application/transaction/get/query';
+import CreateCommand from 'application/transaction/create/command';
+import GetOne from 'application/transaction/get/query';
 
 (async () => {
     try {

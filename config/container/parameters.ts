@@ -15,6 +15,10 @@ export const parameters: ParametersList = new Map([
         { value: config.get('orm.writeModel')}
     ],
     [
+        "orm.readModel",
+        { value: config.get('orm.readModel')}
+    ],
+    [
         "env",
         { value: config.get('env')}
     ],

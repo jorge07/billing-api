@@ -1,4 +1,4 @@
-import { EventStore } from "hollywood-js";
+import { Domain, EventStore } from "hollywood-js";
 import { interfaces } from "inversify";
 import { IContainerServiceItem, ServiceList } from "../../../../../../config/container/items/service";
 
@@ -19,9 +19,11 @@ function listenerBinder(
     }
 
     if (serviceDefinition.subscriber) {
-        container.get<EventStore.EventBus>("infrastructure.eventBus").attach(
-            serviceDefinition.subscriber,
-            container.get(key),
-        );
+        serviceDefinition.subscriber.forEach((event: Domain.DomainEvent) => {
+            container.get<EventStore.EventBus>("infrastructure.eventBus").attach(
+                event,
+                container.get(key),
+            );
+        });
     }
 }

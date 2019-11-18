@@ -7,10 +7,11 @@ services:
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
-      POSTGRES_DB: 'writeModel'
+      POSTGRES_DB: 'write_model'
       PGDATA: /data/postgres
     volumes:
        - postgres:/data/postgres
+       - ./postgres:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
     networks:

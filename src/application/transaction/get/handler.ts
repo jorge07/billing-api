@@ -9,7 +9,7 @@ import GetOne from "./query";
 @injectable()
 export default class Get implements Application.IQueryHandler {
     constructor(
-        @inject("domain.transaction.repository") private readonly repository: IRepository,
+        @inject("infrastructure.transaction.readModel.repository") private readonly repository: IRepository,
     ) {}
 
     @Application.autowiring

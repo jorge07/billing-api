@@ -7,7 +7,7 @@ export interface IContainerServiceItem {
     custom?: (context: interfaces.Context) => any
     containerAware?: boolean
     listener?: boolean
-    subscriber?: Domain.DomainEvent
+    subscriber?: any[]
     async?: () => any
     constant?: boolean
 }

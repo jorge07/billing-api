@@ -19,34 +19,32 @@ describe("GET /transaction/:uuid", () => {
       kernel.container.restore();
   });
   
-  it("Get /111", async () => {
-    await transactionRepository.save(Transaction.create("111", "uuu", new Price(1, "EUR")));
+  it("Get /255edcfe-0622-11ea-8d71-362b9e155667", async () => {
+    await transactionRepository.save(Transaction.create("255edcfe-0622-11ea-8d71-362b9e155667", "uuu", new Price(1, "EUR")));
 
-    const result: any = await request(kernel.http.getExpress()).get("/transaction/111");
+    const result: any = await request(kernel.http.getExpress()).get("/transaction/255edcfe-0622-11ea-8d71-362b9e155667");
 
     const expectedResponse = {
       "data": {
-        "aggregateRootId":"111",
-        "methodPrefix":"apply",
-        "aggregates":[],
-        "playhead":0,
-        "events":[],
+        "uuid":"255edcfe-0622-11ea-8d71-362b9e155667",
         "product":"uuu",
-        "price": {
-          "amount": 1,
-          "currency": "EUR",
-        }
+        "priceAmount": 1,
+        "priceCurrency": "EUR",
       },
       "meta":[]
     };
 
-    expect(result.text).toEqual(JSON.stringify(expectedResponse));
+    const jsonResponse = JSON.parse(result.text);
+
+    delete jsonResponse.data.createdAt;
+
+    expect(jsonResponse).toEqual(expect.objectContaining(expectedResponse));
     expect(result.statusCode).toEqual(200);
   });
   
-  it("Get /444 expect status 404", async () => {
+  it("Get /255edcfe-0622-11ea-8d71-362b9e155600 expect status 404", async () => {
     await request(kernel.http.getExpress())
-      .get("/transaction/4444")
+      .get("/transaction/255edcfe-0622-11ea-8d71-362b9e155600")
       .expect(404)
     ;
   });

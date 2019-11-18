@@ -1,7 +1,6 @@
-import { Application } from "hollywood-js";
+import { Application, EventStore } from "hollywood-js";
 import { inject, injectable } from "inversify";
 import ConflictException from "../../../domain/shared/exceptions/ConflictException";
-import IRepository from "../../../domain/transaction/repository";
 import Transaction from "../../../domain/transaction/transaction";
 import { ILog } from "../../../infrastructure/shared/audit/logger";
 import CreateCommand from "./command";
@@ -10,18 +9,22 @@ import CreateCommand from "./command";
 export default class Create implements Application.ICommandHandler {
     constructor(
         @inject("logger") private readonly logger: ILog,
-        @inject("domain.transaction.repository") private readonly repository: IRepository,
+        @inject(
+            "infrastructure.transaction.eventStore",
+        ) private readonly writeModel: EventStore.EventStore<Transaction>,
     ) {}
 
     @Application.autowiring
     public async handle(command: CreateCommand): Promise<void | Application.IAppError> {
 
         try {
-            await this.repository.get(command.uuid);
-
+            await this.writeModel.load(command.uuid);
             throw new ConflictException("Already exists");
+
         } catch (err) {
-            // Silence not found
+            if (!(err instanceof EventStore.AggregateRootNotFoundException)) {
+                throw err;
+            }
         }
 
         const transaction: Transaction = Transaction.create(
@@ -30,6 +33,6 @@ export default class Create implements Application.ICommandHandler {
             command.price,
         );
 
-        await this.repository.save(transaction);
+        await this.writeModel.save(transaction);
     }
 }

@@ -5,6 +5,7 @@ import InMemoryTransactionRepository from '../../infrastructure/transaction/inMe
 import GetOne from 'application/transaction/get/query';
 import Price from 'domain/transaction/valueObject/price';
 import KernelFactory, { Kernel } from "../../../src/kernel";
+import { getConnectionManager } from 'typeorm';
 
 describe("Get Transaction", () => {
 
@@ -12,20 +13,19 @@ describe("Get Transaction", () => {
 
     beforeEach(async () => {
         kernel = await KernelFactory(false);
-        kernel.container.snapshot();
         const repository = kernel.container.get<InMemoryTransactionRepository>('domain.transaction.repository');
-        await repository.save(Transaction.create("111", "", new Price(1, 'EUR')));
+        await repository.save(Transaction.create("255edcfe-0622-11ea-8d71-362b9e155667", "", new Price(1, 'EUR')));
     })
     
-    afterEach(async () => {
-        kernel.container.restore();
-    });
+    afterAll(async () => {
+        await getConnectionManager().connections.forEach((conn)=> conn.close());
+    })
     
     test("Get a valid transaction", async () => {
         expect.assertions(3);
-        const transaction: any = await kernel.app.ask(new GetOne("111"))
+        const transaction: any = await kernel.app.ask(new GetOne("255edcfe-0622-11ea-8d71-362b9e155667"))
         expect(transaction).not.toBe(null)
         expect(transaction).not.toBe(undefined)
-        expect(transaction.data.aggregateRootId).toBe("111")
+        expect(transaction.data.uuid).toBe("255edcfe-0622-11ea-8d71-362b9e155667")
     })
 })

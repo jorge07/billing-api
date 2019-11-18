@@ -21,7 +21,7 @@ describe("POST /transaction", () => {
     await request(kernel.http.getExpress())
       .post("/transaction")
       .send({
-        uuid: 111, 
+        uuid: "255edcfe-0622-11ea-8d71-362b9e155667", 
         price: { 
           amount: 12, 
           currency: "EUR" 
@@ -31,6 +31,6 @@ describe("POST /transaction", () => {
       .set('Accept', 'application/json')
       .expect(201);
 
-    expect(await transactionRepository.get("111")).toBeInstanceOf(Transaction)
+    expect(await transactionRepository.get("255edcfe-0622-11ea-8d71-362b9e155667")).toBeInstanceOf(Transaction)
   });
 });

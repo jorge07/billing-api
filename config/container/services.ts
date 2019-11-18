@@ -15,6 +15,12 @@ import { Events } from 'infrastructure/shared/eventStore/mapping/events';
 import PostgresEventStoreDBAL from 'infrastructure/shared/eventStore/dbal';
 import PostgresClient from 'infrastructure/shared/postgres/postgresClient';
 import * as config from 'config';
+import { Transactions } from 'infrastructure/transaction/readModel/mapping/transactions';
+import PostgresEventStoreSnapshotDBAL from '../../src/infrastructure/shared/eventStore/snapshotDbal';
+import { Snapshots } from '../../src/infrastructure/shared/eventStore/mapping/snapshots';
+import TransactionPostgresProjector from '../../src/infrastructure/transaction/readModel/projections/transactionsPostgresProjector';
+import TransactionWasCreated from 'domain/transaction/events/transactionWasCreated';
+import PostgresRepository from '../../src/infrastructure/transaction/readModel/repository/PostgresRepository';
 
 decorate(injectable(), EventStore.InMemoryEventStore);
 decorate(injectable(), EventStore.InMemorySnapshotStoreDBAL);
@@ -68,7 +74,7 @@ export const services: Map<string, IContainerServiceItem> = new Map([
         { instance: EventStore.EventBus }
     ],
     [
-        "infrastructure.orm.postgresConnection", 
+        "infrastructure.orm.writeModel.postgresConnection", 
         { 
             constant: true,
             async: async () => {
@@ -85,11 +91,54 @@ export const services: Map<string, IContainerServiceItem> = new Map([
         }
     ],
     [
-        "infrastructure.eventStore.postgresConnection", 
+        "infrastructure.orm.readModel.postgresConnection", 
+        { 
+            constant: true,
+            async: async () => {
+                const connection = new PostgresClient(Object.assign({}, config.get('orm.readModel')));
+                
+                try {
+                    await connection.connect();
+                } catch (err) {
+                    throw new Error('PG connection error: ' + err.message);
+                }
+
+                return { connected: true }
+            }
+        }
+    ],
+    [
+        "infrastructure.eventStore.postgresRepository", 
         { custom: ({ container } : interfaces.Context) => {
                 // Ensure connection is always present
-                container.get('infrastructure.orm.postgresConnection');            
+                container.get('infrastructure.orm.writeModel.postgresConnection');            
                 return getRepository<Events>(Events);
+            }
+        }
+    ],
+    [
+        "infrastructure.transaction.readModel.dbal", 
+        { custom: ({ container } : interfaces.Context) => {
+                // Ensure connection is always present
+                container.get('infrastructure.orm.readModel.postgresConnection');            
+                return getRepository<Transactions>(Transactions, 'readModel');
+            }
+        }
+    ],
+    [
+        "infrastructure.transaction.readModel.repository", 
+        { instance: PostgresRepository }
+    ],
+    [
+        "infrastructure.transaction.readModel.projector", 
+        { instance: TransactionPostgresProjector, subscriber: [TransactionWasCreated] }
+    ],
+    [
+        "infrastructure.eventStore.postgresSnapshotsConnection", 
+        { custom: ({ container } : interfaces.Context) => {
+                // Ensure connection is always present
+                container.get('infrastructure.orm.writeModel.postgresConnection');            
+                return getRepository<Snapshots>(Snapshots);
             }
         }
     ],
@@ -99,7 +148,7 @@ export const services: Map<string, IContainerServiceItem> = new Map([
     ],
     [
         "infrastructure.eventStore.snapshotStoreDBAL", 
-        { instance: EventStore.InMemorySnapshotStoreDBAL }
+        { instance: PostgresEventStoreSnapshotDBAL }
     ],
     [
         "infrastructure.transaction.eventStore", 

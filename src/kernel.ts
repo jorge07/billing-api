@@ -34,6 +34,13 @@ async function createContainer(): Promise<interfaces.Container> {
 }
 
 export default async function KernelFactory(debug: boolean): Promise<Kernel> {
-    const container: any = await createContainer();
+    let container: any;
+
+    try {
+        container = await createContainer();
+    } catch (error) {
+        throw new Error("Container Compilation Error: " + error.message);
+    }
+
     return new Kernel(debug, container);
 }
