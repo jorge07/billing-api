@@ -32,11 +32,11 @@ export const testServices: ServiceList = new Map([
         }
     ],
     [
-        "infrastructure.transaction.readModel.repository", 
+        "infrastructure.transaction.readModel.repository",
         { instance: GenericInMemoryRepository }
     ],
     [
-        "infrastructure.orm.postgresConnection", 
+        "infrastructure.orm.postgresConnection",  // Fake connection on tests to avoid connections
         { 
             constant: true,
             async: async () => {
