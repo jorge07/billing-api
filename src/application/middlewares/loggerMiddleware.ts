@@ -1,5 +1,5 @@
 import IMiddleware from "hollywood-js/src/Application/Bus/Middelware";
-import { ILog } from "../../infrastructure/shared/audit/logger";
+import { ILog } from "infrastructure/shared/audit/logger";
 
 export default class LoggerMiddleware implements IMiddleware {
 

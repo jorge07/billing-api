@@ -1,4 +1,4 @@
-import config from 'config';
+import * as config from 'config';
 import { ParametersList, IContainerParameterItem } from './items/parameter';
 
 export const parameters: ParametersList = new Map([
@@ -9,6 +9,14 @@ export const parameters: ParametersList = new Map([
     [
         "logLevel",
         { value: config.get('logger.logLevel')}
+    ],
+    [
+        "orm.writeModel",
+        { value: config.get('orm.writeModel')}
+    ],
+    [
+        "orm.readModel",
+        { value: config.get('orm.readModel')}
     ],
     [
         "env",

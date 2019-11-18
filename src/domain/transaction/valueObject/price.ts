@@ -1,4 +1,4 @@
-import InvalidArgumentException from "../../../infrastructure/shared/exceptions/invalidArgumentException";
+import InvalidArgumentException from "domain/shared/exceptions/invalidArgumentException";
 import { currencies } from "./currencyList";
 
 export default class Price {

@@ -1,28 +1,11 @@
-import { Container } from "inversify";
+import addModules from "infrastructure/shared/container/builder/services/addModules";
+import { AsyncContainerModule, interfaces } from "inversify";
 import { IContainerServiceItem, ServiceList } from "../../../../../config/container/items/service";
-import listenerBinder from "./listenerBinder";
+import attachListenersAndSubscribers from "./services/attachListenerAndSubscribers";
 
-export default function serviceBinder(container: Container, services: ServiceList): void {
-
-    services.forEach((serviceDefinition: IContainerServiceItem, key: string) => {
-        if (serviceDefinition.custom) {
-
-            container.bind(key).toDynamicValue(serviceDefinition.custom).inSingletonScope();
-
-        } else if (serviceDefinition.collection) {
-
-            serviceDefinition.collection.forEach((item: any) => {
-                container.bind(key).to(item).inSingletonScope();
-            });
-
-        } else {
-
-            container.bind(key).to(serviceDefinition.instance).inSingletonScope();
-        }
-
-        if (serviceDefinition.listener || serviceDefinition.subscriber) {
-            listenerBinder(container, serviceDefinition, key);
-            return;
-        }
-    });
+export default async function serviceBinder(container: interfaces.Container, services: ServiceList): Promise<void> {
+    const modules = [];
+    addModules(services, modules);
+    await container.loadAsync(...modules);
+    attachListenersAndSubscribers(services, container);
 }

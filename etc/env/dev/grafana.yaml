@@ -1,0 +1,19 @@
+version: '3.5'
+
+services:
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    user: "0"
+    volumes:
+      # Data persistency
+      # sudo mkdir -p /srv/docker/grafana/data; chown 472:472 /srv/docker/grafana/data
+      - grafana:/var/lib/grafana
+    networks:
+      - postgres
+
+volumes:
+  grafana:
+    driver: local

@@ -1,5 +1,7 @@
-import Kernel from "../../kernel";
+import KernelFactory from "../../kernel";
 
-const kernel = new Kernel(false);
+(async () => {
+    const kernel = await KernelFactory(false);
 
-kernel.http.up();
+    kernel.http.up();
+})();

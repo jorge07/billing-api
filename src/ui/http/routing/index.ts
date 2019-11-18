@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import App from "../../../infrastructure/shared/app/index";
+import App from "../../../application/index";
 import get from "./transaction/get";
 import create from "./transaction/post";
 
