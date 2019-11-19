@@ -1,5 +1,9 @@
 # Billing API
 
+
+![Lint Status](https://github.com/jorge07/billing-api/workflows/Lint/badge.svg)
+![Tests Status](https://github.com/jorge07/billing-api/workflows/Tests/badge.svg)
+
 A Typescript project to demostrate how to work with:
 
 - DDD
