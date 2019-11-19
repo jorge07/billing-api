@@ -18,7 +18,7 @@ function listenerBinder(
     if (!serviceDefinition.bus) {
         throw new Error(`Missing bus parameter in Service tags for: ${key}`);
     }
-    
+
     if (serviceDefinition.listener) {
         container.get<EventStore.EventBus>(serviceDefinition.bus).addListener(container.get(key));
     }

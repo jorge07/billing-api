@@ -1,23 +1,22 @@
-import { EventStore, Domain } from "hollywood-js";
-import { Channel } from 'amqplib';
-import { inject } from 'inversify';
+import { Channel } from "amqplib";
+import { Domain, EventStore } from "hollywood-js";
+import { inject } from "inversify";
 
 export default class RabbitMQEventPublisher extends EventStore.EventListener {
-    
+
+    constructor(
+        @inject("infrastructure.rabbitmq.connection") private readonly channel: Channel,
+        private readonly context: string,
+    ) {
+        super();
+    }
+
     public on(message: Domain.DomainMessage): void {
-        this.channel.publish('default', this.routingKey(message), Buffer.from(JSON.stringify(message), "utf8"));
+        this.channel.publish("default", this.routingKey(message), Buffer.from(JSON.stringify(message), "utf8"));
     }
 
     private routingKey(message: Domain.DomainMessage): string {
-        
-        return this.context + '.' + message.eventType;
-        
-    }
 
-    constructor(
-        @inject('infrastructure.rabbitmq.connection') private readonly channel: Channel,
-        private readonly context: string
-    ) {
-        super();
+        return this.context + "." + message.eventType;
     }
 }

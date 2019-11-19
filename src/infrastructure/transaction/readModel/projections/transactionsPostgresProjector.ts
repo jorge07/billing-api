@@ -16,8 +16,8 @@ export default class TransactionPostgresProjector extends EventStore.EventSubscr
     protected async onTransactionWasCreated(event: TransactionWasCreated): Promise<void> {
         try {
             await this.readModel.save(Transactions.fromCreated(event));
-        } catch(error) {
+        } catch (error) {
             throw new Error("Error in Transaction Projector save: " + error.message);
-        }  
+        }
     }
 }

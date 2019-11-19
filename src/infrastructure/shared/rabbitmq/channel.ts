@@ -1,26 +1,30 @@
-import { Channel, Message, Connection } from 'amqplib';
-import { injectable } from 'inversify';
-import { ILog } from 'infrastructure/shared/audit/logger';
+import { Channel, Connection, Message } from "amqplib";
+import { ILog } from "infrastructure/shared/audit/logger";
+import { injectable } from "inversify";
 
 @injectable()
 export default class AMPQChannel {
 
-    private readonly defaultExange: string = 'events';
+    private readonly defaultExange: string = "events";
 
     constructor(
         private readonly connection: Connection,
-        private readonly channel: Channel
+        private readonly channel: Channel,
     ) {}
 
-    async publish(exchange: string = 'events', routingKey: string = 'domain', message: string): Promise<boolean | void> {
+    public publish(
+        exchange: string = "events",
+        routingKey: string = "domain",
+        message: string,
+    ): boolean {
         try {
             return this.channel.publish(exchange, routingKey, Buffer.from(message));
-        } catch(err) {
-            throw new Error('Publish message error: ' + err.message);
+        } catch (err) {
+            throw new Error("Publish message error: " + err.message);
         }
     }
 
-    async consume(exchange: string = 'events', queue: string = 'events', action: (mgs: Message | null) => any) {
+    public async consume(exchange: string = "events", queue: string = "events", action: (mgs: Message | null) => any) {
         await this.channel.assertQueue(queue, { exclusive: false });
         await this.channel.bindQueue(queue, exchange, queue);
         await this.channel.consume(queue, action, { noAck: true });
