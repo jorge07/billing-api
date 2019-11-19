@@ -25,7 +25,7 @@ export const testServices: ServiceList = new Map([
             new EventStore.EventStore<Transaction>(
                 Transaction,
                 container.get<EventStore.IEventStoreDBAL>("infrastructure.eventStore.DBAL"),
-                container.get<EventStore.EventBus>("infrastructure.eventBus"),
+                container.get<EventStore.EventBus>("infrastructure.transaction.eventBus"),
                 undefined,
                 container.get<number>("eventStore.margin"),
             ))
@@ -55,11 +55,19 @@ export const testServices: ServiceList = new Map([
     ],
     [
         "infrastructure.shared.eventCollector", 
-        { instance: EventCollectorListener, listener: true }
-    ],    
+        { 
+            instance: EventCollectorListener,
+            bus: 'infrastructure.transaction.eventBus', 
+            listener: true 
+        }
+    ],
     [
         "infrastructure.transaction.readModel.projector", 
-        { instance: TransactionInMemoryProjector, subscriber: [TransactionWasCreated] }
+        { 
+            instance: TransactionInMemoryProjector, 
+            bus: 'infrastructure.transaction.eventBus', 
+            subscriber: [TransactionWasCreated] 
+        }
     ],   
     [
         "infrastructure.test.inMemory.dbal", 

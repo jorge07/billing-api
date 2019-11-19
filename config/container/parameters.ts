@@ -4,30 +4,34 @@ import { ParametersList, IContainerParameterItem } from './items/parameter';
 export const parameters: ParametersList = new Map([
     [
         "appName", 
-        { value: config.get('appName')}
+        { value: config.get('appName') }
     ],
     [
         "logLevel",
-        { value: config.get('logger.logLevel')}
+        { value: config.get('logger.logLevel') }
     ],
     [
         "orm.writeModel",
-        { value: config.get('orm.writeModel')}
+        { value: config.get('orm.writeModel') }
     ],
     [
         "orm.readModel",
-        { value: config.get('orm.readModel')}
+        { value: config.get('orm.readModel') }
+    ],
+    [
+        "rabbitmq",
+        { value: config.get('rabbitmq') }
     ],
     [
         "env",
-        { value: config.get('env')}
+        { value: config.get('env') }
     ],
     [
         "port", 
-        { value: config.get('http.port')}
+        { value: config.get('http.port') }
     ],
     [
         "eventStore.margin", 
-        { value: config.get('eventStore.margin')}
+        { value: config.get('eventStore.margin') }
     ],
 ]);
