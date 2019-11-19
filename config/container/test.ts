@@ -54,6 +54,15 @@ export const testServices: ServiceList = new Map([
         }
     ],
     [
+        "infrastructure.transaction.rabbitmq.connection", 
+        { 
+            constant: true,
+            async: async () => {
+                return {}
+            }
+        }
+    ],
+    [
         "infrastructure.shared.eventCollector", 
         { 
             instance: EventCollectorListener,
