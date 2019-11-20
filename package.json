@@ -4,6 +4,8 @@
    "main": "index.js",
    "license": "MIT",
    "dependencies": {
+      "@types/amqplib": "^0.5.13",
+      "amqplib": "^0.5.5",
       "body-parser": "^1.19.0",
       "config": "^3.2.3",
       "express": "^4.17.1",
@@ -39,6 +41,7 @@
       "deps:rm": "yarn deps down -v",
       "start:dev": "yarn dev:run ./src/ui/http/index.ts",
       "dev:run": "node --inspect=5858 -r ts-node/register -r tsconfig-paths/register ",
+      "do": "node -r ts-node/register -r tsconfig-paths/register ",
       "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
       "typeorm:writeModel": "yarn typeorm -f config/packages/orm/writeModel/config.js",
       "typeorm:writeModel:migration:generate": "yarn typeorm:writeModel migration:generate -n",

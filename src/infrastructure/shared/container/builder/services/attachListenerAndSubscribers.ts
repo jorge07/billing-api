@@ -9,21 +9,29 @@ export default function attachListenersAndSubscribers(serviceList: ServiceList, 
         }
     }
 }
+
 function listenerBinder(
     container: interfaces.Container,
     serviceDefinition: IContainerServiceItem,
     key: string,
 ) {
+    if (!serviceDefinition.bus) {
+        throw new Error(`Missing bus parameter in Service tags for: ${key}`);
+    }
+
     if (serviceDefinition.listener) {
-        container.get<EventStore.EventBus>("infrastructure.eventBus").addListener(container.get(key));
+        container.get<EventStore.EventBus>(serviceDefinition.bus).addListener(container.get(key));
     }
 
     if (serviceDefinition.subscriber) {
-        serviceDefinition.subscriber.forEach((event: Domain.DomainEvent) => {
-            container.get<EventStore.EventBus>("infrastructure.eventBus").attach(
-                event,
-                container.get(key),
-            );
-        });
+        for (const index in serviceDefinition.subscriber) {
+            if (serviceDefinition.subscriber.hasOwnProperty(index)) {
+                const event: Domain.DomainEvent = serviceDefinition.subscriber[index];
+                container.get<EventStore.EventBus>(serviceDefinition.bus).attach(
+                    event,
+                    container.get(key),
+                );
+            }
+        }
     }
 }

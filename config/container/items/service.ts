@@ -1,13 +1,20 @@
 import { interfaces } from 'inversify';
 import { Domain } from 'hollywood-js';
 
-export interface IContainerServiceItem {
+export type Listener = {
+    bus: string
+    listener?: boolean
+}
+
+export type Subscriber = Listener & {
+    subscriber: any[]
+}
+
+export interface IContainerServiceItem extends Partial<Subscriber> {
     instance?: any
     collection?: any[]
     custom?: (context: interfaces.Context) => any
     containerAware?: boolean
-    listener?: boolean
-    subscriber?: any[]
     async?: () => any
     constant?: boolean
 }

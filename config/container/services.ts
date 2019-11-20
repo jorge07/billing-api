@@ -16,11 +16,13 @@ import PostgresEventStoreDBAL from 'infrastructure/shared/eventStore/dbal';
 import PostgresClient from 'infrastructure/shared/postgres/postgresClient';
 import * as config from 'config';
 import { Transactions } from 'infrastructure/transaction/readModel/mapping/transactions';
-import PostgresEventStoreSnapshotDBAL from '../../src/infrastructure/shared/eventStore/snapshotDbal';
-import { Snapshots } from '../../src/infrastructure/shared/eventStore/mapping/snapshots';
-import TransactionPostgresProjector from '../../src/infrastructure/transaction/readModel/projections/transactionsPostgresProjector';
+import PostgresEventStoreSnapshotDBAL from 'infrastructure/shared/eventStore/snapshotDbal';
+import { Snapshots } from 'infrastructure/shared/eventStore/mapping/snapshots';
+import TransactionPostgresProjector from 'infrastructure/transaction/readModel/projections/transactionsPostgresProjector';
 import TransactionWasCreated from 'domain/transaction/events/transactionWasCreated';
-import PostgresRepository from '../../src/infrastructure/transaction/readModel/repository/PostgresRepository';
+import PostgresRepository from 'infrastructure/transaction/readModel/repository/PostgresRepository';
+import RabbitMQChannelClientFactory from 'infrastructure/shared/rabbitmq/channelFactory';
+import AMPQChannel from 'infrastructure/shared/rabbitmq/channel';
 
 decorate(injectable(), EventStore.InMemoryEventStore);
 decorate(injectable(), EventStore.InMemorySnapshotStoreDBAL);
@@ -70,7 +72,11 @@ export const services: Map<string, IContainerServiceItem> = new Map([
         { instance: InMemoryTransactionRepository }
     ],
     [
-        "infrastructure.eventBus", 
+        "infrastructure.transaction.eventBus", 
+        { instance: EventStore.EventBus }
+    ],
+    [
+        "infrastructure.transaction.async.eventBus", 
         { instance: EventStore.EventBus }
     ],
     [
@@ -131,7 +137,13 @@ export const services: Map<string, IContainerServiceItem> = new Map([
     ],
     [
         "infrastructure.transaction.readModel.projector", 
-        { instance: TransactionPostgresProjector, subscriber: [TransactionWasCreated] }
+        { 
+            instance: TransactionPostgresProjector, 
+            bus: 'infrastructure.transaction.async.eventBus', 
+            subscriber: [
+                TransactionWasCreated
+            ] 
+        }
     ],
     [
         "infrastructure.eventStore.postgresSnapshotsConnection", 
@@ -156,10 +168,29 @@ export const services: Map<string, IContainerServiceItem> = new Map([
             new EventStore.EventStore<Transaction>(
                 Transaction,
                 container.get<EventStore.IEventStoreDBAL>("infrastructure.eventStore.DBAL"),
-                container.get<EventStore.EventBus>("infrastructure.eventBus"),
+                container.get<EventStore.EventBus>("infrastructure.transaction.eventBus"),
                 container.get<EventStore.ISnapshotStoreDBAL>("infrastructure.eventStore.snapshotStoreDBAL"),
                 container.get<number>("eventStore.margin"),
             ))
+        }
+    ],
+    [
+        "infrastructure.transaction.rabbitmq.connection", 
+        { 
+            constant: true,
+            async: async () => {
+                const factory = new RabbitMQChannelClientFactory(Object.assign({}, config.get('rabbitmq')));
+                let client;
+
+                try {
+                    const { channel, connection } = await factory.createChannel();
+                    client = new AMPQChannel(connection, channel);
+                } catch (err) {
+                    throw new Error('RabbitMQ connection error: ' + err.message);
+                }
+
+                return client;
+            }
         }
     ],
     [
