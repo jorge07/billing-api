@@ -66,7 +66,7 @@ export default class HTTPServer {
 
     private wrapAsyncRoutes(action: (req: Request, res: Response) => Promise<void>) {
         return (req: Request, res: Response, next: (err: any) => void) => action(req, res).catch(next);
-      }
+    }
 
     private bindRouting(): void {
         routes.forEach((context) => {
