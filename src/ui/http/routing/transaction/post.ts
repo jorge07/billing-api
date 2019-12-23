@@ -1,6 +1,6 @@
+import App from "application/index";
+import CreateCommand from "application/useCase/transaction/create/command";
 import { Express, Request, Response } from "express";
-import App from "../../../../application/index";
-import CreateCommand from "../../../../application/transaction/create/command";
 import { IRoute } from "../index";
 
 export default function create(app: App): IRoute {

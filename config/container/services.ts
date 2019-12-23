@@ -1,6 +1,6 @@
-import Create from 'application/transaction/create/handler';
+import Create from 'application/useCase/transaction/create/handler';
 import Log from 'infrastructure/shared/audit/logger';
-import Get from 'application/transaction/get/handler';
+import Get from 'application/useCase/transaction/get/handler';
 import App from 'application/index';
 import { interfaces, decorate, injectable } from 'inversify';
 import { EventStore } from 'hollywood-js';

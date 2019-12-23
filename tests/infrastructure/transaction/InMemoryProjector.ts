@@ -13,7 +13,7 @@ export default class TransactionInMemoryProjector extends ReadModel.Projector {
 
     protected onTransactionWasCreated(event: TransactionWasCreated): void {
         this.readModel
-            .save(event.uuid, Transactions.fromCreated(event))
+            .save(event.uuid.toString(), Transactions.fromCreated(event))
         ;
     }
 }

@@ -1,8 +1,8 @@
+import ConflictException from "domain/shared/exceptions/ConflictException";
+import Transaction from "domain/transaction/transaction";
 import { Application, EventStore } from "hollywood-js";
+import { ILog } from "infrastructure/shared/audit/logger";
 import { inject, injectable } from "inversify";
-import ConflictException from "../../../domain/shared/exceptions/ConflictException";
-import Transaction from "../../../domain/transaction/transaction";
-import { ILog } from "../../../infrastructure/shared/audit/logger";
 import CreateCommand from "./command";
 
 @injectable()
@@ -18,7 +18,7 @@ export default class Create implements Application.ICommandHandler {
     public async handle(command: CreateCommand): Promise<void | Application.IAppError> {
 
         try {
-            await this.writeModel.load(command.uuid);
+            await this.writeModel.load(command.uuid.toString());
             throw new ConflictException("Already exists");
 
         } catch (err) {

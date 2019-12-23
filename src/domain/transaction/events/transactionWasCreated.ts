@@ -1,6 +1,6 @@
 import { Domain } from "hollywood-js";
-import { TransactionID } from "../transactionId";
 import Price from "../valueObject/price";
+import TransactionID from "../valueObject/transactionId";
 
 export default class TransactionWasCreated extends Domain.DomainEvent {
     constructor(
