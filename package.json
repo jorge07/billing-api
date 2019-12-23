@@ -56,7 +56,7 @@
       "dev": "yarn deps:up && nodemon",
       "build": "./node_modules/typescript/bin/tsc --project tsconfig.json",
       "lint": "./node_modules/tslint/bin/tslint -c etc/env/dev/tslint.json --fix 'src/**/*.ts' ",
-      "test": "NODE_ENV=test jest"
+      "test": "NODE_ENV=test jest --no-cache"
    },
    "jest": {
       "preset": "ts-jest",
