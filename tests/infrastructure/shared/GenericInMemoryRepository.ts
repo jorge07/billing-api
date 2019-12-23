@@ -1,6 +1,6 @@
 import { ReadModel } from 'hollywood-js';
 import { inject, injectable } from 'inversify';
-import NotFoundException from '../../../src/domain/shared/exceptions/notFoundException';
+import NotFoundException from 'domain/shared/exceptions/notFoundException';
 
 @injectable()
 export default class GenericInMemoryRepository {

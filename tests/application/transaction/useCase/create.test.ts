@@ -5,7 +5,7 @@ import InMemoryTransactionRepository from '../../../infrastructure/transaction/i
 import EventCollectorListener from '../../../infrastructure/shared/EventCollectorListener';
 import TransactionWasCreated from "domain/transaction/events/transactionWasCreated";
 import KernelFactory, { Kernel } from '../../../../src/kernel';
-import TransactionID from '../../../../src/domain/transaction/valueObject/transactionId';
+import TransactionID from 'domain/transaction/valueObject/transactionId';
 import { v4 } from 'uuid';
 
 describe("Create Transaction", () => {

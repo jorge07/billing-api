@@ -3,7 +3,7 @@ import { Container } from 'inversify';
 import { Domain } from 'hollywood-js';
 import TransactionWasCreated from 'domain/transaction/events/transactionWasCreated';
 import Price from 'domain/transaction/valueObject/price';
-import TransactionID from '../../../src/domain/transaction/valueObject/transactionId';
+import TransactionID from 'domain/transaction/valueObject/transactionId';
 
 describe("Transaction", () => {
     test("Create transaction", () => {

@@ -3,7 +3,7 @@ import KernelFactory, { Kernel } from '../../../../src/kernel';
 import InMemoryTransactionRepository from "../../../infrastructure/transaction/inMemoryRepository";
 import Transaction from "domain/transaction/transaction";
 import Price from 'domain/transaction/valueObject/price';
-import TransactionID from '../../../../src/domain/transaction/valueObject/transactionId';
+import TransactionID from 'domain/transaction/valueObject/transactionId';
 
 describe("GET /transaction/:uuid", () => {
 
