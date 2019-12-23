@@ -3,6 +3,7 @@ import KernelFactory, { Kernel } from '../../../../src/kernel';
 import InMemoryTransactionRepository from "../../../infrastructure/transaction/inMemoryRepository";
 import Transaction from "domain/transaction/transaction";
 import Price from 'domain/transaction/valueObject/price';
+import TransactionID from '../../../../src/domain/transaction/valueObject/transactionId';
 
 describe("GET /transaction/:uuid", () => {
 
@@ -19,14 +20,15 @@ describe("GET /transaction/:uuid", () => {
       kernel.container.restore();
   });
   
-  it("Get /255edcfe-0622-11ea-8d71-362b9e155667", async () => {
-    await transactionRepository.save(Transaction.create("255edcfe-0622-11ea-8d71-362b9e155667", "uuu", new Price(1, "EUR")));
+  it("Get /ae081e7a-ec8c-4ff1-9de5-f70383fe03a7", async () => {
+    const txnuuid = "ae081e7a-ec8c-4ff1-9de5-f70383fe03a7"; 
+    await transactionRepository.save(Transaction.create(new TransactionID(txnuuid), "uuu", new Price(1, "EUR")));
 
-    const result: any = await request(kernel.http.getExpress()).get("/transaction/255edcfe-0622-11ea-8d71-362b9e155667");
+    const result: any = await request(kernel.http.getExpress()).get("/transaction/" + txnuuid);
 
     const expectedResponse = {
       "data": {
-        "uuid":"255edcfe-0622-11ea-8d71-362b9e155667",
+        "uuid":txnuuid,
         "product":"uuu",
         "priceAmount": 1,
         "priceCurrency": "EUR",
@@ -42,9 +44,9 @@ describe("GET /transaction/:uuid", () => {
     expect(result.statusCode).toEqual(200);
   });
   
-  it("Get /255edcfe-0622-11ea-8d71-362b9e155600 expect status 404", async () => {
+  it("Get /ae081e7a-ec8c-4ff1-9de5-f70383fe03a7 expect status 404", async () => {
     await request(kernel.http.getExpress())
-      .get("/transaction/255edcfe-0622-11ea-8d71-362b9e155600")
+      .get("/transaction/ae081e7a-ec8c-4ff1-9de5-f70383fe03a7")
       .expect(404)
     ;
   });

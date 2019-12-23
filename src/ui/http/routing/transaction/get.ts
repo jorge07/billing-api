@@ -1,6 +1,6 @@
+import App from "application/index";
+import GetOne from "application/useCase/transaction/get/query";
 import { Express, Request, Response } from "express";
-import App from "../../../../application/index";
-import GetOne from "../../../../application/transaction/get/query";
 import { IRoute } from "../index";
 
 export default function get(app: App): IRoute {

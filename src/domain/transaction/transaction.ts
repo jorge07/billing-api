@@ -1,12 +1,13 @@
 import { Domain } from "hollywood-js";
+import { AggregateRootId } from "hollywood-js/src/Domain";
 import TransactionWasCreated from "./events/transactionWasCreated";
-import { TransactionID } from "./transactionId";
 import Price from "./valueObject/price";
+import TransactionID from "./valueObject/transactionId";
 
 export default class Transaction extends Domain.EventSourced {
 
     public static create(uuid: TransactionID, product: string, price: Price): Transaction {
-        const instance = new Transaction(uuid);
+        const instance = new Transaction(uuid.toString());
 
         instance.raise(new TransactionWasCreated(
             uuid,
@@ -20,7 +21,7 @@ export default class Transaction extends Domain.EventSourced {
     private price?: Price;
     private product?: string;
 
-    constructor(uuid: TransactionID) {
+    constructor(uuid: AggregateRootId) {
         super(uuid);
     }
 

@@ -1,5 +1,6 @@
 import InMemoryMiddlewareCache from 'application/middlewares/InMemoryMiddlewareCache';
-import CreateCommand from 'application/transaction/create/command';
+import CreateCommand from 'application/useCase/transaction/create/command';
+import { v4 } from 'uuid';
 
 describe("Cache middleware test", () => {
 
@@ -11,10 +12,20 @@ describe("Cache middleware test", () => {
         let hit = false;
 
         const exec = async () => {
-            return await middelware.execute(new CreateCommand("1", "2", { amount: 1, currency: "EUR"}), ( ) => {
-                hit = true
-                return "test";
-            });
+            return await middelware.execute(
+                new CreateCommand(
+                    v4(), 
+                    "2", 
+                    { 
+                        amount: 1, 
+                        currency: "EUR"
+                    }
+                ), 
+                ( ) => {
+                    hit = true
+                    return "test";
+                }
+            );
         };
 
         expect(await exec()).toBe("test");
@@ -24,10 +35,11 @@ describe("Cache middleware test", () => {
     test("Cache Hit", async () => {
         let hit = false;
 
-        await middelware.execute(new CreateCommand("1", "2", { amount: 1, currency: "EUR"}), ( ) => ("test"));
+        const txuuid = v4();
+        await middelware.execute(new CreateCommand(txuuid, "2", { amount: 1, currency: "EUR"}), ( ) => ("test"));
         
         const exec = async () => {
-            return await middelware.execute(new CreateCommand("1", "2", { amount: 1, currency: "EUR"}), ( ) => {
+            return await middelware.execute(new CreateCommand(txuuid, "2", { amount: 1, currency: "EUR"}), ( ) => {
                 hit = true
                 return "Nope!";
             });

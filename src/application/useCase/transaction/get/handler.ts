@@ -1,9 +1,9 @@
 import NotFoundException from "domain/shared/exceptions/notFoundException";
+import IRepository from "domain/transaction/repository";
 import { Application } from "hollywood-js";
 import { EventStore } from "hollywood-js";
+import Log from "infrastructure/shared/audit/logger";
 import { inject, injectable } from "inversify";
-import IRepository from "../../../domain/transaction/repository";
-import Log from "../../../infrastructure/shared/audit/logger";
 import GetOne from "./query";
 
 @injectable()

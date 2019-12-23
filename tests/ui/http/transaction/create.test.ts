@@ -2,6 +2,7 @@ import * as request from "supertest";
 import KernelFactory, { Kernel } from '../../../../src/kernel';
 import InMemoryTransactionRepository from "../../../infrastructure/transaction/inMemoryRepository";
 import Transaction from "domain/transaction/transaction";
+import * as v4 from 'uuid/v4';
 
 describe("POST /transaction", () => {
   let kernel: Kernel;
@@ -18,10 +19,12 @@ describe("POST /transaction", () => {
   });
 
   it("Create a transaction", async () => {
+    const txuuid = v4();
+
     await request(kernel.http.getExpress())
       .post("/transaction")
       .send({
-        uuid: "255edcfe-0622-11ea-8d71-362b9e155667", 
+        uuid: txuuid, 
         price: { 
           amount: 12, 
           currency: "EUR" 
@@ -31,6 +34,6 @@ describe("POST /transaction", () => {
       .set('Accept', 'application/json')
       .expect(201);
 
-    expect(await transactionRepository.get("255edcfe-0622-11ea-8d71-362b9e155667")).toBeInstanceOf(Transaction)
+    expect(await transactionRepository.get(txuuid)).toBeInstanceOf(Transaction)
   });
 });
