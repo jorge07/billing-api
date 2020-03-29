@@ -17,7 +17,12 @@ export default class PostgresClient {
             return;
         }
 
-        this.connection = await createConnection(this.config);
+        try {
+
+            this.connection = await createConnection(this.config);
+        } catch (err) {
+            throw err;
+        }
 
         const sigs = [
             "SIGINT",

@@ -1,4 +1,4 @@
-FROM node:12.13-buster-slim as base
+FROM node:13.12-buster-slim as base
 
 ENV NODE_ENV dev
 

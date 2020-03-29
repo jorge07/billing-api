@@ -1,35 +1,23 @@
-import { IContainerServiceItem, ServiceList } from './items/service';
 import InMemoryTransactionRepository from '../../tests/infrastructure/transaction/inMemoryRepository';
 import EventCollectorListener from '../../tests/infrastructure/shared/EventCollectorListener';
-import { EventStore, ReadModel } from 'hollywood-js';
+import { EventStore, ReadModel, Framework } from 'hollywood-js';
 import TransactionInMemoryProjector from '../../tests/infrastructure/transaction/InMemoryProjector';
 import TransactionWasCreated from 'domain/transaction/events/transactionWasCreated';
 import GenericInMemoryRepository from '../../tests/infrastructure/shared/GenericInMemoryRepository';
-import { injectable, decorate, interfaces } from 'inversify';
 import Transaction from '../../src/domain/transaction/transaction';
 
-decorate(injectable(), ReadModel.InMemoryReadModelRepository);
-
-export const testServices: ServiceList = new Map([
+export const testServices: Framework.ServiceList = new Map([
     [
         "domain.transaction.repository",
         { instance: InMemoryTransactionRepository }
     ],
     [
-        "infrastructure.eventStore.DBAL", 
-        { instance: EventStore.InMemoryEventStore }
+        Framework.SERVICES_ALIAS.DEFAULT_EVENT_STORE_SNAPSHOT_DBAL, 
+        { instance: EventStore.InMemorySnapshotStoreDBAL }
     ],
     [
-        "infrastructure.transaction.eventStore", 
-        { custom: ({ container } : interfaces.Context): EventStore.EventStore<Transaction> => (
-            new EventStore.EventStore<Transaction>(
-                Transaction,
-                container.get<EventStore.IEventStoreDBAL>("infrastructure.eventStore.DBAL"),
-                container.get<EventStore.EventBus>("infrastructure.transaction.eventBus"),
-                undefined,
-                container.get<number>("eventStore.margin"),
-            ))
-        }
+        Framework.SERVICES_ALIAS.DEFAULT_EVENT_STORE_DBAL, 
+        { instance: EventStore.InMemoryEventStore }
     ],
     [
         "infrastructure.transaction.readModel.repository",
@@ -54,7 +42,15 @@ export const testServices: ServiceList = new Map([
         }
     ],
     [
-        "infrastructure.transaction.rabbitmq.connection", 
+        "infrastructure.eventBus.publisher", 
+        { 
+            instance: class { on() {}},
+            bus: Framework.SERVICES_ALIAS.DEFAULT_EVENT_BUS, 
+            listener: true 
+        }
+    ],
+    [
+        "infrastructure.rabbitmq.connection", 
         { 
             constant: true,
             async: async () => {
@@ -66,7 +62,7 @@ export const testServices: ServiceList = new Map([
         "infrastructure.shared.eventCollector", 
         { 
             instance: EventCollectorListener,
-            bus: 'infrastructure.transaction.eventBus', 
+            bus: Framework.SERVICES_ALIAS.DEFAULT_EVENT_BUS, 
             listener: true 
         }
     ],
@@ -74,7 +70,7 @@ export const testServices: ServiceList = new Map([
         "infrastructure.transaction.readModel.projector", 
         { 
             instance: TransactionInMemoryProjector, 
-            bus: 'infrastructure.transaction.eventBus', 
+            bus: Framework.SERVICES_ALIAS.DEFAULT_EVENT_BUS, 
             subscriber: [TransactionWasCreated] 
         }
     ],   

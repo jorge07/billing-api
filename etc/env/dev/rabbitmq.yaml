@@ -13,8 +13,6 @@ services:
       - "5672:5672"
     networks:
      - rabbitmq
-
-  workers:
     
 networks:
   rabbitmq:

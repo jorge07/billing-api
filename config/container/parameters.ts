@@ -1,37 +1,37 @@
 import * as config from 'config';
-import { ParametersList, IContainerParameterItem } from './items/parameter';
+import { Framework } from 'hollywood-js';
 
-export const parameters: ParametersList = new Map([
+export const parameters: Framework.ParametersList = new Map([
     [
         "appName", 
-        { value: config.get('appName') }
+        config.get('appName')
     ],
     [
         "logLevel",
-        { value: config.get('logger.logLevel') }
+        config.get('logger.logLevel')
     ],
     [
         "orm.writeModel",
-        { value: config.get('orm.writeModel') }
+        config.get('orm.writeModel')
     ],
     [
         "orm.readModel",
-        { value: config.get('orm.readModel') }
+        config.get('orm.readModel')
     ],
     [
         "rabbitmq",
-        { value: config.get('rabbitmq') }
+        config.get('rabbitmq')
     ],
     [
         "env",
-        { value: config.get('env') }
+        config.get('env')
     ],
     [
         "port", 
-        { value: config.get('http.port') }
+        config.get('http.port')
     ],
     [
         "eventStore.margin", 
-        { value: config.get('eventStore.margin') }
+        config.get('eventStore.margin')
     ],
 ]);

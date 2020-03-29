@@ -1,11 +1,13 @@
 import * as request from "supertest";
-import KernelFactory, { Kernel } from '../../../../src/kernel';
+import KernelFactory from '../../../../src/kernel';
 import InMemoryTransactionRepository from "../../../infrastructure/transaction/inMemoryRepository";
 import Transaction from "domain/transaction/transaction";
 import * as v4 from 'uuid/v4';
+import HTTPServer from '../../../../src/ui/http/server';
+import { Framework } from "hollywood-js";
 
 describe("POST /transaction", () => {
-  let kernel: Kernel;
+  let kernel: Framework.Kernel;
   let transactionRepository;
 
   beforeEach(async () => {
@@ -21,7 +23,7 @@ describe("POST /transaction", () => {
   it("Create a transaction", async () => {
     const txuuid = v4();
 
-    await request(kernel.http.getExpress())
+    await request(kernel.container.get<HTTPServer>('ui.httpServer').getExpress())
       .post("/transaction")
       .send({
         uuid: txuuid, 

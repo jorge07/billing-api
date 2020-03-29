@@ -10,7 +10,7 @@ export default class Transaction extends Domain.EventSourced {
         const instance = new Transaction(uuid.toString());
 
         instance.raise(new TransactionWasCreated(
-            uuid,
+            uuid.toString(),
             product,
             price,
         ));

@@ -1,9 +1,9 @@
-import App from "application/index";
 import GetOne from "application/useCase/transaction/get/query";
 import { Express, Request, Response } from "express";
+import { Framework } from "hollywood-js";
 import { IRoute } from "../index";
 
-export default function get(app: App): IRoute {
+export default function get(app: Framework.AppBridge): IRoute {
     return {
         action: async (req: Request, res: Response) => {
             const { uuid } = req.params;

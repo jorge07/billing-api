@@ -9,13 +9,13 @@ import GetOne from 'application/transaction/get/query';
     try {
         const kernel = await KernelFactory(false);
 
-         await kernel.app.handle(new CreateCommand(
+         await kernel.handle(new CreateCommand(
             "255edcfe-0622-11ea-8d71-362b9e155667",
             "demo",
             { amount: 4, currency: "EUR" }
         ));
 
-        const result = await kernel.app.ask(new GetOne('255edcfe-0622-11ea-8d71-362b9e155667'))
+        const result = await kernel.ask(new GetOne('255edcfe-0622-11ea-8d71-362b9e155667'))
 
         console.log(result);
 

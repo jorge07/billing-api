@@ -1,14 +1,16 @@
 import * as request from "supertest";
-import KernelFactory, { Kernel } from '../../../../src/kernel';
+import KernelFactory from '../../../../src/kernel';
 import InMemoryTransactionRepository from "../../../infrastructure/transaction/inMemoryRepository";
 import Transaction from "domain/transaction/transaction";
 import Price from 'domain/transaction/valueObject/price';
 import TransactionID from 'domain/transaction/valueObject/transactionId';
+import HTTPServer from '../../../../src/ui/http/server';
+import { Framework } from "hollywood-js";
 
 describe("GET /transaction/:uuid", () => {
 
-  let transactionRepository;
-  let kernel: Kernel;
+  let transactionRepository: InMemoryTransactionRepository;
+  let kernel: Framework.Kernel;
 
   beforeEach(async () => {
       kernel = await KernelFactory(false);
@@ -24,7 +26,7 @@ describe("GET /transaction/:uuid", () => {
     const txnuuid = "ae081e7a-ec8c-4ff1-9de5-f70383fe03a7"; 
     await transactionRepository.save(Transaction.create(new TransactionID(txnuuid), "uuu", new Price(1, "EUR")));
 
-    const result: any = await request(kernel.http.getExpress()).get("/transaction/" + txnuuid);
+    const result: any = await request(kernel.container.get<HTTPServer>('ui.httpServer').getExpress()).get("/transaction/" + txnuuid);
 
     const expectedResponse = {
       "data": {
@@ -45,7 +47,7 @@ describe("GET /transaction/:uuid", () => {
   });
   
   it("Get /ae081e7a-ec8c-4ff1-9de5-f70383fe03a7 expect status 404", async () => {
-    await request(kernel.http.getExpress())
+    await request(kernel.container.get<HTTPServer>('ui.httpServer').getExpress())
       .get("/transaction/ae081e7a-ec8c-4ff1-9de5-f70383fe03a7")
       .expect(404)
     ;

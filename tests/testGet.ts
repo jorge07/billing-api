@@ -1,19 +1,17 @@
 import KernelFactory from "../src/kernel";
-import PostgresEventStoreDBAL from 'infrastructure/shared/eventStore/dbal';
-import { EventStore } from 'hollywood-js';
-import Transaction from "domain/transaction/transaction";
-import CreateCommand from 'application/transaction/create/command';
-import GetOne from 'application/transaction/get/query';
+import GetOne from '../src/application/useCase/transaction/get/query';
+import { v4 } from 'uuid';
 
 (async () => {
     try {
         const kernel = await KernelFactory(false);
 
-        const result = await kernel.app.ask(new GetOne('255edcfe-0622-11ea-8d71-362b9e155667'))
+        const result = await kernel.ask(new GetOne(v4()))
 
         console.log(JSON.stringify(result));
 
     } catch(err) {
         console.log(err.message, err);
+        throw err;
     }
 })();

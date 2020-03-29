@@ -1,15 +1,16 @@
 import CreateCommand from 'application/useCase/transaction/create/command';
 import Transaction from 'domain/transaction/transaction';
-import { Application } from "hollywood-js";
+import { Application, Framework } from "hollywood-js";
 import InMemoryTransactionRepository from '../../../infrastructure/transaction/inMemoryRepository';
 import EventCollectorListener from '../../../infrastructure/shared/EventCollectorListener';
 import TransactionWasCreated from "domain/transaction/events/transactionWasCreated";
-import KernelFactory, { Kernel } from '../../../../src/kernel';
+import KernelFactory from '../../../../src/kernel';
 import TransactionID from 'domain/transaction/valueObject/transactionId';
 import { v4 } from 'uuid';
 
+
 describe("Create Transaction", () => {
-    let kernel: Kernel;
+    let kernel: Framework.Kernel;
 
     beforeEach(async () => {
         kernel = await KernelFactory(false);
@@ -22,7 +23,7 @@ describe("Create Transaction", () => {
     test("Create Transactiona valid and get collected by the event bus", async () => {
         expect.assertions(4);
         const txuuid = v4();
-        await kernel.app.handle(new CreateCommand(txuuid, "", { amount: 12, currency: "EUR" }));
+        await kernel.handle(new CreateCommand(txuuid, "", { amount: 12, currency: "EUR" }));
 
         const repository = kernel.container.get<InMemoryTransactionRepository>('domain.transaction.repository');
         const transaction = await repository.get(new TransactionID(txuuid)) as Transaction;
