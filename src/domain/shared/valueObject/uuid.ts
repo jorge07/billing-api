@@ -1,4 +1,4 @@
-import { Domain } from "hollywood-js";
+import type { Domain } from "hollywood-js";
 import * as validate from "uuid-validate";
 import v4 from "uuid/v4";
 import InvalidArgumentException from "../exceptions/invalidArgumentException";

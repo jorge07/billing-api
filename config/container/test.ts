@@ -1,10 +1,9 @@
-import InMemoryTransactionRepository from '../../tests/infrastructure/transaction/inMemoryRepository';
+import InMemoryTransactionRepository from '../../tests/infrastructure/transaction/InMemoryRepository';
 import EventCollectorListener from '../../tests/infrastructure/shared/EventCollectorListener';
 import { EventStore, ReadModel, Framework } from 'hollywood-js';
 import TransactionInMemoryProjector from '../../tests/infrastructure/transaction/InMemoryProjector';
 import TransactionWasCreated from 'domain/transaction/events/transactionWasCreated';
 import GenericInMemoryRepository from '../../tests/infrastructure/shared/GenericInMemoryRepository';
-import Transaction from '../../src/domain/transaction/transaction';
 
 export const testServices: Framework.ServiceList = new Map([
     [

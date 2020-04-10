@@ -1,11 +1,12 @@
 import * as request from "supertest";
 import KernelFactory from '../../../../src/kernel';
-import InMemoryTransactionRepository from "../../../infrastructure/transaction/inMemoryRepository";
+import InMemoryTransactionRepository from "../../../infrastructure/transaction/InMemoryRepository";
 import Transaction from "domain/transaction/transaction";
 import Price from 'domain/transaction/valueObject/price';
 import TransactionID from 'domain/transaction/valueObject/transactionId';
 import HTTPServer from '../../../../src/ui/http/server';
 import { Framework } from "hollywood-js";
+import * as prom from "prom-client";
 
 describe("GET /transaction/:uuid", () => {
 
@@ -14,6 +15,8 @@ describe("GET /transaction/:uuid", () => {
 
   beforeEach(async () => {
       kernel = await KernelFactory(false);
+      ((prom.Registry as any).globalRegistry as prom.Registry).clear();
+
       transactionRepository = kernel.container.get<InMemoryTransactionRepository>('domain.transaction.repository')
       kernel.container.snapshot();
   });

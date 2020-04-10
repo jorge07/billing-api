@@ -3,7 +3,7 @@ const migrationsDir = "config/packages/orm/writeModel/migrations";
 module.exports = {
    name: "default",
    type: "postgres",
-   host: "localhost",
+   host: "192.168.99.106",
    port: 5432,
    username: "postgres",
    password: "changeme",

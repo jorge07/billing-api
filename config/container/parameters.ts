@@ -34,4 +34,8 @@ export const parameters: Framework.ParametersList = new Map([
         "eventStore.margin", 
         config.get('eventStore.margin')
     ],
+    [
+        "metricsConfig", 
+        config.get('metrics')
+    ],
 ]);

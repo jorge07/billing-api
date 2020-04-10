@@ -1,7 +1,9 @@
 import * as bodyParser from "body-parser";
-import { Express, Request, Response } from "express";
 import * as express from "express";
-import { Server } from "http";
+import type { Express, Request, Response } from "express";
+import * as prometheus from "express-prom-bundle";
+import { Framework } from "hollywood-js";
+import type { Server } from "http";
 import { inject, injectable } from "inversify";
 import Log from "../../infrastructure/shared/audit/logger";
 import errorHandler from "./middleware/errorHandler";
@@ -9,37 +11,44 @@ import { IRoute, routes } from "./routing";
 
 @injectable()
 export default class HTTPServer {
-    private readonly express: Express;
-    private server?: Server;
+    private readonly http: Express;
+    private readonly monitor: Express;
 
     constructor(
         @inject("port") private readonly port: number,
         @inject("logger") private readonly logger: Log,
-        @inject("hollywood.app.bridge") private readonly app: any,
+        @inject("metricsConfig") private readonly metricsConfig: object,
+        @inject("hollywood.app.bridge") private readonly app: Framework.AppBridge,
     ) {
-        this.express = express();
-        this.express.use(
+        this.http = express();
+        this.monitor = express();
+
+        this.http.use(
             bodyParser.json({
                 type: "application/json",
             }),
         );
-
+        this.bindMonitor(this.metricsConfig);
         this.bindRouting();
-        this.express.use(errorHandler);
-        this.stopWatch();
+        this.http.use(errorHandler);
     }
 
     public async up(): Promise<void> {
-        this.server = await this.express.listen(this.port, () => {
+        const server: Server = await this.http.listen(this.port, () => {
             this.logger.info(`🚀 Server is running in http://localhost:${this.port}`);
-       });
+        });
+        const monitor: Server = await this.monitor.listen(9800, () => {
+            this.logger.info(`🚀 Monitor is running in http://localhost:9800/metrics`);
+        });
+
+        this.stopWatch([server, monitor]);
     }
 
     public getExpress(): express.Express {
-        return this.express;
+        return this.http;
     }
 
-    private stopWatch(): void {
+    private stopWatch(servers: Server[]): void {
         const sigs = [
             "SIGINT",
             "SIGTERM",
@@ -48,17 +57,29 @@ export default class HTTPServer {
 
         sigs.forEach((sig: any) => {
             process.on(sig, () => {
-                if (!this.server) {
-                    return;
-                }
                 this.logger.warn("Shutting down...");
-                this.server.close((err?: Error) => {
-                    if (err) {
-                        this.logger.error(err.message);
-                        process.exit(1);
-                    }
-                });
 
+                const errors: any[] = [];
+
+                for (const server of servers) {
+                    server.close((err?: Error) => {
+                        if (err) {
+                            errors.push(err);
+                        }
+                    });
+                }
+
+                if (errors.length > 0) {
+                    for (const err of errors) {
+                        this.logger.warn("The following errors encounter when shutting down");
+                        this.logger.error(err.message);
+                    }
+
+                    process.exitCode = 1;
+                }
+
+                this.logger.warn("Bye!");
+                process.exit(0);
             });
         });
     }
@@ -73,14 +94,34 @@ export default class HTTPServer {
 
             switch (route.method.toLocaleLowerCase()) {
                 case "get":
-                    this.express.get(route.path, this.wrapAsyncRoutes(route.action));
+                    this.http.get(route.path, this.wrapAsyncRoutes(route.action));
                     break;
                 case "post":
-                    this.express.post(route.path, this.wrapAsyncRoutes(route.action));
+                    this.http.post(route.path, this.wrapAsyncRoutes(route.action));
                     break;
                 default:
                     throw new Error("No valid method for:" + JSON.stringify(route));
             }
         });
+    }
+
+    private bindMonitor(config: prometheus.Opts = {}): void {
+        // Any, yes. Workaround for https://github.com/jochen-schweizer/express-prom-bundle/pull/57
+        const metricsRequestMiddleware: any = prometheus({
+            autoregister: false,
+            includeMethod: true,
+            includePath: true,
+            normalizePath: [
+                ["^/transaction/.*", "/transaction/:uuid"],
+                ["/transaction", "/transaction"],
+            ],
+            promClient: {
+                collectDefaultMetrics: {},
+            },
+            ...config
+        });
+
+        this.http.use(metricsRequestMiddleware);
+        this.monitor.use(metricsRequestMiddleware.metricsMiddleware);
     }
 }

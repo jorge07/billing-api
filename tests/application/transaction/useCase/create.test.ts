@@ -1,7 +1,7 @@
 import CreateCommand from 'application/useCase/transaction/create/command';
 import Transaction from 'domain/transaction/transaction';
-import { Application, Framework } from "hollywood-js";
-import InMemoryTransactionRepository from '../../../infrastructure/transaction/inMemoryRepository';
+import { Framework } from "hollywood-js";
+import InMemoryTransactionRepository from '../../../infrastructure/transaction/InMemoryRepository';
 import EventCollectorListener from '../../../infrastructure/shared/EventCollectorListener';
 import TransactionWasCreated from "domain/transaction/events/transactionWasCreated";
 import KernelFactory from '../../../../src/kernel';

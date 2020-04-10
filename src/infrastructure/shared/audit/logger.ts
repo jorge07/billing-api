@@ -7,7 +7,6 @@ export interface ILog {
     error(message: string, ...meta: any[]): void;
 }
 
-@injectable()
 export default class Log implements ILog {
     private readonly winston: winston.Logger;
     constructor(

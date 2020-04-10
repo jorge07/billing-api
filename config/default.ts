@@ -16,6 +16,9 @@ export default {
     eventStore: {
         margin: 10,
     },
+    metrics: {
+        
+    },
     http: {
         port: process.env.PORT || 8080
     }
