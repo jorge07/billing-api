@@ -1,6 +1,6 @@
 import Price from "domain/transaction/valueObject/price";
 import TransactionID from "domain/transaction/valueObject/transactionId";
-import { ICommand } from "hollywood-js/src/Application";
+import type { ICommand } from "hollywood-js/src/Application";
 
 export default class CreateCommand implements ICommand {
     public readonly price: Price;

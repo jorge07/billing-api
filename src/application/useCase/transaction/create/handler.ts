@@ -1,11 +1,10 @@
 import ConflictException from "domain/shared/exceptions/ConflictException";
 import Transaction from "domain/transaction/transaction";
 import { Application, EventStore } from "hollywood-js";
-import type { ILog } from "infrastructure/shared/audit/logger";
+import Probe from "infrastructure/shared/audit/probe";
 import { inject, injectable } from "inversify";
-import CreateCommand from "./command";
-import Probe from 'infrastructure/shared/audit/probe';
 import type { Counter } from "prom-client";
+import CreateCommand from "./command";
 
 @injectable()
 export default class Create implements Application.ICommandHandler {
@@ -15,14 +14,13 @@ export default class Create implements Application.ICommandHandler {
 
     constructor(
         @inject("infrastructure.shared.audit.probe") private readonly probe: Probe,
-        @inject("logger") private readonly logger: ILog,
         @inject(
             "infrastructure.transaction.eventStore",
         ) private readonly writeModel: EventStore.EventStore<Transaction>,
     ) {
-        this.error = this.probe.counter({ name: 'transaction_create_error', help: 'Counter of the incremental transaction create errors'})
-        this.conflicts = this.probe.counter({ name: 'transaction_create_conflict', help: 'Counter of the incremental transaction create conflicts'})
-        this.success = this.probe.counter({ name: 'transaction_create_success', help: 'Counter of the incremental transaction create success'})
+        this.error = this.probe.counter({ name: "transaction_create_error", help: "Counter of the incremental transaction create errors"});
+        this.conflicts = this.probe.counter({ name: "transaction_create_conflict", help: "Counter of the incremental transaction create conflicts"});
+        this.success = this.probe.counter({ name: "transaction_create_success", help: "Counter of the incremental transaction create success"});
     }
 
     @Application.autowiring

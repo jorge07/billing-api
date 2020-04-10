@@ -1,13 +1,13 @@
-import * as express from "express";
 import * as bodyParser from "body-parser";
-import * as prometheus from "express-prom-bundle";
+import * as express from "express";
 import type { Express, Request, Response } from "express";
+import * as prometheus from "express-prom-bundle";
+import { Framework } from "hollywood-js";
 import type { Server } from "http";
 import { inject, injectable } from "inversify";
 import Log from "../../infrastructure/shared/audit/logger";
 import errorHandler from "./middleware/errorHandler";
 import { IRoute, routes } from "./routing";
-import { Framework } from 'hollywood-js';
 
 @injectable()
 export default class HTTPServer {
@@ -26,7 +26,7 @@ export default class HTTPServer {
         this.http.use(
             bodyParser.json({
                 type: "application/json",
-            })
+            }),
         );
         this.bindMonitor(this.metricsConfig);
         this.bindRouting();
@@ -59,18 +59,18 @@ export default class HTTPServer {
             process.on(sig, () => {
                 this.logger.warn("Shutting down...");
 
-                const errors: any[] = []; 
+                const errors: any[] = [];
 
-                for (let server of servers) {
+                for (const server of servers) {
                     server.close((err?: Error) => {
                         if (err) {
-                            errors.push(err)
+                            errors.push(err);
                         }
                     });
                 }
 
                 if (errors.length > 0) {
-                    for (let err of errors) {
+                    for (const err of errors) {
                         this.logger.warn("The following errors encounter when shutting down");
                         this.logger.error(err.message);
                     }
@@ -107,16 +107,16 @@ export default class HTTPServer {
 
     private bindMonitor(config: prometheus.Opts = {}): void {
         const metricsRequestMiddleware = prometheus({
-            includePath: true,
-            includeMethod: true,
             autoregister: false,
+            includeMethod: true,
+            includePath: true,
+            normalizePath: [
+                ["^/transaction/.*", "/transaction/:uuid"],
+                ["/transaction", "/transaction"],
+            ],
             promClient: {
                 collectDefaultMetrics: {},
             },
-            normalizePath: [
-                ['^/transaction/.*', '/transaction/:uuid'],
-                ['/transaction', '/transaction']
-            ],
         });
 
         this.http.use(metricsRequestMiddleware);
