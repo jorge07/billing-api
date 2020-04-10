@@ -106,7 +106,8 @@ export default class HTTPServer {
     }
 
     private bindMonitor(config: prometheus.Opts = {}): void {
-        const metricsRequestMiddleware = prometheus({
+        // Any, yes. Workaround for https://github.com/jochen-schweizer/express-prom-bundle/pull/57
+        const metricsRequestMiddleware: any = prometheus({
             autoregister: false,
             includeMethod: true,
             includePath: true,
@@ -117,6 +118,7 @@ export default class HTTPServer {
             promClient: {
                 collectDefaultMetrics: {},
             },
+            ...config
         });
 
         this.http.use(metricsRequestMiddleware);
