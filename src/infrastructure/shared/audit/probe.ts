@@ -1,14 +1,7 @@
-import prom, {CounterConfiguration} from "prom-client";
+import * as prom from "prom-client";
 
-export default function probe() {
-
-    return {
-        counter: (conf: CounterConfiguration<string>) => {
-            return new prom.Counter(conf)
-        },
-        gauge: prom.Gauge,
-        histogram: prom.Histogram,
-        summary: prom.Summary,
+export default class Probe {
+    counter(conf: prom.CounterConfiguration<string>) {
+        return new prom.Counter(conf)
     }
-
-}
+};

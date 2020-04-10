@@ -21,6 +21,7 @@ import PostgresRepository from 'infrastructure/transaction/readModel/repository/
 import RabbitMQChannelClientFactory from 'infrastructure/shared/rabbitmq/channelFactory';
 import AMPQChannel from 'infrastructure/shared/rabbitmq/channel';
 import RabbitMQEventPublisher from '../../src/infrastructure/shared/eventListener/RabbitMQEventPublisher';
+import Probe from '../../src/infrastructure/shared/audit/probe';
 
 export const services: Framework.ServiceList = new Map([
     [
@@ -55,6 +56,10 @@ export const services: Framework.ServiceList = new Map([
                 LoggerMiddleware,
             ]
         }
+    ],
+    [
+        "infrastructure.shared.audit.probe", 
+        { instance: Probe }
     ],
     [
         "infrastructure.transaction.async.eventBus", 
