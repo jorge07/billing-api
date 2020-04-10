@@ -3,7 +3,7 @@ const migrationsDir = "config/packages/orm/readModel/migrations";
 module.exports = {
    name: "readModel",
    type: "postgres",
-   host: "localhost",
+   host: "192.168.99.106",
    port: 5432,
    username: "postgres",
    password: "changeme",
