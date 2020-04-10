@@ -1,11 +1,11 @@
 import ConflictException from "domain/shared/exceptions/ConflictException";
 import Transaction from "domain/transaction/transaction";
 import { Application, EventStore } from "hollywood-js";
-import { ILog } from "infrastructure/shared/audit/logger";
+import type { ILog } from "infrastructure/shared/audit/logger";
 import { inject, injectable } from "inversify";
 import CreateCommand from "./command";
 import Probe from 'infrastructure/shared/audit/probe';
-import { Counter } from "prom-client";
+import type { Counter } from "prom-client";
 
 @injectable()
 export default class Create implements Application.ICommandHandler {
