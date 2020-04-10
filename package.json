@@ -60,6 +60,6 @@
       "dev": "yarn deps:up && nodemon",
       "build": "./node_modules/typescript/bin/tsc -P tsconfig.json",
       "lint": "./node_modules/tslint/bin/tslint -c etc/env/dev/tslint.json --fix 'src/**/*.ts' ",
-      "test": "NODE_ENV=test jest"
+      "test": "NODE_ENV=test jest -i"
    }
 }

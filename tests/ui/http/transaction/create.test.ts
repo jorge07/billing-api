@@ -1,6 +1,6 @@
 import * as request from "supertest";
 import KernelFactory from '../../../../src/kernel';
-import InMemoryTransactionRepository from "../../../infrastructure/transaction/inMemoryRepository";
+import InMemoryTransactionRepository from "../../../infrastructure/transaction/InMemoryRepository";
 import Transaction from "domain/transaction/transaction";
 import * as v4 from 'uuid/v4';
 import HTTPServer from '../../../../src/ui/http/server';
