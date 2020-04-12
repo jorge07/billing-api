@@ -1,4 +1,4 @@
-import { inject, injectable } from "inversify";
+import { inject } from "inversify";
 import * as winston from "winston";
 
 export interface ILog {

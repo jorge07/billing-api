@@ -5,9 +5,9 @@ import * as prometheus from "express-prom-bundle";
 import { Framework } from "hollywood-js";
 import type { Server } from "http";
 import { inject, injectable } from "inversify";
-import Log from "../../infrastructure/shared/audit/logger";
 import errorHandler from "./middleware/errorHandler";
 import { IRoute, routes } from "./routing";
+import Log from 'infrastructure/shared/audit/logger';
 
 @injectable()
 export default class HTTPServer {
@@ -17,7 +17,6 @@ export default class HTTPServer {
     constructor(
         @inject("port") private readonly port: number,
         @inject("logger") private readonly logger: Log,
-        @inject("metricsConfig") private readonly metricsConfig: object,
         @inject("hollywood.app.bridge") private readonly app: Framework.AppBridge,
     ) {
         this.http = express();
@@ -28,7 +27,7 @@ export default class HTTPServer {
                 type: "application/json",
             }),
         );
-        this.bindMonitor(this.metricsConfig);
+        this.bindMonitor();
         this.bindRouting();
         this.http.use(errorHandler);
     }
@@ -105,7 +104,7 @@ export default class HTTPServer {
         });
     }
 
-    private bindMonitor(config: prometheus.Opts = {}): void {
+    private bindMonitor(): void {
         // Any, yes. Workaround for https://github.com/jochen-schweizer/express-prom-bundle/pull/57
         const metricsRequestMiddleware: any = prometheus({
             autoregister: false,
@@ -117,8 +116,7 @@ export default class HTTPServer {
             ],
             promClient: {
                 collectDefaultMetrics: {},
-            },
-            ...config
+            }
         });
 
         this.http.use(metricsRequestMiddleware);

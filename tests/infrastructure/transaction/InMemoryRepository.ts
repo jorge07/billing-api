@@ -1,7 +1,6 @@
 import { EventStore } from "hollywood-js";
 import IRepository from "domain/transaction/repository";
 import Transaction from 'domain/transaction/transaction';
-import { InMemoryEventStore, EventBus, InMemorySnapshotStoreDBAL } from "hollywood-js/src/EventStore";
 import { injectable, inject } from 'inversify';
 import TransactionID from "domain/transaction/valueObject/transactionId";
 

@@ -1,7 +1,5 @@
-import { DomainMessage } from "hollywood-js/src/Domain";
-import {Column, Entity, PrimaryColumn } from "typeorm";
-import TransactionWasCreated from "../../../../domain/transaction/events/transactionWasCreated";
-import Transaction from "../../../../domain/transaction/transaction";
+import { Column, Entity, PrimaryColumn } from "typeorm";
+import type TransactionWasCreated from "domain/transaction/events/transactionWasCreated";
 
 @Entity()
 export class Transactions {

@@ -2282,9 +2282,9 @@ highlight.js@^9.6.0:
   version "9.16.2"
   resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-9.16.2.tgz#68368d039ffe1c6211bcc07e483daf95de3e403e"
 
-hollywood-js@^1.9.3:
-  version "1.9.3"
-  resolved "https://registry.yarnpkg.com/hollywood-js/-/hollywood-js-1.9.3.tgz#6528e9c160824fd5bcfc102c855e0e56e42e8a8d"
+hollywood-js@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/hollywood-js/-/hollywood-js-2.0.0.tgz#5ebeeb85a1c35995e28483faf438cbea34b086af"
   dependencies:
     config "^3.3.1"
     inversify "^5.0.1"

@@ -1,9 +1,9 @@
+import { EntityNotFoundError } from "typeorm/error/EntityNotFoundError";
+import { Repository } from "typeorm";
+import { inject, injectable } from "inversify";
 import NotFoundException from "domain/shared/exceptions/notFoundException";
 import IRepository from "domain/transaction/repository";
-import { inject, injectable } from "inversify";
-import { Repository } from "typeorm";
-import { EntityNotFoundError } from "typeorm/error/EntityNotFoundError";
-import TransactionID from "../../../../domain/transaction/valueObject/transactionId";
+import TransactionID from "domain/transaction/valueObject/transactionId";
 import { Transactions } from "../mapping/transactions";
 
 @injectable()

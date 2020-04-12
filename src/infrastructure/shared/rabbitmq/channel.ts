@@ -1,11 +1,8 @@
 import { Channel, Connection, Message } from "amqplib";
-import { ILog } from "infrastructure/shared/audit/logger";
 import { injectable } from "inversify";
 
 @injectable()
 export default class AMPQChannel {
-
-    private readonly defaultExange: string = "events";
 
     constructor(
         private readonly connection: Connection,

@@ -1,5 +1,4 @@
 import Transaction from 'domain/transaction/transaction';
-import { Container } from 'inversify';
 import { Domain } from 'hollywood-js';
 import TransactionWasCreated from 'domain/transaction/events/transactionWasCreated';
 import Price from 'domain/transaction/valueObject/price';

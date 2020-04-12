@@ -1,6 +1,5 @@
-import { inject, injectable } from "inversify";
+import { injectable } from "inversify";
 import { Connection, createConnection, getConnectionManager } from "typeorm";
-import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions";
 
 @injectable()
 export default class PostgresClient {

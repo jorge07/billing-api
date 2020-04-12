@@ -1,5 +1,5 @@
 import * as config from 'config';
-import { Framework } from 'hollywood-js';
+import type { Framework } from 'hollywood-js';
 
 export const parameters: Framework.ParametersList = new Map([
     [

@@ -1,5 +1,5 @@
 import { injectable, inject } from 'inversify';
-import { EventStore, ReadModel } from 'hollywood-js';
+import { ReadModel } from 'hollywood-js';
 import { Transactions } from 'infrastructure/transaction/readModel/mapping/transactions';
 import TransactionWasCreated from 'domain/transaction/events/transactionWasCreated';
 

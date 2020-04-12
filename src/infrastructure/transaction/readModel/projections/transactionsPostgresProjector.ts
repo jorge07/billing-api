@@ -1,8 +1,7 @@
-import TransactionWasCreated from "domain/transaction/events/transactionWasCreated";
-import Transaction from "domain/transaction/transaction";
 import { EventStore } from "hollywood-js";
-import PostgresRepository from "infrastructure/transaction/readModel/repository/PostgresRepository";
 import { inject, injectable } from "inversify";
+import TransactionWasCreated from "domain/transaction/events/transactionWasCreated";
+import PostgresRepository from "infrastructure/transaction/readModel/repository/PostgresRepository";
 import { Transactions } from "../mapping/transactions";
 
 @injectable()

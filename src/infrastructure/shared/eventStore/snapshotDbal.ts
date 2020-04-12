@@ -1,7 +1,6 @@
-import { Domain, EventStore } from "hollywood-js";
+import type { Domain, EventStore } from "hollywood-js";
 import { inject, injectable } from "inversify";
-import { Repository, SelectQueryBuilder } from "typeorm";
-import { Events } from "./mapping/events";
+import { Repository } from "typeorm";
 import { Snapshots } from "./mapping/snapshots";
 
 @injectable()

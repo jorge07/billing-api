@@ -1,5 +1,5 @@
-import { DomainMessage } from "hollywood-js/src/Domain";
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import type { DomainMessage } from "hollywood-js/src/Domain";
+import { Column, Entity, PrimaryGeneratedColumn} from "typeorm";
 
 @Entity()
 export class Events {

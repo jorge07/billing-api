@@ -1,14 +1,14 @@
 import * as config from 'config';
-import { interfaces, decorate, injectable } from 'inversify';
-import Create from 'application/useCase/transaction/create/handler';
-import Log from 'infrastructure/shared/audit/logger';
-import Get from 'application/useCase/transaction/get/handler';
+import type { interfaces } from 'inversify';
 import { EventStore, Framework } from 'hollywood-js';
+import { getRepository } from 'typeorm';
+import Create from 'application/useCase/transaction/create/handler';
+import Get from 'application/useCase/transaction/get/handler';
+import Log from 'infrastructure/shared/audit/logger';
 import Transaction from 'domain/transaction/transaction';
 import HTTPServer from 'ui/http/server';
 import LoggerMiddleware from 'application/middlewares/loggerMiddleware';
 import InMemoryMiddlewareCache from 'application/middlewares/InMemoryMiddlewareCache';
-import { getRepository, Connection, Repository } from 'typeorm';
 import { Events } from 'infrastructure/shared/eventStore/mapping/events';
 import PostgresEventStoreDBAL from 'infrastructure/shared/eventStore/dbal';
 import PostgresClient from 'infrastructure/shared/postgres/postgresClient';
@@ -20,8 +20,8 @@ import TransactionWasCreated from 'domain/transaction/events/transactionWasCreat
 import PostgresRepository from 'infrastructure/transaction/readModel/repository/PostgresRepository';
 import RabbitMQChannelClientFactory from 'infrastructure/shared/rabbitmq/channelFactory';
 import AMPQChannel from 'infrastructure/shared/rabbitmq/channel';
-import RabbitMQEventPublisher from '../../src/infrastructure/shared/eventListener/RabbitMQEventPublisher';
-import Probe from '../../src/infrastructure/shared/audit/probe';
+import RabbitMQEventPublisher from 'infrastructure/shared/eventListener/RabbitMQEventPublisher';
+import Probe from 'infrastructure/shared/audit/probe';
 
 export const services: Framework.ServiceList = new Map([
     [
@@ -70,9 +70,6 @@ export const services: Framework.ServiceList = new Map([
         { 
             constant: true,
             async: async () => {
-
-
-
                 const connection = new PostgresClient(Object.assign({}, config.get('orm.writeModel')));
                 
                 try {
@@ -168,7 +165,7 @@ export const services: Framework.ServiceList = new Map([
         { 
             async: async () => {
                 const factory = new RabbitMQChannelClientFactory(Object.assign({}, config.get('rabbitmq')));
-                let client;
+                let client: AMPQChannel;
 
                 try {
                     const { channel, connection } = await factory.createChannel();
