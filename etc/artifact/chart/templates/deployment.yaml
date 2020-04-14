@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "billing.fullname" . }}
+  labels:
+    {{- include "billing.labels" . | nindent 4 }}
+  annotations:
+    checksum/secrets: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
+spec:
+  replicas: {{ default 1 .Values.autoscaling.api.minReplicas }}
+  selector:
+    matchLabels:
+      {{- include "billing.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "billing.selectorLabels" . | nindent 8 }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      serviceAccountName: {{ include "billing.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+{{ tpl ($.Files.Get "config/parameters.yaml") $ | indent 10 }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.parameters.port }}
+              protocol: TCP
+            - name: metrics
+              containerPort: 9800
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /monitor/health
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /monitor/health
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}

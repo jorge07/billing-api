@@ -1,0 +1,16 @@
+{{- if .Values.autoscaling.api }}
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "billing.fullname" . }}
+  labels:
+    {{- include "billing.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .Release.Name }}
+  minReplicas: {{ .Values.autoscaling.api.min }}
+  maxReplicas: {{ .Values.autoscaling.api.max }}
+  targetCPUUtilizationPercentage: {{ .Values.autoscaling.api.targetCPUUtilizationPercentage }}
+{{- end }}

@@ -1,4 +1,3 @@
-import * as config from 'config';
 import type { interfaces } from 'inversify';
 import { EventStore, Framework } from 'hollywood-js';
 import { getRepository } from 'typeorm';
@@ -22,6 +21,7 @@ import RabbitMQChannelClientFactory from 'infrastructure/shared/rabbitmq/channel
 import AMPQChannel from 'infrastructure/shared/rabbitmq/channel';
 import RabbitMQEventPublisher from 'infrastructure/shared/eventListener/RabbitMQEventPublisher';
 import Probe from 'infrastructure/shared/audit/probe';
+import { parameters } from './parameters';
 
 export const services: Framework.ServiceList = new Map([
     [
@@ -70,7 +70,7 @@ export const services: Framework.ServiceList = new Map([
         { 
             constant: true,
             async: async () => {
-                const connection = new PostgresClient(Object.assign({}, config.get('orm.writeModel')));
+                const connection = new PostgresClient(Object.assign({}, parameters.get('orm.writeModel')));
                 
                 try {
                     await connection.connect();
@@ -87,7 +87,7 @@ export const services: Framework.ServiceList = new Map([
         { 
             constant: true,
             async: async () => {
-                const connection = new PostgresClient(Object.assign({}, config.get('orm.readModel')));
+                const connection = new PostgresClient(Object.assign({}, parameters.get('orm.readModel')));
                 
                 try {
                     await connection.connect();
@@ -164,7 +164,7 @@ export const services: Framework.ServiceList = new Map([
         "infrastructure.rabbitmq.connection", 
         { 
             async: async () => {
-                const factory = new RabbitMQChannelClientFactory(Object.assign({}, config.get('rabbitmq')));
+                const factory = new RabbitMQChannelClientFactory(Object.assign({}, parameters.get('rabbitmq')));
                 let client: AMPQChannel;
 
                 try {

@@ -1,0 +1,7 @@
+node_modules/
+build/
+coverage/
+.vscode/
+.github/
+etc/artifact/chart
+etc/env

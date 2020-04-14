@@ -11,5 +11,9 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+    - port: 9800
+      targetPort: metrics
+      protocol: TCP
+      name: metrics
   selector:
     {{- include "billing.selectorLabels" . | nindent 4 }}

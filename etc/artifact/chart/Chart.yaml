@@ -1,0 +1,19 @@
+apiVersion: v2
+name: billing
+description: A Helm chart for Kubernetes for Billing project
+type: application
+version: 0.1.0
+appVersion: 1.0.0
+dependencies:
+  - name: rabbitmq
+    version: 6.25.2
+    repository: https://charts.bitnami.com/bitnami
+    conditions: rabbitmq.selfHosted
+  - name: postgresql
+    version: 8.7.3
+    repository: https://charts.bitnami.com/bitnami
+    conditions: postgresql.selfHosted
+  - name: prometheus-operator
+    version: 8.12.12
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    conditions: prometheus-operator.enabled

@@ -1,0 +1,33 @@
+- name: NODE_ENV
+  value: {{ $.Values.parameters.env }}
+- name: PORT
+  value: {{ .Values.parameters.port | quote }}
+- name: LOG_LEVEL
+  value: {{ .Values.parameters.log_level }}
+- name: RMQ_HOST
+  value: {{ .Values.parameters.rabbit.host }}
+- name: RMQ_USER
+  value: {{ .Values.parameters.rabbit.user }}
+- name: RMQ_PASS
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "billing.fullname" . }}
+      key: rabbitmq.pass
+- name: PG_WRITE_HOST
+  value: {{ .Values.parameters.writeModel.host }}
+- name: PG_WRITE_USER
+  value: {{ .Values.parameters.writeModel.user }}
+- name: PG_WRITE_PASS
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "billing.fullname" . }}
+      key: writeModel.pass
+- name: PG_READ_HOST
+  value: {{ .Values.parameters.readModel.host }}
+- name: PG_READ_USER
+  value: {{ .Values.parameters.readModel.user }}
+- name: PG_READ_PASS
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "billing.fullname" . }}
+      key: readModel.pass

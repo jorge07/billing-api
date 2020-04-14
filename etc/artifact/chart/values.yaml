@@ -1,0 +1,118 @@
+parameters:
+  env: dev
+  port: 8080
+  log_level: info
+  rabbit:
+    host: rabbitmq
+    user: guest
+    pass: guest
+  writeModel:
+    host: postgresql
+    user: postgres
+    pass: changeme
+  readModel:
+    host: postgresql
+    user: postgres
+    pass: changeme
+
+image:
+  repository: jorge07/billing-api
+  tag: latest
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+autoscaling:
+  api:
+    min: 1
+    max: 10
+    targetCPUUtilizationPercentage: 75
+  worker:
+    min: 1
+    max: 5
+    queue: events
+    avgItems: 5
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths: []
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: 
+  limits:
+    cpu: 300m
+    memory: 256Mi
+  requests:
+    cpu: 300m
+    memory: 256Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+rabbitmq:
+  selfHosted: true
+  rbacEnabled: true
+  rabbitmq:
+    username: guest
+    password: guest
+    erlangCookie: "SWQOKODSQALRPCLNMEQG"
+
+postgresql:
+  selfHosted: true
+  postgresql:
+    statefulset:
+      apiVersion: apps/v1
+  image:
+    tag: 11.7.0-debian-10-r65
+  postgresqlUsername: postgres
+  postgresqlPassword: changeme
+  postgresqlDatabase: write_model
+  extraEnv: []
+  initdbScripts:
+    init_script.sh: |
+      #!/bin/bash
+      set -e
+
+      psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
+          CREATE DATABASE read_model;
+      EOSQL
+
+prometheus-operator:
+  enabled: false

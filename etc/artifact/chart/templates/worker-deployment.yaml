@@ -1,11 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "billing.fullname" . }}
+  name: {{ include "billing.fullname" . }}-worker
   labels:
     {{- include "billing.labels" . | nindent 4 }}
+  annotations:
+    checksum/secrets: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ default 1 .Values.autoscaling.worker.min }}
   selector:
     matchLabels:
       {{- include "billing.selectorLabels" . | nindent 6 }}
@@ -27,18 +29,9 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - name: http
-              containerPort: 3000
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
+          command: [ "node", "-r", "tsconfig-paths/register", "./src/ui/console/asyncEventBus/asyncEventBus.js" ]
+          env:
+{{ tpl ($.Files.Get "config/parameters.yaml") $ | indent 10 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

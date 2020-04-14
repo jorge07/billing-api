@@ -1,0 +1,12 @@
+dependencies:
+- name: rabbitmq
+  repository: https://charts.bitnami.com/bitnami
+  version: 6.25.2
+- name: postgresql
+  repository: https://charts.bitnami.com/bitnami
+  version: 8.7.3
+- name: prometheus-operator
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 8.12.12
+digest: sha256:5f61998ea51f8577a694346d8ef57f2dc8a3afd00dcbaf948eace43abc7aa2c9
+generated: "2020-04-14T01:03:17.019052+02:00"

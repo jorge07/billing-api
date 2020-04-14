@@ -43,12 +43,25 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
+{{- define "billing-worker.labels" -}}
+helm.sh/chart: {{ include "billing.chart" . }}
+{{ include "billing-worker.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}
+
 {{/*
 Selector labels
 */}}
 {{- define "billing.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "billing.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}
+{{- define "billing-worker.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "billing.name" . }}-worker
+app.kubernetes.io/instance: {{ .Release.Name }}-worker
 {{- end -}}
 
 {{/*

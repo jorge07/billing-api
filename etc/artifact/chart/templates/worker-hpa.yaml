@@ -1,0 +1,23 @@
+{{- if .Values.autoscaling.worker }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "billing.fullname" . }}-worker
+  labels:
+    {{- include "billing-worker.labels" . | nindent 4 }}
+spec:
+  minReplicas: {{ default 1 .Values.autoscaling.worker.min }}
+  maxReplicas: {{ default 3 .Values.autoscaling.worker.max }}
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "billing.fullname" . }}-worker
+  metrics:
+  - type: External
+    external:
+      metricName: rabbitmq.queue.messages_ready
+      metricSelector:
+        matchLabels:
+            rabbitmq_queue: {{ .Values.autoscaling.worker.queue }}
+      targetAverageValue: {{ .Values.autoscaling.worker.avgItems }}
+{{- end }}
