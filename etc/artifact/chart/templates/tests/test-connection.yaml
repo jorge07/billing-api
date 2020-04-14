@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "billing.fullname" . }}:{{ .Values.service.port }}']
+      args: ['{{ include "billing.fullname" . }}:{{ .Values.service.port }}/monitor/health']
   restartPolicy: Never

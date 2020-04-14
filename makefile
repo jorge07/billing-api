@@ -43,6 +43,11 @@ mk-expose-api:
 	echo "open http://127.0.0.1:8080"
 	kubectl --namespace default port-forward svc/api-billing 8080:80
 
+.PHONY: mk-expose-prom
+mk-expose-prom:
+	echo "open http://127.0.0.1:9090"
+	kubectl --namespace default port-forward svc/api-prometheus-operator-prometheus 9090:9090
+
 .PHONY: mk-expose-grafana
 mk-expose-grafana:
 	echo "open http://127.0.0.1:3000"

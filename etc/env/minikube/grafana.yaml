@@ -90,17 +90,17 @@ prometheus-operator:
                   "steppedLine": false,
                   "targets": [
                     {
-                      "expr": "sum(increase(transaction_create_success[1m]))",
+                      "expr": "billing:transactions:success:sum_increase_1m",
                       "legendFormat": "Success",
                       "refId": "A"
                     },
                     {
-                      "expr": "sum(increase(transaction_create_conflict[1m]))",
+                      "expr": "billing:transactions:conflict:sum_increase_1m",
                       "legendFormat": "Conflict",
                       "refId": "B"
                     },
                     {
-                      "expr": "sum(increase(transaction_create_error[1m]))",
+                      "expr": "billing:transactions:error:sum_increase_1m",
                       "legendFormat": "Error",
                       "refId": "C"
                     }
@@ -204,7 +204,7 @@ prometheus-operator:
                   "steppedLine": false,
                   "targets": [
                     {
-                      "expr": "sum(rate(http_request_duration_seconds_count{job=\"api-billing\"}[1m]))",
+                      "expr": "billing:traffic:total_rate_1m",
                       "legendFormat": "Traffic",
                       "refId": "A"
                     }
@@ -292,7 +292,7 @@ prometheus-operator:
                   "steppedLine": false,
                   "targets": [
                     {
-                      "expr": "sum(rate(http_request_duration_seconds_count{job=\"api-billing\"}[1m])) by (method)",
+                      "expr": "billing:traffic:total_rate_by_method_1m",
                       "legendFormat": "{{ method }}",
                       "refId": "A"
                     }
@@ -380,7 +380,7 @@ prometheus-operator:
                   "steppedLine": false,
                   "targets": [
                     {
-                      "expr": "sum(rate(http_request_duration_seconds_count{job=\"api-billing\"}[1m])) by (path)",
+                      "expr": "billing:traffic:total_rate_by_path_1m",
                       "legendFormat": "{{ path }}",
                       "refId": "A"
                     }
@@ -469,7 +469,7 @@ prometheus-operator:
                   "steppedLine": false,
                   "targets": [
                     {
-                      "expr": "sum(rate(http_request_duration_seconds_count{job=\"api-billing\"}[1m])) by (path, method)",
+                      "expr": "billing:traffic:total_rate_by_path_method_1m",
                       "legendFormat": "{{ method }} : {{ path }}",
                       "refId": "A"
                     }
@@ -572,8 +572,8 @@ prometheus-operator:
                   "steppedLine": false,
                   "targets": [
                     {
-                      "expr": "sum(rate(http_request_duration_seconds_count{job=\"api-billing\", status_code=~\"5..\"}[1m])) / sum(rate(http_request_duration_seconds_count{job=\"api-billing\"}[1m]))",
-                      "legendFormat": "Error rate",
+                      "expr": "billing:traffic:server_error_rate_1m",
+                      "legendFormat": "Server Error rate",
                       "refId": "A"
                     }
                   ],
@@ -661,8 +661,8 @@ prometheus-operator:
                   "steppedLine": false,
                   "targets": [
                     {
-                      "expr": "sum(rate(http_request_duration_seconds_count{job=\"api-billing\", status_code=~\"4..\"}[1m])) / sum(rate(http_request_duration_seconds_count{job=\"api-billing\"}[1m]))",
-                      "legendFormat": "Error rate",
+                      "expr": "billing:traffic:client_error_rate_1m",
+                      "legendFormat": "Client Error rate",
                       "refId": "A"
                     }
                   ],
@@ -764,7 +764,7 @@ prometheus-operator:
                   "pluginVersion": "6.6.2",
                   "targets": [
                     {
-                      "expr": "sum(rate(http_request_duration_seconds_sum{job=\"api-billing\"}[5m]))/sum(rate(http_request_duration_seconds_count{job=\"api-billing\"}[5m]))",
+                      "expr": "billing:traffic:duration_avg_5m",
                       "legendFormat": "Score",
                       "refId": "A"
                     }
@@ -818,7 +818,7 @@ prometheus-operator:
                   "steppedLine": false,
                   "targets": [
                     {
-                      "expr": "(\n  sum(rate(http_request_duration_seconds_bucket{le=\"0.3\", job=\"api-billing\"}[5m]))\n+\n  sum(rate(http_request_duration_seconds_bucket{le=\"1.5\", job=\"api-billing\"}[5m]))\n) / 2 / sum(rate(http_request_duration_seconds_count{job=\"api-billing\"}[5m]))",
+                      "expr": "billing:traffic:apdex_global_5m",
                       "legendFormat": "Score",
                       "refId": "A"
                     }
@@ -915,7 +915,7 @@ prometheus-operator:
                   "pluginVersion": "6.6.2",
                   "targets": [
                     {
-                      "expr": " sum(rate(http_request_duration_seconds_bucket{le=\"0.1\", job=\"api-billing\"}[5m])) by (method, path)\n/\n  sum(rate(http_request_duration_seconds_count{job=\"api-billing\"}[5m])) by (method, path)",
+                      "expr": "billing:traffic:apdex_by_method_path_5m",
                       "legendFormat": "{{ method }} : {{ path }}",
                       "refId": "A"
                     }
@@ -969,7 +969,7 @@ prometheus-operator:
                   "steppedLine": false,
                   "targets": [
                     {
-                      "expr": " sum(rate(http_request_duration_seconds_bucket{le=\"0.1\", job=\"api-billing\"}[5m]))\n/\n  sum(rate(http_request_duration_seconds_count{job=\"api-billing\"}[5m])) ",
+                      "expr": "billing:traffic:95_slo",
                       "legendFormat": "Score",
                       "refId": "A"
                     }
@@ -1060,7 +1060,7 @@ prometheus-operator:
                   "pluginVersion": "6.6.2",
                   "targets": [
                     {
-                      "expr": "sum(rate(http_request_duration_seconds_sum{job=\"api-billing\"}[5m])) by (path, method)/sum(rate(http_request_duration_seconds_count{job=\"api-billing\"}[5m])) by (path, method)",
+                      "expr": "billing:traffic:duration_avg_by_method_path_5m",
                       "legendFormat": "{{ method }} : {{ path }}",
                       "refId": "A"
                     }
@@ -1112,17 +1112,17 @@ prometheus-operator:
                   "steppedLine": false,
                   "targets": [
                     {
-                      "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{job=\"api-billing\"}[1m])) by (le))",
+                      "expr": "billing:traffic:histogram_95_1m",
                       "legendFormat": "95",
                       "refId": "A"
                     },
                     {
-                      "expr": " histogram_quantile(0.70, sum(rate(http_request_duration_seconds_bucket{job=\"api-billing\"}[1m])) by (le))",
+                      "expr": "billing:traffic:histogram_70_1m",
                       "legendFormat": "70",
                       "refId": "B"
                     },
                     {
-                      "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket{job=\"api-billing\"}[1m])) by (le))",
+                      "expr": "billing:traffic:histogram_50_1m",
                       "legendFormat": "50",
                       "refId": "C"
                     }

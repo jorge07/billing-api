@@ -1,0 +1,73 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "billing.fullname" . }}
+  labels:
+    app: prometheus-operator
+    release: api
+    {{- include "billing.labels" . | nindent 4 }}
+spec:
+  groups:
+  - name: billing-api.rules
+    rules:
+    - expr: sum(increase(transaction_create_success[1m]))
+      record: billing:transactions:success:sum_increase_1m
+    - expr: sum(increase(transaction_create_success[5m]))
+      record: billing:transactions:success:sum_increase_5m
+    - expr: sum(increase(transaction_create_success[1h]))
+      record: billing:transactions:success:sum_increase_1h
+    - expr: sum(increase(transaction_create_conflict[1m]))
+      record: billing:transactions:conflict:sum_increase_1m
+    - expr: sum(increase(transaction_create_conflict[5m]))
+      record: billing:transactions:conflict:sum_increase_5m
+    - expr: sum(increase(transaction_create_conflict[1h]))
+      record: billing:transactions:conflict:sum_increase_1h
+    - expr: sum(increase(transaction_create_error[1m]))
+      record: billing:transactions:error:sum_increase_1m
+    - expr: sum(increase(transaction_create_error[5m]))
+      record: billing:transactions:error:sum_increase_5m
+    - expr: sum(increase(transaction_create_error[1h]))
+      record: billing:transactions:error:sum_increase_1h
+    - expr: sum(rate(http_request_duration_seconds_count{job="api-billing"}[1m]))
+      record: billing:traffic:total_rate_1m
+    - expr: sum(rate(http_request_duration_seconds_count{job="api-billing"}[5m]))
+      record: billing:traffic:total_rate_5m
+    - expr: sum(rate(http_request_duration_seconds_count{job="api-billing"}[1h]))
+      record: billing:traffic:total_rate_1h
+    - expr: sum(rate(http_request_duration_seconds_count{job="api-billing"}[1m])) by (method)
+      record: billing:traffic:total_rate_by_method_1m
+    - expr: sum(rate(http_request_duration_seconds_count{job="api-billing"}[1m])) by (path)
+      record: billing:traffic:total_rate_by_path_1m
+    - expr: sum(rate(http_request_duration_seconds_count{job="api-billing"}[1m])) by (path, method)
+      record: billing:traffic:total_rate_by_path_method_1m
+    - expr: sum(rate(http_request_duration_seconds_count{job="api-billing", status_code=~"5.."}[1m])) / sum(rate(http_request_duration_seconds_count{job="api-billing"}[1m]))
+      record: billing:traffic:server_error_rate_1m
+    - expr: sum(rate(http_request_duration_seconds_count{job="api-billing", status_code=~"4.."}[1m])) / sum(rate(http_request_duration_seconds_count{job="api-billing"}[1m]))
+      record: billing:traffic:client_error_rate_1m
+    - expr: sum(rate(http_request_duration_seconds_sum{job="api-billing"}[5m])) / sum(rate(http_request_duration_seconds_count{job="api-billing"}[5m]))
+      record: billing:traffic:duration_avg_5m
+    - expr: |-
+        (
+          sum(rate(http_request_duration_seconds_bucket{le="0.3", job="api-billing"}[5m]))
+          +
+          sum(rate(http_request_duration_seconds_bucket{le="1.5", job="api-billing"}[5m]))
+        ) / 2 / sum(rate(http_request_duration_seconds_count{job="api-billing"}[5m]))
+      record: billing:traffic:apdex_global_5m
+    - expr: |-
+        sum(rate(http_request_duration_seconds_bucket{le="0.1", job="api-billing"}[5m])) by (method, path)
+        / sum(rate(http_request_duration_seconds_count{job="api-billing"}[5m])) by (method, path)
+      record: billing:traffic:apdex_by_method_path_5m
+    - expr: |-
+        sum(rate(http_request_duration_seconds_bucket{le="0.1", job="api-billing"}[5m]))
+        / sum(rate(http_request_duration_seconds_count{job="api-billing"}[5m]))
+      record: billing:traffic:95_slo
+    - expr: |-
+        sum(rate(http_request_duration_seconds_sum{job="api-billing"}[5m])) by (path, method)
+        / sum(rate(http_request_duration_seconds_count{job="api-billing"}[5m])) by (path, method)
+      record: billing:traffic:duration_avg_by_method_path_5m
+    - expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{job="api-billing"}[1m])) by (le))
+      record: billing:traffic:histogram_95_1m
+    - expr: histogram_quantile(0.70, sum(rate(http_request_duration_seconds_bucket{job="api-billing"}[1m])) by (le))
+      record: billing:traffic:histogram_70_1m
+    - expr: histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket{job="api-billing"}[1m])) by (le))
+      record: billing:traffic:histogram_50_1m
