@@ -3,18 +3,18 @@ kind: Deployment
 metadata:
   name: {{ include "billing.fullname" . }}-worker
   labels:
-    {{- include "billing.labels" . | nindent 4 }}
+    {{- include "billing-worker.labels" . | nindent 4 }}
   annotations:
     checksum/secrets: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
 spec:
   replicas: {{ default 1 .Values.autoscaling.worker.min }}
   selector:
     matchLabels:
-      {{- include "billing.selectorLabels" . | nindent 6 }}
+      {{- include "billing-worker.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "billing.selectorLabels" . | nindent 8 }}
+        {{- include "billing-worker.selectorLabels" . | nindent 8 }}
     spec:
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:

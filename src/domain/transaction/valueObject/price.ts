@@ -24,6 +24,10 @@ export default class Price {
     }
 
     private validateAmount(amount: number): void {
+        if (isNaN(amount)) {
+            throw new InvalidArgumentException("Amount is not a number");
+        }
+        
         if (Math.sign(amount) < 0) {
             throw new InvalidArgumentException("Negative prices not allowed");
         }

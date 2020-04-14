@@ -1,0 +1,1201 @@
+prometheus-operator:
+  grafana:
+    dashboardProviders:
+      dashboardproviders.yaml:
+        apiVersion: 1
+        providers:
+        - name: 'default'
+          orgId: 1
+          folder: 'Billing'
+          type: file
+          disableDeletion: false
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/default
+    dashboards:
+      default:
+        billing-api:
+          json: |
+            {
+              "annotations": {
+                "list": [
+                  {
+                    "builtIn": 1,
+                    "datasource": "-- Grafana --",
+                    "enable": true,
+                    "hide": true,
+                    "iconColor": "rgba(0, 211, 255, 1)",
+                    "name": "Annotations & Alerts",
+                    "type": "dashboard"
+                  }
+                ]
+              },
+              "editable": true,
+              "gnetId": null,
+              "graphTooltip": 0,
+              "links": [],
+              "panels": [
+                {
+                  "collapsed": false,
+                  "datasource": null,
+                  "gridPos": {
+                    "h": 1,
+                    "w": 24,
+                    "x": 0,
+                    "y": 0
+                  },
+                  "id": 17,
+                  "panels": [],
+                  "title": "[Business] Transactions",
+                  "type": "row"
+                },
+                {
+                  "aliasColors": {},
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "Prometheus",
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": {
+                    "h": 7,
+                    "w": 24,
+                    "x": 0,
+                    "y": 1
+                  },
+                  "hiddenSeries": false,
+                  "id": 4,
+                  "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "nullPointMode": "null",
+                  "options": {
+                    "dataLinks": []
+                  },
+                  "percentage": false,
+                  "pointradius": 2,
+                  "points": false,
+                  "renderer": "flot",
+                  "seriesOverrides": [],
+                  "spaceLength": 10,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                    {
+                      "expr": "sum(increase(transaction_create_success[1m]))",
+                      "legendFormat": "Success",
+                      "refId": "A"
+                    },
+                    {
+                      "expr": "sum(increase(transaction_create_conflict[1m]))",
+                      "legendFormat": "Conflict",
+                      "refId": "B"
+                    },
+                    {
+                      "expr": "sum(increase(transaction_create_error[1m]))",
+                      "legendFormat": "Error",
+                      "refId": "C"
+                    }
+                  ],
+                  "thresholds": [],
+                  "timeFrom": null,
+                  "timeRegions": [],
+                  "timeShift": null,
+                  "title": "Transactions Created | Conflict | Error",
+                  "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                  },
+                  "transparent": true,
+                  "type": "graph",
+                  "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                  },
+                  "yaxes": [
+                    {
+                      "decimals": 0,
+                      "format": "short",
+                      "label": null,
+                      "logBase": 1,
+                      "max": null,
+                      "min": null,
+                      "show": true
+                    },
+                    {
+                      "decimals": 0,
+                      "format": "short",
+                      "label": null,
+                      "logBase": 1,
+                      "max": null,
+                      "min": null,
+                      "show": true
+                    }
+                  ],
+                  "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                  }
+                },
+                {
+                  "collapsed": false,
+                  "datasource": null,
+                  "gridPos": {
+                    "h": 1,
+                    "w": 24,
+                    "x": 0,
+                    "y": 8
+                  },
+                  "id": 13,
+                  "panels": [],
+                  "title": "Requests",
+                  "type": "row"
+                },
+                {
+                  "aliasColors": {},
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": null,
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": {
+                    "h": 6,
+                    "w": 24,
+                    "x": 0,
+                    "y": 9
+                  },
+                  "hiddenSeries": false,
+                  "id": 15,
+                  "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "nullPointMode": "null",
+                  "options": {
+                    "dataLinks": []
+                  },
+                  "percentage": false,
+                  "pointradius": 2,
+                  "points": false,
+                  "renderer": "flot",
+                  "seriesOverrides": [],
+                  "spaceLength": 10,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                    {
+                      "expr": "sum(rate(http_request_duration_seconds_count{job=\"api-billing\"}[1m]))",
+                      "legendFormat": "Traffic",
+                      "refId": "A"
+                    }
+                  ],
+                  "thresholds": [],
+                  "timeFrom": null,
+                  "timeRegions": [],
+                  "timeShift": null,
+                  "title": "Requests per second per 1m",
+                  "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                  },
+                  "transparent": true,
+                  "type": "graph",
+                  "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                  },
+                  "yaxes": [
+                    {
+                      "format": "reqps",
+                      "label": null,
+                      "logBase": 1,
+                      "max": null,
+                      "min": null,
+                      "show": true
+                    },
+                    {
+                      "format": "short",
+                      "label": null,
+                      "logBase": 1,
+                      "max": null,
+                      "min": null,
+                      "show": true
+                    }
+                  ],
+                  "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                  }
+                },
+                {
+                  "aliasColors": {},
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": null,
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": {
+                    "h": 6,
+                    "w": 24,
+                    "x": 0,
+                    "y": 15
+                  },
+                  "hiddenSeries": false,
+                  "id": 18,
+                  "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "nullPointMode": "null",
+                  "options": {
+                    "dataLinks": []
+                  },
+                  "percentage": false,
+                  "pointradius": 2,
+                  "points": false,
+                  "renderer": "flot",
+                  "seriesOverrides": [],
+                  "spaceLength": 10,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                    {
+                      "expr": "sum(rate(http_request_duration_seconds_count{job=\"api-billing\"}[1m])) by (method)",
+                      "legendFormat": "{{ method }}",
+                      "refId": "A"
+                    }
+                  ],
+                  "thresholds": [],
+                  "timeFrom": null,
+                  "timeRegions": [],
+                  "timeShift": null,
+                  "title": "Requests per method per 1m",
+                  "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                  },
+                  "transparent": true,
+                  "type": "graph",
+                  "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                  },
+                  "yaxes": [
+                    {
+                      "format": "reqps",
+                      "label": null,
+                      "logBase": 1,
+                      "max": null,
+                      "min": null,
+                      "show": true
+                    },
+                    {
+                      "format": "short",
+                      "label": null,
+                      "logBase": 1,
+                      "max": null,
+                      "min": null,
+                      "show": true
+                    }
+                  ],
+                  "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                  }
+                },
+                {
+                  "aliasColors": {},
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": null,
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": {
+                    "h": 6,
+                    "w": 24,
+                    "x": 0,
+                    "y": 21
+                  },
+                  "hiddenSeries": false,
+                  "id": 19,
+                  "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "nullPointMode": "null",
+                  "options": {
+                    "dataLinks": []
+                  },
+                  "percentage": false,
+                  "pointradius": 2,
+                  "points": false,
+                  "renderer": "flot",
+                  "seriesOverrides": [],
+                  "spaceLength": 10,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                    {
+                      "expr": "sum(rate(http_request_duration_seconds_count{job=\"api-billing\"}[1m])) by (path)",
+                      "legendFormat": "{{ path }}",
+                      "refId": "A"
+                    }
+                  ],
+                  "thresholds": [],
+                  "timeFrom": null,
+                  "timeRegions": [],
+                  "timeShift": null,
+                  "title": "Requests per path per 1m",
+                  "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                  },
+                  "transparent": true,
+                  "type": "graph",
+                  "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                  },
+                  "yaxes": [
+                    {
+                      "format": "reqps",
+                      "label": null,
+                      "logBase": 1,
+                      "max": null,
+                      "min": null,
+                      "show": true
+                    },
+                    {
+                      "format": "short",
+                      "label": null,
+                      "logBase": 1,
+                      "max": null,
+                      "min": null,
+                      "show": true
+                    }
+                  ],
+                  "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                  }
+                },
+                {
+                  "aliasColors": {},
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": null,
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": {
+                    "h": 6,
+                    "w": 24,
+                    "x": 0,
+                    "y": 27
+                  },
+                  "hiddenSeries": false,
+                  "id": 20,
+                  "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "rightSide": true,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "nullPointMode": "null",
+                  "options": {
+                    "dataLinks": []
+                  },
+                  "percentage": false,
+                  "pointradius": 2,
+                  "points": false,
+                  "renderer": "flot",
+                  "seriesOverrides": [],
+                  "spaceLength": 10,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                    {
+                      "expr": "sum(rate(http_request_duration_seconds_count{job=\"api-billing\"}[1m])) by (path, method)",
+                      "legendFormat": "{{ method }} : {{ path }}",
+                      "refId": "A"
+                    }
+                  ],
+                  "thresholds": [],
+                  "timeFrom": null,
+                  "timeRegions": [],
+                  "timeShift": null,
+                  "title": "Requests per path per 1m",
+                  "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                  },
+                  "transparent": true,
+                  "type": "graph",
+                  "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                  },
+                  "yaxes": [
+                    {
+                      "format": "reqps",
+                      "label": null,
+                      "logBase": 1,
+                      "max": null,
+                      "min": null,
+                      "show": true
+                    },
+                    {
+                      "format": "short",
+                      "label": null,
+                      "logBase": 1,
+                      "max": null,
+                      "min": null,
+                      "show": true
+                    }
+                  ],
+                  "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                  }
+                },
+                {
+                  "collapsed": false,
+                  "datasource": null,
+                  "gridPos": {
+                    "h": 1,
+                    "w": 24,
+                    "x": 0,
+                    "y": 33
+                  },
+                  "id": 11,
+                  "panels": [],
+                  "title": "Error",
+                  "type": "row"
+                },
+                {
+                  "aliasColors": {},
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": null,
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": {
+                    "h": 6,
+                    "w": 24,
+                    "x": 0,
+                    "y": 34
+                  },
+                  "hiddenSeries": false,
+                  "id": 21,
+                  "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "rightSide": true,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "nullPointMode": "null",
+                  "options": {
+                    "dataLinks": []
+                  },
+                  "percentage": false,
+                  "pointradius": 2,
+                  "points": false,
+                  "renderer": "flot",
+                  "seriesOverrides": [],
+                  "spaceLength": 10,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                    {
+                      "expr": "sum(rate(http_request_duration_seconds_count{job=\"api-billing\", status_code=~\"5..\"}[1m])) / sum(rate(http_request_duration_seconds_count{job=\"api-billing\"}[1m]))",
+                      "legendFormat": "Error rate",
+                      "refId": "A"
+                    }
+                  ],
+                  "thresholds": [],
+                  "timeFrom": null,
+                  "timeRegions": [],
+                  "timeShift": null,
+                  "title": "Server Error Rate per 1m",
+                  "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                  },
+                  "transparent": true,
+                  "type": "graph",
+                  "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                  },
+                  "yaxes": [
+                    {
+                      "format": "percentunit",
+                      "label": null,
+                      "logBase": 1,
+                      "max": "1",
+                      "min": "0",
+                      "show": true
+                    },
+                    {
+                      "format": "short",
+                      "label": null,
+                      "logBase": 1,
+                      "max": null,
+                      "min": null,
+                      "show": true
+                    }
+                  ],
+                  "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                  }
+                },
+                {
+                  "aliasColors": {},
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": null,
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": {
+                    "h": 6,
+                    "w": 24,
+                    "x": 0,
+                    "y": 40
+                  },
+                  "hiddenSeries": false,
+                  "id": 22,
+                  "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "rightSide": true,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "nullPointMode": "null",
+                  "options": {
+                    "dataLinks": []
+                  },
+                  "percentage": false,
+                  "pointradius": 2,
+                  "points": false,
+                  "renderer": "flot",
+                  "seriesOverrides": [],
+                  "spaceLength": 10,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                    {
+                      "expr": "sum(rate(http_request_duration_seconds_count{job=\"api-billing\", status_code=~\"4..\"}[1m])) / sum(rate(http_request_duration_seconds_count{job=\"api-billing\"}[1m]))",
+                      "legendFormat": "Error rate",
+                      "refId": "A"
+                    }
+                  ],
+                  "thresholds": [],
+                  "timeFrom": null,
+                  "timeRegions": [],
+                  "timeShift": null,
+                  "title": "Client Error Rate per 1m",
+                  "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                  },
+                  "transparent": true,
+                  "type": "graph",
+                  "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                  },
+                  "yaxes": [
+                    {
+                      "format": "percentunit",
+                      "label": null,
+                      "logBase": 1,
+                      "max": "1",
+                      "min": "0",
+                      "show": true
+                    },
+                    {
+                      "format": "short",
+                      "label": null,
+                      "logBase": 1,
+                      "max": null,
+                      "min": null,
+                      "show": true
+                    }
+                  ],
+                  "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                  }
+                },
+                {
+                  "collapsed": false,
+                  "datasource": null,
+                  "gridPos": {
+                    "h": 1,
+                    "w": 24,
+                    "x": 0,
+                    "y": 46
+                  },
+                  "id": 9,
+                  "panels": [],
+                  "title": "Duration",
+                  "type": "row"
+                },
+                {
+                  "datasource": null,
+                  "description": "Max at 0.1s",
+                  "gridPos": {
+                    "h": 5,
+                    "w": 8,
+                    "x": 0,
+                    "y": 47
+                  },
+                  "id": 7,
+                  "options": {
+                    "colorMode": "value",
+                    "fieldOptions": {
+                      "calcs": [
+                        "mean"
+                      ],
+                      "defaults": {
+                        "mappings": [],
+                        "thresholds": {
+                          "mode": "absolute",
+                          "steps": [
+                            {
+                              "color": "green",
+                              "value": null
+                            },
+                            {
+                              "color": "red",
+                              "value": 0.1
+                            }
+                          ]
+                        }
+                      },
+                      "overrides": [],
+                      "values": false
+                    },
+                    "graphMode": "area",
+                    "justifyMode": "auto",
+                    "orientation": "auto"
+                  },
+                  "pluginVersion": "6.6.2",
+                  "targets": [
+                    {
+                      "expr": "sum(rate(http_request_duration_seconds_sum{job=\"api-billing\"}[5m]))/sum(rate(http_request_duration_seconds_count{job=\"api-billing\"}[5m]))",
+                      "legendFormat": "Score",
+                      "refId": "A"
+                    }
+                  ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "AVG response times",
+                  "transparent": true,
+                  "type": "stat"
+                },
+                {
+                  "aliasColors": {},
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": null,
+                  "description": "Apdex Score with le at 0.3s and max at 1.5s\n",
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": {
+                    "h": 5,
+                    "w": 16,
+                    "x": 8,
+                    "y": 47
+                  },
+                  "hiddenSeries": false,
+                  "id": 25,
+                  "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": false,
+                    "total": false,
+                    "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "nullPointMode": "null",
+                  "options": {
+                    "dataLinks": []
+                  },
+                  "percentage": false,
+                  "pluginVersion": "6.6.2",
+                  "pointradius": 2,
+                  "points": false,
+                  "renderer": "flot",
+                  "seriesOverrides": [],
+                  "spaceLength": 10,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                    {
+                      "expr": "(\n  sum(rate(http_request_duration_seconds_bucket{le=\"0.3\", job=\"api-billing\"}[5m]))\n+\n  sum(rate(http_request_duration_seconds_bucket{le=\"1.5\", job=\"api-billing\"}[5m]))\n) / 2 / sum(rate(http_request_duration_seconds_count{job=\"api-billing\"}[5m]))",
+                      "legendFormat": "Score",
+                      "refId": "A"
+                    }
+                  ],
+                  "thresholds": [],
+                  "timeFrom": null,
+                  "timeRegions": [],
+                  "timeShift": null,
+                  "title": "Global Apdex Score",
+                  "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                  },
+                  "transparent": true,
+                  "type": "graph",
+                  "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                  },
+                  "yaxes": [
+                    {
+                      "decimals": 0,
+                      "format": "short",
+                      "label": null,
+                      "logBase": 1,
+                      "max": "1",
+                      "min": "0",
+                      "show": true
+                    },
+                    {
+                      "format": "short",
+                      "label": null,
+                      "logBase": 1,
+                      "max": null,
+                      "min": null,
+                      "show": true
+                    }
+                  ],
+                  "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                  }
+                },
+                {
+                  "datasource": null,
+                  "gridPos": {
+                    "h": 6,
+                    "w": 8,
+                    "x": 0,
+                    "y": 52
+                  },
+                  "id": 6,
+                  "options": {
+                    "displayMode": "lcd",
+                    "fieldOptions": {
+                      "calcs": [
+                        "mean"
+                      ],
+                      "defaults": {
+                        "decimals": 1,
+                        "mappings": [],
+                        "max": 1,
+                        "min": 0,
+                        "thresholds": {
+                          "mode": "absolute",
+                          "steps": [
+                            {
+                              "color": "red",
+                              "value": null
+                            },
+                            {
+                              "color": "yellow",
+                              "value": 0.75
+                            },
+                            {
+                              "color": "green",
+                              "value": 0.9
+                            }
+                          ]
+                        },
+                        "title": "",
+                        "unit": "percentunit"
+                      },
+                      "overrides": [],
+                      "values": false
+                    },
+                    "orientation": "horizontal",
+                    "showUnfilled": true
+                  },
+                  "pluginVersion": "6.6.2",
+                  "targets": [
+                    {
+                      "expr": " sum(rate(http_request_duration_seconds_bucket{le=\"0.1\", job=\"api-billing\"}[5m])) by (method, path)\n/\n  sum(rate(http_request_duration_seconds_count{job=\"api-billing\"}[5m])) by (method, path)",
+                      "legendFormat": "{{ method }} : {{ path }}",
+                      "refId": "A"
+                    }
+                  ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "Apdex Score by Path",
+                  "transparent": true,
+                  "type": "bargauge"
+                },
+                {
+                  "aliasColors": {},
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": null,
+                  "description": "Defined at serve 95% of requests within 300ms\n",
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": {
+                    "h": 6,
+                    "w": 16,
+                    "x": 8,
+                    "y": 52
+                  },
+                  "hiddenSeries": false,
+                  "id": 26,
+                  "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": false,
+                    "total": false,
+                    "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "nullPointMode": "null",
+                  "options": {
+                    "dataLinks": []
+                  },
+                  "percentage": false,
+                  "pluginVersion": "6.6.2",
+                  "pointradius": 2,
+                  "points": false,
+                  "renderer": "flot",
+                  "seriesOverrides": [],
+                  "spaceLength": 10,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                    {
+                      "expr": " sum(rate(http_request_duration_seconds_bucket{le=\"0.1\", job=\"api-billing\"}[5m]))\n/\n  sum(rate(http_request_duration_seconds_count{job=\"api-billing\"}[5m])) ",
+                      "legendFormat": "Score",
+                      "refId": "A"
+                    }
+                  ],
+                  "thresholds": [],
+                  "timeFrom": null,
+                  "timeRegions": [],
+                  "timeShift": null,
+                  "title": "95% SLO",
+                  "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                  },
+                  "transparent": true,
+                  "type": "graph",
+                  "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                  },
+                  "yaxes": [
+                    {
+                      "decimals": 0,
+                      "format": "short",
+                      "label": null,
+                      "logBase": 1,
+                      "max": "1",
+                      "min": "0",
+                      "show": true
+                    },
+                    {
+                      "format": "short",
+                      "label": null,
+                      "logBase": 1,
+                      "max": null,
+                      "min": null,
+                      "show": true
+                    }
+                  ],
+                  "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                  }
+                },
+                {
+                  "datasource": null,
+                  "description": "Max at 0.1s",
+                  "gridPos": {
+                    "h": 6,
+                    "w": 8,
+                    "x": 0,
+                    "y": 58
+                  },
+                  "id": 27,
+                  "options": {
+                    "displayMode": "lcd",
+                    "fieldOptions": {
+                      "calcs": [
+                        "mean"
+                      ],
+                      "defaults": {
+                        "mappings": [],
+                        "min": 0,
+                        "thresholds": {
+                          "mode": "absolute",
+                          "steps": [
+                            {
+                              "color": "green",
+                              "value": null
+                            },
+                            {
+                              "color": "red",
+                              "value": 0.1
+                            }
+                          ]
+                        },
+                        "unit": "s"
+                      },
+                      "overrides": [],
+                      "values": false
+                    },
+                    "orientation": "horizontal",
+                    "showUnfilled": true
+                  },
+                  "pluginVersion": "6.6.2",
+                  "targets": [
+                    {
+                      "expr": "sum(rate(http_request_duration_seconds_sum{job=\"api-billing\"}[5m])) by (path, method)/sum(rate(http_request_duration_seconds_count{job=\"api-billing\"}[5m])) by (path, method)",
+                      "legendFormat": "{{ method }} : {{ path }}",
+                      "refId": "A"
+                    }
+                  ],
+                  "timeFrom": null,
+                  "timeShift": null,
+                  "title": "AVG response times",
+                  "transparent": true,
+                  "type": "bargauge"
+                },
+                {
+                  "aliasColors": {},
+                  "bars": false,
+                  "dashLength": 10,
+                  "dashes": false,
+                  "datasource": "Prometheus",
+                  "fill": 1,
+                  "fillGradient": 0,
+                  "gridPos": {
+                    "h": 6,
+                    "w": 16,
+                    "x": 8,
+                    "y": 58
+                  },
+                  "hiddenSeries": false,
+                  "id": 2,
+                  "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                  },
+                  "lines": true,
+                  "linewidth": 1,
+                  "nullPointMode": "null",
+                  "options": {
+                    "dataLinks": []
+                  },
+                  "percentage": false,
+                  "pointradius": 2,
+                  "points": false,
+                  "renderer": "flot",
+                  "seriesOverrides": [],
+                  "spaceLength": 10,
+                  "stack": false,
+                  "steppedLine": false,
+                  "targets": [
+                    {
+                      "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{job=\"api-billing\"}[1m])) by (le))",
+                      "legendFormat": "95",
+                      "refId": "A"
+                    },
+                    {
+                      "expr": " histogram_quantile(0.70, sum(rate(http_request_duration_seconds_bucket{job=\"api-billing\"}[1m])) by (le))",
+                      "legendFormat": "70",
+                      "refId": "B"
+                    },
+                    {
+                      "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket{job=\"api-billing\"}[1m])) by (le))",
+                      "legendFormat": "50",
+                      "refId": "C"
+                    }
+                  ],
+                  "thresholds": [],
+                  "timeFrom": null,
+                  "timeRegions": [],
+                  "timeShift": null,
+                  "title": "Percentiles",
+                  "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                  },
+                  "transparent": true,
+                  "type": "graph",
+                  "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                  },
+                  "yaxes": [
+                    {
+                      "format": "ms",
+                      "label": null,
+                      "logBase": 1,
+                      "max": null,
+                      "min": null,
+                      "show": true
+                    },
+                    {
+                      "format": "short",
+                      "label": null,
+                      "logBase": 1,
+                      "max": null,
+                      "min": null,
+                      "show": true
+                    }
+                  ],
+                  "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                  }
+                }
+              ],
+              "schemaVersion": 22,
+              "style": "dark",
+              "tags": [],
+              "templating": {
+                "list": []
+              },
+              "time": {
+                "from": "now-1h",
+                "to": "now"
+              },
+              "timepicker": {
+                "refresh_intervals": [
+                  "5s",
+                  "10s",
+                  "30s",
+                  "1m",
+                  "5m",
+                  "15m",
+                  "30m",
+                  "1h",
+                  "2h",
+                  "1d"
+                ]
+              },
+              "timezone": "",
+              "title": "billing-api",
+              "uid": "-9QdPCjWk",
+              "version": 1
+            }

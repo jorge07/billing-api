@@ -22,13 +22,13 @@
    },
    "devDependencies": {
       "@types/amqplib": "^0.5.13",
-      "@types/uuid": "^3.4.6",
-      "@types/uuid-validate": "^0.0.1",
       "@types/config": "^0.0.34",
       "@types/express": "^4.17.1",
       "@types/jest": "^25.x",
       "@types/node": "^12.12",
       "@types/supertest": "^2.0.8",
+      "@types/uuid": "^3.4.6",
+      "@types/uuid-validate": "^0.0.1",
       "concurrently": "^5.1.0",
       "eslint": "^6.5.1",
       "eslint-plugin-import": "^2.18.2",
@@ -60,9 +60,6 @@
       "build": "./node_modules/typescript/bin/tsc -P tsconfig.json",
       "lint": "./node_modules/tslint/bin/tslint -c etc/env/dev/tslint.json --fix 'src/**/*.ts' ",
       "test": "NODE_ENV=test jest -i",
-      "artifact": "docker build -t jorge07/billing-api:${APP_VERSION} -f etc/artifact/Dockerfile .",
-      "minikube:template": "helm template api --namespace default -f etc/env/minikube/values.yaml etc/artifact/chart/",
-      "minikube:deploy": "helm upgrade -i api --namespace default -f etc/env/minikube/values.yaml etc/artifact/chart/",
-      "minikube:crds": "kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/release-0.37/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagers.yaml;kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/release-0.37/example/prometheus-operator-crd/monitoring.coreos.com_podmonitors.yaml;kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/release-0.37/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml;kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/release-0.37/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml;kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/release-0.37/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml;kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/release-0.37/example/prometheus-operator-crd/monitoring.coreos.com_thanosrulers.yaml"
+      "e2e": "codeceptjs run"
    }
 }
