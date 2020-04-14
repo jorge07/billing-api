@@ -17,3 +17,55 @@ A Typescript project to demostrate how to work with:
 - Unit, Integration and E2E testing with jest and supertest
 - Typescript Dev Env with debugger and all funcy stuff.
 
+## Project Structure
+
+```
+config/           -> Project configuration for parameters and DI services
+etc/
+   artifact/
+      chart/      -> Kubernetes helm chart
+      Dockerfile  -> The artifact to deploy
+   env/
+      dev/        -> Dev Stack
+      minikube/   -> Minikube Stack
+src/
+  application/    -> Application layer (Use Cases)
+  domain/         -> Domain Logic
+  infrastructure  -> Implementation details
+  ui/
+    console/      -> CLI
+    http/         -> HTTP Server
+  kernel.ts       -> Project Kernel
+tests/            -> Tests directory
+```
+
+## Setup
+
+Look at makefile
+
+- `make mk-setup` to build the minikube stack
+- `yarn dev` to star dev environment
+
+## Stack
+
+- Billing API and Worker/s
+- Postgres
+- RabbitMQ
+- Prometheus Operator
+- Alert manager
+- Grafana + built in BillingAPI dasboard
+
+### Screenshots
+
+- Api
+
+![Get Transaction](https://i.imgur.com/RFDOvaT.png)
+
+- Grafana
+
+![Dash](https://i.imgur.com/g6wGwgX.png)
+
+- Prom Rules
+
+![PrometheusRules](https://i.imgur.com/HS4lMoA.png)
+![PrometheusRules](https://i.imgur.com/SZG76IG.png)
