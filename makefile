@@ -40,8 +40,8 @@ mk-setup: mk-start prom-crds mk-template mk-deploy
 
 .PHONY: mk-expose-api
 mk-expose-api:
-	echo "open http://127.0.0.1:8080"
-	kubectl --namespace default port-forward svc/api-billing 8080:80
+	echo "open http://127.0.0.1:8070"
+	kubectl --namespace default port-forward svc/api-billing 8070:80
 
 .PHONY: mk-expose-prom
 mk-expose-prom:
