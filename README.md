@@ -16,6 +16,12 @@ A Typescript project to demostrate how to work with:
 - In Memory Store for tests
 - Unit, Integration and E2E testing with jest and supertest
 - Typescript Dev Env with debugger and all funcy stuff.
+- Docker
+- Kubernetes
+- Helm
+- Custom metrics
+- Prometheus
+- Grafana
 
 ## Project Structure
 
