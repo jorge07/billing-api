@@ -40,18 +40,18 @@ spec:
       record: billing:traffic:total_rate_by_path_1m
     - expr: sum(rate(http_request_duration_seconds_count{job="api-billing"}[1m])) by (path, method)
       record: billing:traffic:total_rate_by_path_method_1m
-    - expr: sum(rate(http_request_duration_seconds_count{job="api-billing", status_code=~"5.."}[1m])) / sum(rate(http_request_duration_seconds_count{job="api-billing"}[1m]))
+    - expr: sum(rate(http_request_duration_seconds_count{job="api-billing", status_code=~"5.."}[1m])) / billing:traffic:total_rate_1m
       record: billing:traffic:server_error_rate_1m
-    - expr: sum(rate(http_request_duration_seconds_count{job="api-billing", status_code=~"4.."}[1m])) / sum(rate(http_request_duration_seconds_count{job="api-billing"}[1m]))
+    - expr: sum(rate(http_request_duration_seconds_count{job="api-billing", status_code=~"4.."}[1m])) / billing:traffic:total_rate_1m
       record: billing:traffic:client_error_rate_1m
-    - expr: sum(rate(http_request_duration_seconds_sum{job="api-billing"}[5m])) / sum(rate(http_request_duration_seconds_count{job="api-billing"}[5m]))
+    - expr: sum(rate(http_request_duration_seconds_sum{job="api-billing"}[5m])) / billing:traffic:total_rate_5m
       record: billing:traffic:duration_avg_5m
     - expr: |-
         (
           sum(rate(http_request_duration_seconds_bucket{le="0.3", job="api-billing"}[5m]))
           +
           sum(rate(http_request_duration_seconds_bucket{le="1.5", job="api-billing"}[5m]))
-        ) / 2 / sum(rate(http_request_duration_seconds_count{job="api-billing"}[5m]))
+        ) / 2 / billing:traffic:total_rate_5m
       record: billing:traffic:apdex_global_5m
     - expr: |-
         sum(rate(http_request_duration_seconds_bucket{le="0.1", job="api-billing"}[5m])) by (method, path)
@@ -59,7 +59,7 @@ spec:
       record: billing:traffic:apdex_by_method_path_5m
     - expr: |-
         sum(rate(http_request_duration_seconds_bucket{le="0.1", job="api-billing"}[5m]))
-        / sum(rate(http_request_duration_seconds_count{job="api-billing"}[5m]))
+        / billing:traffic:total_rate_5m
       record: billing:traffic:95_slo
     - expr: |-
         sum(rate(http_request_duration_seconds_sum{job="api-billing"}[5m])) by (path, method)

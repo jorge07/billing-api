@@ -3,6 +3,7 @@ COMPOSE=docker-compose -f docker-compose.yml -f docker-compose.$(env).yml
 MINIKUBE_DOCKER=minikube docker-env
 APP_VERSION=1.0.0
 CRD_URL=https://raw.githubusercontent.com/coreos/prometheus-operator/release-0.37/example/prometheus-operator-crd/monitoring.coreos.com_
+
 export ENV COMPOSE MINIKUBE_DOCKER APP_VERSION CRD_URL
 
 .PHONY: dev

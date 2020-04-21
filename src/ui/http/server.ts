@@ -64,21 +64,22 @@ export default class HTTPServer {
                     server.close((err?: Error) => {
                         if (err) {
                             errors.push(err);
+                            
                         }
+                        
+                        if (errors.length > 0) {
+                            for (const err of errors) {
+                                this.logger.warn("The following errors encounter when shutting down");
+                                this.logger.error(err.message);
+                            }
+        
+                            process.exitCode = 1;
+                        }
+        
+                        this.logger.warn("Bye!");
+                        process.exit(0);
                     });
                 }
-
-                if (errors.length > 0) {
-                    for (const err of errors) {
-                        this.logger.warn("The following errors encounter when shutting down");
-                        this.logger.error(err.message);
-                    }
-
-                    process.exitCode = 1;
-                }
-
-                this.logger.warn("Bye!");
-                process.exit(0);
             });
         });
     }

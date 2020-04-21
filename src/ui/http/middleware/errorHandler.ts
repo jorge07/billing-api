@@ -15,6 +15,6 @@ export default function errorHandler(err: any, req: Request, res: Response, next
             res.status(404).send(err.message);
             break;
         default:
-            res.status(500).send("Internal Server Error.");
+            res.status(500).send(`Internal Server Error: ${err.message}`);
     }
 }

@@ -17,7 +17,6 @@ RUN yarn install --no-cache
 COPY . .
 
 RUN yarn build
-RUN ls -lha
 
 FROM base as production
 
@@ -25,11 +24,11 @@ ENV NODE_ENV production
 
 WORKDIR /app
 
-COPY --from=build /tmp/build .
-
 COPY package.json .
 COPY tsconfig.json .
 
 RUN yarn install
+
+COPY --from=build /tmp/build .
 
 CMD [ "node", "-r", "tsconfig-paths/register", "./src/ui/http/index.js" ]

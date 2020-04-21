@@ -33,6 +33,7 @@ export default class Create implements Application.ICommandHandler {
             throw new ConflictException("Already exists");
         } catch (err) {
             if (!(err instanceof EventStore.AggregateRootNotFoundException)) {
+                this.error.inc(1);
                 throw err;
             }
         }
