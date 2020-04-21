@@ -39,7 +39,7 @@ TODO
 
 ### Grafana
 
-![Dash](https://i.imgur.com/g6wGwgX.png)
+![Dash](https://i.imgur.com/84YoLck.png)
 
 ### Prom Rules
 
