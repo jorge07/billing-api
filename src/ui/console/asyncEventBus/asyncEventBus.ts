@@ -1,10 +1,10 @@
-import type { Message } from 'amqplib';
+import type { Message } from "amqplib";
 import type { Domain, EventStore, Framework } from "hollywood-js";
 import type { ILog } from "infrastructure/shared/audit/logger";
+import type Probe from "infrastructure/shared/audit/probe";
 import type AMPQChannel from "infrastructure/shared/rabbitmq/channel";
 import KernelFactory from "../../../kernel";
-import type Probe from 'infrastructure/shared/audit/probe';
-import HTTPServer from '../../http/server';
+import HTTPServer from "../../http/server";
 
 const MAX_MESSAGES_BEFORE_RESTART = 100;
 
@@ -23,15 +23,15 @@ const MAX_MESSAGES_BEFORE_RESTART = 100;
     stopWatch(amqpChannel);
 
     const labelsNames = [
-        'queue',
-        'event'
+        "queue",
+        "event",
     ];
     const buckets = [0.003, 0.03, 0.1, 0.3, 1.5, 10];
     const histogram = probe.histogram({
-        name: 'events_worker_duration_seconds',
-        help: 'duration histogram of events processing labeled with: ' + labelsNames.join(', '),
+        buckets,
+        help: "duration histogram of events processing labeled with: " + labelsNames.join(", "),
         labelNames: labelsNames,
-        buckets: buckets
+        name: "events_worker_duration_seconds",
       });
 
     try {
@@ -41,10 +41,10 @@ const MAX_MESSAGES_BEFORE_RESTART = 100;
                 const domainMessage = (JSON.parse(message.content.toString()) as Domain.DomainMessage);
                 const timer = histogram.startTimer({
                     event: domainMessage.eventType,
-                    queue: 'events'
+                    queue: "events",
                 });
                 logger.info(`Received: ${domainMessage.uuid} ${domainMessage.eventType}`);
-    
+
                 await eventBus.publish(domainMessage);
                 counter++;
                 timer();
@@ -56,10 +56,10 @@ const MAX_MESSAGES_BEFORE_RESTART = 100;
                 }
                 logger.info(`Processed: ${domainMessage.uuid} ${domainMessage.eventType}`);
                 return true;
-    
-            } catch(error) {
+
+            } catch (error) {
                 logger.error(error.message);
-                return false
+                return false;
             }
         });
     } catch (error) {
@@ -84,7 +84,7 @@ async function stopWatch(amqpChannel: AMPQChannel): Promise<void> {
                 this.logger.warn(`Shutting down error: ${err.message}`);
                 process.exit(1);
             }
-              
+
         });
     });
 }

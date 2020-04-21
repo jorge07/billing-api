@@ -1,5 +1,5 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
 import type TransactionWasCreated from "domain/transaction/events/transactionWasCreated";
+import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity()
 export class Transactions {

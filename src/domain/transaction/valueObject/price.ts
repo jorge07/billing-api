@@ -27,7 +27,7 @@ export default class Price {
         if (isNaN(amount)) {
             throw new InvalidArgumentException("Amount is not a number");
         }
-        
+
         if (Math.sign(amount) < 0) {
             throw new InvalidArgumentException("Negative prices not allowed");
         }

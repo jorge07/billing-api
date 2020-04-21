@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import AppBridge from "hollywood-js/src/Framework/AppBridge";
+import health from "./monitor/health";
 import get from "./transaction/get";
 import create from "./transaction/post";
-import health from "./monitor/health";
 
 type Context = (app: AppBridge) => IRoute;
 
@@ -15,5 +15,5 @@ export interface IRoute {
 export const routes: Context[] = [
     get,
     create,
-    health
+    health,
 ];

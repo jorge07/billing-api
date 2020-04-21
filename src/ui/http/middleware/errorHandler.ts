@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
+import ConflictException from "domain/shared/exceptions/ConflictException";
 import InvalidArgumentException from "domain/shared/exceptions/invalidArgumentException";
 import NotFoundException from "domain/shared/exceptions/notFoundException";
-import ConflictException from "domain/shared/exceptions/ConflictException";
+import { Request, Response } from "express";
 
 export default function errorHandler(err: any, req: Request, res: Response, next: () => void) {
     switch (true) {

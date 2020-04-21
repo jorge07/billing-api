@@ -4,10 +4,10 @@ import type { Express, Request, Response } from "express";
 import * as prometheus from "express-prom-bundle";
 import { Framework } from "hollywood-js";
 import type { Server } from "http";
+import Log from "infrastructure/shared/audit/logger";
 import { inject, injectable } from "inversify";
 import errorHandler from "./middleware/errorHandler";
 import { IRoute, routes } from "./routing";
-import Log from 'infrastructure/shared/audit/logger';
 
 @injectable()
 export default class HTTPServer {
@@ -64,18 +64,18 @@ export default class HTTPServer {
                     server.close((err?: Error) => {
                         if (err) {
                             errors.push(err);
-                            
+
                         }
-                        
+
                         if (errors.length > 0) {
-                            for (const err of errors) {
+                            for (const error of errors) {
                                 this.logger.warn("The following errors encounter when shutting down");
-                                this.logger.error(err.message);
+                                this.logger.error(error.message);
                             }
-        
+
                             process.exitCode = 1;
                         }
-        
+
                         this.logger.warn("Bye!");
                         process.exit(0);
                     });
@@ -117,7 +117,7 @@ export default class HTTPServer {
             ],
             promClient: {
                 collectDefaultMetrics: {},
-            }
+            },
         });
 
         this.http.use(metricsRequestMiddleware);
