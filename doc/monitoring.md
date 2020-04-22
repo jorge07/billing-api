@@ -190,6 +190,7 @@ Display the information in the correct way is as important as have the informati
 - Add descritions in the charts to help to provide context about the numbers displayed
 - Avoid logarithmic scales as much as you can. Use text panels to notify if not, so you can have a red alert text on top.
 - Absolute numbers are useless 99% of the time
+- Perspective matters. Start gaphs at 0 it's important mor of the time. Use the stddev or rate to monitor fluctuations.
 - Avoid use the information of the metrics as a BI tool.
 
 ## Resources
