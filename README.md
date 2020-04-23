@@ -33,7 +33,7 @@ TODO
 
 ## Screenshots
 
-### Api
+### API
 
 ![Get Transaction](https://i.imgur.com/RFDOvaT.png)
 
