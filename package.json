@@ -5,7 +5,9 @@
    "license": "MIT",
    "dependencies": {
       "amqplib": "^0.5.5",
+      "axios": "^0.19.2",
       "body-parser": "^1.19.0",
+      "commander": "^5.1.0",
       "express": "^4.17.1",
       "express-prom-bundle": "^6.0.0",
       "hollywood-js": "^2.0.0",
@@ -48,7 +50,7 @@
       "stop": "yarn deps stop",
       "deps:rm": "yarn deps down -v",
       "start:dev": "yarn dev:run ./src/ui/http/index.ts",
-      "start:dev:workers": "yarn tsrun ./src/ui/console/asyncEventBus/asyncEventBus.ts",
+      "start:dev:workers": "./src/ui/console/bin.ts queue:consume",
       "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
       "typeorm:writeModel": "yarn typeorm -f config/packages/orm/writeModel/config.js",
       "typeorm:writeModel:migration:generate": "yarn typeorm:writeModel migration:generate -n",

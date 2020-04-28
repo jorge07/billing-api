@@ -4,6 +4,11 @@ import { Connection, createConnection, getConnectionManager } from "typeorm";
 @injectable()
 export default class PostgresClient {
 
+    private signals = [
+        "SIGINT",
+        "SIGTERM",
+        "SIGQUIT",
+    ];
     private connection?: Connection;
 
     constructor(
@@ -16,27 +21,17 @@ export default class PostgresClient {
             return;
         }
 
-        try {
+        this.connection = await createConnection(this.config);
 
-            this.connection = await createConnection(this.config);
-        } catch (err) {
-            throw err;
-        }
 
-        const sigs = [
-            "SIGINT",
-            "SIGTERM",
-            "SIGQUIT",
-        ];
-
-        sigs.forEach((sig: any) => process.on(sig, () => this.close()));
+        this.signals.forEach((sig: any) => process.on(sig, () => this.close()));
 
         return this.connection;
     }
 
-    public close() {
+    public async close() {
         if (this.connection) {
-            this.connection.close();
+            await this.connection.close();
         }
     }
 }

@@ -56,10 +56,12 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels
 */}}
 {{- define "billing.selectorLabels" -}}
+app.kubernetes.io/project: {{ include "billing.name" . }}
 app.kubernetes.io/name: {{ include "billing.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 {{- define "billing-worker.selectorLabels" -}}
+app.kubernetes.io/project: {{ include "billing.name" . }}
 app.kubernetes.io/name: {{ include "billing.name" . }}-worker
 app.kubernetes.io/instance: {{ .Release.Name }}-worker
 {{- end -}}

@@ -7,7 +7,8 @@ import TransactionID from 'domain/transaction/valueObject/transactionId';
 describe("Transaction", () => {
     test("Create transaction", () => {
         const price = new Price(2, 'EUR');
-        const instance = Transaction.create(new TransactionID("ae081e7a-ec8c-4ff1-9de5-f70383fe03a7"), "product", price);
+        const transactionID = new TransactionID("ae081e7a-ec8c-4ff1-9de5-f70383fe03a7");
+        const instance = Transaction.create(transactionID, "product", price);
         const stream = instance.getUncommitedEvents();
 
         expect(instance.getAggregateRootId()).toBe("ae081e7a-ec8c-4ff1-9de5-f70383fe03a7");

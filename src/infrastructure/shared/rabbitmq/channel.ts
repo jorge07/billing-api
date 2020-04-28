@@ -15,15 +15,20 @@ export default class AMPQChannel {
         message: string,
     ): boolean {
         try {
-            return this.channel.publish(exchange, routingKey, Buffer.from(message));
+            return this.channel.publish(exchange, routingKey, Buffer.from(message, "utf8"));
         } catch (err) {
             throw new Error("Publish message error: " + err.message);
         }
     }
 
-    public async consume(exchange: string = "events", queue: string = "events", action: (mgs: Message | null) => any) {
+    public async consume(
+        exchange: string = "events",
+        queue: string = "events",
+        pattern: string = "#",
+        action: (mgs: Message | null) => any,
+    ) {
         await this.channel.assertQueue(queue, { exclusive: false });
-        await this.channel.bindQueue(queue, exchange, queue);
+        await this.channel.bindQueue(queue, exchange, pattern);
         await this.channel.consume(queue, action, { noAck: true });
     }
 

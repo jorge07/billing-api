@@ -24,7 +24,7 @@ autoscaling:
     max: 10
     targetCPUUtilizationPercentage: 75
   worker: 
-    min: 1
+    min: 3
     max: 5
     queue: events
     avgItems: 5
@@ -51,6 +51,16 @@ prometheus-operator:
       selector:
         matchLabels:
           app.kubernetes.io/instance: api
+      namespaceSelector:
+        matchNames:
+          - default
+      endpoints:
+        - port: metrics
+          interval: 10s
+    - name: billing-workers
+      selector:
+        matchLabels:
+          app.kubernetes.io/instance: api-worker
       namespaceSelector:
         matchNames:
           - default

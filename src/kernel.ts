@@ -1,5 +1,4 @@
 import { Framework } from "hollywood-js";
-import "reflect-metadata";
 import { parameters } from "../config/parameters";
 import { services } from "../config/services";
 import { testServices } from "../config/test";

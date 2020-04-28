@@ -1,8 +1,9 @@
-import HTTPServer from "ui/http/server";
+import "reflect-metadata";
+import BillingAPI from "ui/http/BillingAPI";
 import KernelFactory from "../../kernel";
 
 (async () => {
     const kernel = await KernelFactory(false);
 
-    kernel.container.get<HTTPServer>("ui.httpServer").up();
+    await kernel.container.get<BillingAPI>("ui.httpServer").up();
 })();

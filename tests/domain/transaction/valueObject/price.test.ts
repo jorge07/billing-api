@@ -11,7 +11,6 @@ describe("Price", () => {
 
     test("Invalid Currency", () => {
         const todo = () => new Price(12.5, "GBP");
-        
         expect(todo).toThrow(InvalidArgumentException);
     });
 });
