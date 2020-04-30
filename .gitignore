@@ -1,6 +1,6 @@
 .idea/
 .vscode/
-
+etc/artifact/chart/charts/
 node_modules/
 build/
 tmp/
