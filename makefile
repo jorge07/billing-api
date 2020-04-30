@@ -10,7 +10,7 @@ dev:
 	yarn dev
 
 artifact: ## build environment and initialize composer and project dependencies
-	@eval $(minikube docker-env);
+	@eval $$(minikube docker-env); \
 	docker build -t jorge07/billing-api:${APP_VERSION} -f etc/artifact/Dockerfile .
 
 mk-template:

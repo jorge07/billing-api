@@ -53,12 +53,12 @@ prometheus-operator:
                 },
                 {
                   "colors": [
-                    "rgba(245, 54, 54, 0.9)",
-                    "rgba(237, 129, 40, 0.89)",
-                    "rgba(50, 172, 45, 0.97)"
+                    "#F2495C",
+                    "#FADE2A",
+                    "#73BF69"
                   ],
                   "composites": [],
-                  "content": "graph TD\n\nIngress[Ingress] -->|Route to | API{Billing API}\nAPI --> Commands\nAPI --> Queries\nCommands -->|Write| WM[Write Model DB]\nCommands -->|Publish| RMQ[RabbitMQ Exchange] \nRMQ -->|topic| Queue[Events Queues]\nWorker(API Workers) --> |Write| RM(Read Model DB)\nWorker --> |Consumes|Queue\nQueries --> |Read| RM\n",
+                  "content": "graph TD\n\nIngress[Ingress] -->|Route to | API{Billing API}\nAPI --> Commands\nAPI --> Queries\nCommands -->|Write| WM[Write Model DB]\nCommands -->|Publish| RMQ[RabbitMQ Exchange] \nRMQ -->|topic| Queue[Event Queues]\nWorker(API Workers) --> |Write| RM(Read Model DB)\nWorker --> |Consumes|Queue\nQueries --> |Read| RM\n",
                   "datasource": null,
                   "decimals": 2,
                   "format": "percentunit",
@@ -109,7 +109,7 @@ prometheus-operator:
                     "avg": true,
                     "current": false,
                     "gradient": {
-                      "enabled": true,
+                      "enabled": false,
                       "show": true
                     },
                     "max": false,
@@ -153,6 +153,21 @@ prometheus-operator:
                       "expr": "billing:traffic:apdex_by_method_path_5m{path=\"/transaction/:uuid\"}",
                       "legendFormat": "Queries",
                       "refId": "C"
+                    },
+                    {
+                      "expr": "sum(increase(events_worker_duration_seconds_count[5m]))",
+                      "legendFormat": "Worker",
+                      "refId": "D"
+                    },
+                    {
+                      "expr": "sum(increase(event_published_count[5m]))",
+                      "legendFormat": "RMQ",
+                      "refId": "E"
+                    },
+                    {
+                      "expr": "sum(increase(event_store_postgres_write_duration_seconds_count[5m]))",
+                      "legendFormat": "WM",
+                      "refId": "F"
                     }
                   ],
                   "thresholds": "0,0.7,1",
@@ -179,7 +194,7 @@ prometheus-operator:
                         {
                           "from": "0.91",
                           "text": "OK",
-                          "to": "1"
+                          "to": "9999"
                         }
                       ],
                       "text": "N/A",
@@ -1339,7 +1354,7 @@ prometheus-operator:
                 "list": []
               },
               "time": {
-                "from": "now-15m",
+                "from": "now-1h",
                 "to": "now"
               },
               "timepicker": {

@@ -35,5 +35,5 @@ async function call() {
             await call();
             loop(iteration);
         }
-    }, 1000);
+    }, 300);
 })(100);

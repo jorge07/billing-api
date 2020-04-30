@@ -29,7 +29,7 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: [ "node", "-r", "tsconfig-paths/register", "./src/ui/console/asyncEventBus/asyncEventBus.js" ]
+          command: [ "api", "queue:consume", "-m" ]
           ports:
             - name: metrics
               containerPort: 9800

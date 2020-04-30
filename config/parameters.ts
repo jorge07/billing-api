@@ -35,7 +35,7 @@ export const parameters: Framework.ParametersList = new Map<UniqueParameterIdent
     ],
     [
         "metrics.port",
-        process.env.PORT || 9800,
+        process.env.METRICS_PORT || 9800,
     ],
     [
         "eventStore.margin",

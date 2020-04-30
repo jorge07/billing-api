@@ -14,10 +14,9 @@ COPY tsconfig.json .
 
 RUN yarn install --no-cache
 
+COPY config/ config/
 COPY src/ src/
 COPY tests/ tests/
-COPY config/ config/
-COPY bin.ts .
 
 RUN yarn build
 
@@ -31,11 +30,11 @@ COPY package.json .
 COPY yarn.lock .
 COPY tsconfig.json .
 
-RUN yarn install --productions
+RUN yarn install --production
 
 COPY --from=build /tmp/build .
 
-RUN chmod +x bin.js \
-	&& ln -s /app/bin.js /usr/local/bin/api
+RUN chmod +x src/ui/bin.js \
+	&& ln -s /app/src/ui/bin.js /usr/local/bin/api
 
 CMD [ "api", "http" ]
