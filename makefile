@@ -17,6 +17,7 @@ mk-template:
 	helm template api --namespace default -f etc/env/minikube/values.yaml -f etc/env/minikube/grafana.yaml etc/artifact/chart/
 
 mk-deploy:
+	helm dep update etc/artifact/chart/
 	helm upgrade -i api --namespace default -f etc/env/minikube/values.yaml -f etc/env/minikube/grafana.yaml etc/artifact/chart/
 
 prom-crds:

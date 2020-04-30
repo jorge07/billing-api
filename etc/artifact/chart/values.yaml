@@ -94,6 +94,17 @@ rabbitmq:
     password: guest
     erlangCookie: "SWQOKODSQALRPCLNMEQG"
 
+prometheus-rabbitmq-exporter:
+  rabbitmq:
+    url: http://api-rabbitmq:15672
+    user: guest
+    password: guest
+  prometheus:
+    monitor:
+      enabled: true
+    additionalLabels:
+      release: api
+
 postgresql:
   selfHosted: true
   postgresql:

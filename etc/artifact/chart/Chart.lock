@@ -2,11 +2,14 @@ dependencies:
 - name: rabbitmq
   repository: https://charts.bitnami.com/bitnami
   version: 6.25.2
+- name: prometheus-rabbitmq-exporter
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 0.5.5
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
   version: 8.7.3
 - name: prometheus-operator
   repository: https://kubernetes-charts.storage.googleapis.com/
   version: 8.12.12
-digest: sha256:5f61998ea51f8577a694346d8ef57f2dc8a3afd00dcbaf948eace43abc7aa2c9
-generated: "2020-04-14T01:03:17.019052+02:00"
+digest: sha256:ad439eda97719d02fdb6a7cde5d985bab8f7c79dea17eb07cb6bb6963bc35e3e
+generated: "2020-04-30T12:33:11.756377+02:00"
