@@ -14,11 +14,11 @@ artifact: ## build environment and initialize composer and project dependencies
 	docker build -t jorge07/billing-api:${APP_VERSION} -f etc/artifact/Dockerfile .
 
 mk-template:
-	helm template api --namespace default -f etc/env/minikube/values.yaml -f etc/env/minikube/grafana.yaml etc/artifact/chart/
+	helm template api --namespace default -f etc/env/minikube/values.yaml  etc/artifact/chart/
 
 mk-deploy:
 	helm dep update etc/artifact/chart/
-	helm upgrade -i api --namespace default -f etc/env/minikube/values.yaml -f etc/env/minikube/grafana.yaml etc/artifact/chart/
+	helm upgrade -i api --namespace default -f etc/env/minikube/values.yaml etc/artifact/chart/
 
 prom-crds:
 	kubectl apply -f $(CRD_URL)alertmanagers.yaml

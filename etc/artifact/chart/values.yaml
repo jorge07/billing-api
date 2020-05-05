@@ -102,8 +102,8 @@ prometheus-rabbitmq-exporter:
   prometheus:
     monitor:
       enabled: true
-    additionalLabels:
-      release: api
+      additionalLabels:
+        release: api
 
 postgresql:
   selfHosted: true
@@ -125,5 +125,24 @@ postgresql:
           CREATE DATABASE read_model;
       EOSQL
 
-prometheus-operator:
+prometheusOperator:
   enabled: false
+  grafana:
+    plugins:
+    - jdbranham-diagram-panel
+    dashboardProviders:
+      dashboardproviders.yaml:
+        apiVersion: 1
+        providers:
+        - name: 'default'
+          orgId: 1
+          folder: 'Billing'
+          type: file
+          disableDeletion: false
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/default
+    sidecar:
+      dashboards:
+        enabled: true
+        label: grafana_dashboard
