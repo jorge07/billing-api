@@ -74,10 +74,14 @@ export default class AsyncEventBus {
     }
 
     private async limit(counter: number, amqpChannel: AMPQChannel, logger: ILog) {
+        const STOP_MARGIN = 10000;
         if (counter >= MAX_MESSAGES_BEFORE_RESTART) {
             await amqpChannel.close();
-            logger.warn(`Max messages processed (${MAX_MESSAGES_BEFORE_RESTART}), shutting down.`);
-            process.exit(0);
+            logger.warn(`Max messages processed (${MAX_MESSAGES_BEFORE_RESTART}). Channel closed. Shutting down in 10 seconds.`);
+            setTimeout(() => {
+                logger.warn(`Shut down.`);
+                process.exit(0);
+            }, STOP_MARGIN);
         }
     }
 

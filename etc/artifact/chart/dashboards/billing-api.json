@@ -38,7 +38,7 @@
         "#73BF69"
       ],
       "composites": [],
-      "content": "graph TD\n\nIngress[Ingress] -->|Route to | API{Billing API}\nAPI --> Commands\nAPI --> Queries\nCommands -->|Write| WM[Write Model DB]\nCommands -->|Publish| RMQ[RabbitMQ Exchange] \nRMQ -->|topic| Queue[Event Queues]\nWorker(API Workers) --> |Write| RM(Read Model DB)\nWorker --> |Consumes|Queue\nQueries --> |Read| RM\n",
+      "content": "graph LR\n\nIngress[Ingress] -->|Route to | API{Billing API}\nAPI --> Commands\nAPI --> Queries\nCommands -->|Write| WM[Write Model DB]\nCommands -->|Publish| RMQ[RabbitMQ Exchange] \nRMQ -->|topic| Queue[Event Queues]\nWorker(API Workers) --> |Write| RM(Read Model DB)\nWorker --> |Consumes|Queue\nQueries --> |Read| RM\n",
       "datasource": null,
       "decimals": 2,
       "format": "percentunit",
@@ -85,6 +85,7 @@
         },
         "startOnLoad": false
       },
+      "interval": "",
       "legend": {
         "avg": true,
         "current": false,
@@ -109,7 +110,7 @@
         }
       ],
       "maxDataPoints": 100,
-      "maxWidth": false,
+      "maxWidth": true,
       "mermaidServiceUrl": "",
       "metricCharacterReplacements": [],
       "moddedSeriesVal": 0,
@@ -118,6 +119,7 @@
       "options": {},
       "seriesOverrides": [],
       "style": "",
+      "styleValues": {},
       "targets": [
         {
           "expr": "billing:traffic:apdex_global_5m",
@@ -148,9 +150,20 @@
           "expr": "sum(increase(event_store_postgres_write_duration_seconds_count[5m]))",
           "legendFormat": "WM",
           "refId": "F"
+        },
+        {
+          "expr": "1-rabbitmq_queue_messages_ready{queue=\"events\"}",
+          "legendFormat": "Queue",
+          "refId": "G"
         }
       ],
-      "thresholds": "0,0.7,1",
+      "themes": [
+        "default",
+        "dark",
+        "forest",
+        "neutral"
+      ],
+      "thresholds": "0,0.7,0.95",
       "timeFrom": null,
       "timeShift": null,
       "title": "Triage",
@@ -236,13 +249,13 @@
       "options": {
         "dataLinks": []
       },
-      "percentage": false,
+      "percentage": true,
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
-      "stack": false,
+      "stack": true,
       "steppedLine": false,
       "targets": [
         {
@@ -283,11 +296,11 @@
       "yaxes": [
         {
           "decimals": 0,
-          "format": "short",
+          "format": "percent",
           "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
+          "max": "100",
+          "min": "0",
           "show": true
         },
         {
@@ -329,7 +342,7 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 6,
-        "w": 24,
+        "w": 12,
         "x": 0,
         "y": 33
       },
@@ -417,9 +430,9 @@
       "fillGradient": 0,
       "gridPos": {
         "h": 6,
-        "w": 24,
-        "x": 0,
-        "y": 39
+        "w": 12,
+        "x": 12,
+        "y": 33
       },
       "hiddenSeries": false,
       "id": 18,
@@ -504,10 +517,10 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 6,
-        "w": 24,
+        "h": 7,
+        "w": 12,
         "x": 0,
-        "y": 45
+        "y": 39
       },
       "hiddenSeries": false,
       "id": 19,
@@ -592,10 +605,10 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 6,
-        "w": 24,
-        "x": 0,
-        "y": 51
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 39
       },
       "hiddenSeries": false,
       "id": 20,
@@ -679,7 +692,263 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 57
+        "y": 46
+      },
+      "id": 33,
+      "panels": [],
+      "title": "Workers",
+      "type": "row"
+    },
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 47
+      },
+      "id": 35,
+      "options": {
+        "colorMode": "value",
+        "fieldOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": null
+                },
+                {
+                  "color": "semi-dark-blue",
+                  "value": 2
+                }
+              ]
+            }
+          },
+          "overrides": [],
+          "values": false
+        },
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto"
+      },
+      "pluginVersion": "6.6.2",
+      "targets": [
+        {
+          "expr": "rabbitmq_queue_consumers{queue=\"events\"}",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Healthy Workers",
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 6,
+        "y": 47
+      },
+      "id": 36,
+      "options": {
+        "colorMode": "value",
+        "fieldOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": null
+                },
+                {
+                  "color": "semi-dark-blue",
+                  "value": 2
+                }
+              ]
+            }
+          },
+          "overrides": [],
+          "values": false
+        },
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto"
+      },
+      "pluginVersion": "6.6.2",
+      "targets": [
+        {
+          "expr": "rabbitmq_queue_messages_ready{queue=\"events\"}",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "[Events Queue] Messages Ready",
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 12,
+        "y": 47
+      },
+      "id": 37,
+      "options": {
+        "colorMode": "value",
+        "fieldOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": null
+                },
+                {
+                  "color": "semi-dark-blue",
+                  "value": 3
+                }
+              ]
+            }
+          },
+          "overrides": [],
+          "values": false
+        },
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto"
+      },
+      "pluginVersion": "6.6.2",
+      "targets": [
+        {
+          "expr": "rabbitmq_connectionsTotal",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Total connections",
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": null,
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 18,
+        "y": 47
+      },
+      "hiddenSeries": false,
+      "id": 38,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "dataLinks": []
+      },
+      "percentage": false,
+      "pluginVersion": "6.6.2",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "rabbitmq_queue_messages_ready",
+          "legendFormat": "{{ queue }}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Queues Size",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 52
       },
       "id": 11,
       "panels": [],
@@ -695,10 +964,10 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 6,
-        "w": 24,
+        "h": 5,
+        "w": 12,
         "x": 0,
-        "y": 58
+        "y": 53
       },
       "hiddenSeries": false,
       "id": 21,
@@ -784,10 +1053,10 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 6,
-        "w": 24,
-        "x": 0,
-        "y": 64
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 53
       },
       "hiddenSeries": false,
       "id": 22,
@@ -871,7 +1140,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 70
+        "y": 58
       },
       "id": 9,
       "panels": [],
@@ -885,7 +1154,7 @@
         "h": 5,
         "w": 8,
         "x": 0,
-        "y": 71
+        "y": 59
       },
       "id": 7,
       "options": {
@@ -944,7 +1213,7 @@
         "h": 5,
         "w": 16,
         "x": 8,
-        "y": 71
+        "y": 59
       },
       "hiddenSeries": false,
       "id": 25,
@@ -1028,7 +1297,7 @@
         "h": 6,
         "w": 8,
         "x": 0,
-        "y": 76
+        "y": 64
       },
       "id": 6,
       "options": {
@@ -1071,7 +1340,7 @@
       "pluginVersion": "6.6.2",
       "targets": [
         {
-          "expr": "billing:traffic:apdex_by_method_path_5m",
+          "expr": "billing:traffic:apdex_by_method_path_5m{path!=\"/monitor/health\"}",
           "legendFormat": "{{ method }} : {{ path }}",
           "refId": "A"
         }
@@ -1095,7 +1364,7 @@
         "h": 6,
         "w": 16,
         "x": 8,
-        "y": 76
+        "y": 64
       },
       "hiddenSeries": false,
       "id": 26,
@@ -1180,7 +1449,7 @@
         "h": 6,
         "w": 8,
         "x": 0,
-        "y": 82
+        "y": 70
       },
       "id": 27,
       "options": {
@@ -1239,7 +1508,7 @@
         "h": 6,
         "w": 16,
         "x": 8,
-        "y": 82
+        "y": 70
       },
       "hiddenSeries": false,
       "id": 2,
@@ -1334,7 +1603,7 @@
     "list": []
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {
