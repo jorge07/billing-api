@@ -38,32 +38,3 @@ resources:
 
 prometheus-operator:
   enabled: true
-  prometheus:
-    enabled: true
-    prometheusOperator:
-      createCustomResource: true
-    serviceMonitor:
-      selfMonitor: true
-    prometheusSpec:
-      retention: 2d
-    additionalServiceMonitors:
-    - name: billing-api
-      selector:
-        matchLabels:
-          app.kubernetes.io/instance: api
-      namespaceSelector:
-        matchNames:
-          - default
-      endpoints:
-        - port: metrics
-          interval: 10s
-    - name: billing-workers
-      selector:
-        matchLabels:
-          app.kubernetes.io/instance: api-worker
-      namespaceSelector:
-        matchNames:
-          - default
-      endpoints:
-        - port: metrics
-          interval: 10s
