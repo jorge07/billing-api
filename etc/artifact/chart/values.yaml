@@ -125,11 +125,12 @@ postgresql:
           CREATE DATABASE read_model;
       EOSQL
 
-prometheusOperator:
+prometheus-operator:
   enabled: false
   grafana:
     plugins:
     - jdbranham-diagram-panel
+    - grafana-image-renderer
     dashboardProviders:
       dashboardproviders.yaml:
         apiVersion: 1

@@ -1,3 +1,4 @@
+{{- if index $.Values "prometheus-operator" "grafana" "enabled" }}
 {{- $files := .Files.Glob "dashboards/*.json" }}
 {{- if $files }}
 {{- range $path, $fileContents := $files }}
@@ -9,10 +10,11 @@ metadata:
   name: {{ printf "%s-%s" (include "billing.fullname" $) $dashboardName | trunc 63 | trimSuffix "-" }}
   labels:
 {{- include "billing.labels" $ | nindent 4 }}
-{{- if $.Values.prometheusOperator.grafana.sidecar.dashboards.label }}
-    {{ $.Values.prometheusOperator.grafana.sidecar.dashboards.label }}: "1"
+{{- if index $.Values "prometheus-operator" "grafana" "sidecar" "dashboards" "label" }}
+    {{ index $.Values "prometheus-operator" "grafana" "sidecar" "dashboards" "label" }}: "1"
 {{- end }}
 data:
-{{ $dashboardName }}.json: {{ $.Files.Get $path | toJson | indent 6 }}
+  {{ $dashboardName }}.json: {{ $.Files.Get $path | toJson | indent 6 }}
+{{ end }}
 {{ end }}
 {{ end }}

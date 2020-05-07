@@ -1,4 +1,4 @@
-.PHONY: dev artifact mk-template mk-deploy prom-crds mk-start mk-setup mk-expose-api mk-expose-grafana mk-expose-prom
+.PHONY: dev artifact mk-template mk-deploy prom-crds mk-start mk-setup mk-expose-api mk-expose-grafana mk-expose-prom mk-diff
 ENV=dev
 COMPOSE=docker-compose -f docker-compose.yml -f docker-compose.$(env).yml
 APP_VERSION=1.0.0
@@ -17,8 +17,10 @@ mk-template:
 	helm template api --namespace default -f etc/env/minikube/values.yaml  etc/artifact/chart/
 
 mk-deploy:
-	helm dep update etc/artifact/chart/
 	helm upgrade -i api --namespace default -f etc/env/minikube/values.yaml etc/artifact/chart/
+
+mk-diff:
+	helm diff upgrade api --namespace default -f etc/env/minikube/values.yaml etc/artifact/chart/
 
 prom-crds:
 	kubectl apply -f $(CRD_URL)alertmanagers.yaml
@@ -30,6 +32,8 @@ prom-crds:
 
 mk-start:
 	minikube start
+	helm dep update etc/artifact/chart/
+
 
 mk-setup: mk-start prom-crds mk-template mk-deploy
 

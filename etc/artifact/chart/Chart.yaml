@@ -20,4 +20,4 @@ dependencies:
   - name: prometheus-operator
     version: 8.12.12
     repository: https://kubernetes-charts.storage.googleapis.com/
-    conditions: prometheusOperator.enabled
+    conditions: prometheus-operator.enabled
