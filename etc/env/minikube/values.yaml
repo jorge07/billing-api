@@ -1,6 +1,6 @@
 parameters:
   env: dev
-  port: 8080
+  port: 3000
   log_level: info
   rabbit:
     host: api-rabbitmq
@@ -24,7 +24,7 @@ autoscaling:
     max: 10
     targetCPUUtilizationPercentage: 75
   worker: 
-    min: 1
+    min: 3
     max: 5
     queue: events
     avgItems: 5
@@ -38,22 +38,3 @@ resources:
 
 prometheus-operator:
   enabled: true
-  prometheus:
-    enabled: true
-    prometheusOperator:
-      createCustomResource: true
-    serviceMonitor:
-      selfMonitor: true
-    prometheusSpec:
-      retention: 2d
-    additionalServiceMonitors:
-    - name: billing-api
-      selector:
-        matchLabels:
-          app.kubernetes.io/instance: api
-      namespaceSelector:
-        matchNames:
-          - default
-      endpoints:
-        - port: metrics
-          interval: 10s

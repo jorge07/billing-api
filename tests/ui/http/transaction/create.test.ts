@@ -1,12 +1,12 @@
-import * as request from "supertest";
-import KernelFactory from '../../../../src/kernel';
-import InMemoryTransactionRepository from "../../../infrastructure/transaction/InMemoryRepository";
 import Transaction from "domain/transaction/transaction";
-import * as v4 from 'uuid/v4';
-import HTTPServer from '../../../../src/ui/http/server';
+import TransactionID from "domain/transaction/valueObject/transactionId";
 import { Framework } from "hollywood-js";
 import * as prom from "prom-client";
-import TransactionID from "domain/transaction/valueObject/transactionId";
+import * as request from "supertest";
+import BillingAPI from "ui/http/BillingAPI";
+import * as v4 from "uuid/v4";
+import KernelFactory from "../../../../src/kernel";
+import InMemoryTransactionRepository from "../../../infrastructure/transaction/InMemoryRepository";
 
 describe("POST /transaction", () => {
   let kernel: Framework.Kernel;
@@ -15,7 +15,7 @@ describe("POST /transaction", () => {
   beforeEach(async () => {
     kernel = await KernelFactory(false);
     ((prom.Registry as any).globalRegistry as prom.Registry).clear();
-    transactionRepository = kernel.container.get<InMemoryTransactionRepository>('domain.transaction.repository');
+    transactionRepository = kernel.container.get<InMemoryTransactionRepository>("domain.transaction.repository");
     kernel.container.snapshot();
   });
 
@@ -26,19 +26,19 @@ describe("POST /transaction", () => {
   it("Create a transaction", async () => {
     const txuuid = v4();
 
-    await request(kernel.container.get<HTTPServer>('ui.httpServer').getExpress())
+    await request(kernel.container.get<BillingAPI>("ui.httpServer").http)
       .post("/transaction")
       .send({
-        uuid: txuuid, 
-        price: { 
-          amount: 12, 
-          currency: "EUR" 
-        }, 
-        product: "test"
+        uuid: txuuid,
+        price: {
+          amount: 12,
+          currency: "EUR",
+        },
+        product: "test",
       })
-      .set('Accept', 'application/json')
+      .set("Accept", "application/json")
       .expect(201);
 
-    expect(await transactionRepository.get(new TransactionID(txuuid))).toBeInstanceOf(Transaction)
+    expect(await transactionRepository.get(new TransactionID(txuuid))).toBeInstanceOf(Transaction);
   });
 });

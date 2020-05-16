@@ -7,7 +7,7 @@ metadata:
   annotations:
     checksum/secrets: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
 spec:
-  replicas: {{ default 1 .Values.autoscaling.worker.min }}
+  replicas: {{ default 2 .Values.autoscaling.worker.min }}
   selector:
     matchLabels:
       {{- include "billing-worker.selectorLabels" . | nindent 6 }}
@@ -29,7 +29,11 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: [ "node", "-r", "tsconfig-paths/register", "./src/ui/console/asyncEventBus/asyncEventBus.js" ]
+          command: [ "api", "queue:consume", "-m" ]
+          ports:
+            - name: metrics
+              containerPort: 9800
+              protocol: TCP
           env:
 {{ tpl ($.Files.Get "config/parameters.yaml") $ | indent 10 }}
           resources:

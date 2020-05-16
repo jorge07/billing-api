@@ -6,7 +6,7 @@ describe("Cache middleware test", () => {
 
     const middelware = new InMemoryMiddlewareCache();
 
-    beforeEach(()=> middelware.flush());
+    beforeEach(() => middelware.flush());
 
     test("Cache Miss", async () => {
         let hit = false;
@@ -14,17 +14,17 @@ describe("Cache middleware test", () => {
         const exec = async () => {
             return await middelware.execute(
                 new CreateCommand(
-                    v4(), 
-                    "2", 
-                    { 
-                        amount: 1, 
-                        currency: "EUR"
-                    }
-                ), 
+                    v4(),
+                    "2",
+                    {
+                        amount: 1,
+                        currency: "EUR",
+                    },
+                ),
                 ( ) => {
-                    hit = true
+                    hit = true;
                     return "test";
-                }
+                },
             );
         };
 
@@ -37,7 +37,7 @@ describe("Cache middleware test", () => {
 
         const txuuid = v4();
         await middelware.execute(new CreateCommand(txuuid, "2", { amount: 1, currency: "EUR"}), ( ) => ("test"));
-        
+
         const exec = async () => {
             return await middelware.execute(new CreateCommand(txuuid, "2", { amount: 1, currency: "EUR"}), ( ) => {
                 hit = true

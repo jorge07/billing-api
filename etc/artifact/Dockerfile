@@ -14,7 +14,9 @@ COPY tsconfig.json .
 
 RUN yarn install --no-cache
 
-COPY . .
+COPY config/ config/
+COPY src/ src/
+COPY tests/ tests/
 
 RUN yarn build
 
@@ -25,10 +27,14 @@ ENV NODE_ENV production
 WORKDIR /app
 
 COPY package.json .
+COPY yarn.lock .
 COPY tsconfig.json .
 
-RUN yarn install
+RUN yarn install --production
 
 COPY --from=build /tmp/build .
 
-CMD [ "node", "-r", "tsconfig-paths/register", "./src/ui/http/index.js" ]
+RUN chmod +x src/ui/bin.js \
+	&& ln -s /app/src/ui/bin.js /usr/local/bin/api
+
+CMD [ "api", "http" ]

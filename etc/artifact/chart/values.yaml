@@ -94,6 +94,17 @@ rabbitmq:
     password: guest
     erlangCookie: "SWQOKODSQALRPCLNMEQG"
 
+prometheus-rabbitmq-exporter:
+  rabbitmq:
+    url: http://api-rabbitmq:15672
+    user: guest
+    password: guest
+  prometheus:
+    monitor:
+      enabled: true
+      additionalLabels:
+        release: api
+
 postgresql:
   selfHosted: true
   postgresql:
@@ -116,3 +127,52 @@ postgresql:
 
 prometheus-operator:
   enabled: false
+  prometheus:
+    enabled: true
+    prometheusOperator:
+      createCustomResource: true
+    serviceMonitor:
+      selfMonitor: true
+    prometheusSpec:
+      retention: 2d
+    additionalServiceMonitors:
+    - name: billing-api
+      selector:
+        matchLabels:
+          app.kubernetes.io/instance: api
+      namespaceSelector:
+        matchNames:
+          - default
+      endpoints:
+        - port: metrics
+          interval: 10s
+    - name: billing-workers
+      selector:
+        matchLabels:
+          app.kubernetes.io/instance: api-worker
+      namespaceSelector:
+        matchNames:
+          - default
+      endpoints:
+        - port: metrics
+          interval: 10s
+  grafana:
+    enabled: true
+    plugins:
+    - jdbranham-diagram-panel
+    dashboardProviders:
+      dashboardproviders.yaml:
+        apiVersion: 1
+        providers:
+        - name: 'default'
+          orgId: 1
+          folder: 'Billing'
+          type: file
+          disableDeletion: false
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/default
+    sidecar:
+      dashboards:
+        enabled: true
+        label: grafana_dashboard

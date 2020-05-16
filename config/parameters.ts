@@ -1,44 +1,48 @@
-import type { Framework } from 'hollywood-js';
-import { UniqueParameterIdentifier, Parameter } from 'hollywood-js/src/Framework/Container/Items/Parameter';
-import * as writeModel from "./packages/orm/writeModel/config"
-import * as readModel from "./packages/orm/readModel/config"
-import rabbitmq from "./packages/rabbitmq/config"
+import type { Framework } from "hollywood-js";
+import { Parameter, UniqueParameterIdentifier } from "hollywood-js/src/Framework/Container/Items/Parameter";
+import * as readModel from "./packages/orm/readModel/config";
+import * as writeModel from "./packages/orm/writeModel/config";
+import rabbitmq from "./packages/rabbitmq/config";
 
 export const parameters: Framework.ParametersList = new Map<UniqueParameterIdentifier, Parameter>([
     [
-        "appName", 
-        'billing-api'
+        "appName",
+        "billing-api",
     ],
     [
         "logLevel",
-        process.env.LOG_LEVEL || 'info'
+        process.env.LOG_LEVEL || "info",
     ],
     [
         "orm.writeModel",
-        writeModel
+        writeModel,
     ],
     [
         "orm.readModel",
-        readModel
+        readModel,
     ],
     [
         "rabbitmq",
-        rabbitmq
+        rabbitmq,
     ],
     [
         "env",
-        process.env.NODE_ENV || 'development'
+        process.env.NODE_ENV || "development",
     ],
     [
-        "port", 
-        process.env.PORT || 8080
+        "port",
+        process.env.PORT || 8080,
     ],
     [
-        "eventStore.margin", 
-        10
+        "metrics.port",
+        process.env.METRICS_PORT || 9800,
     ],
     [
-        "metricsConfig", 
-        { }
+        "eventStore.margin",
+        10,
+    ],
+    [
+        "metricsConfig",
+        { },
     ],
 ]);

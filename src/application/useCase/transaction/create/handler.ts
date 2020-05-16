@@ -13,14 +13,13 @@ export default class Create implements Application.ICommandHandler {
     private readonly success: Counter<string>;
 
     constructor(
-        @inject("infrastructure.shared.audit.probe") private readonly probe: Probe,
         @inject(
             "infrastructure.transaction.eventStore",
         ) private readonly writeModel: EventStore.EventStore<Transaction>,
     ) {
-        this.error = this.probe.counter({ name: "transaction_create_error", help: "Counter of the incremental transaction create errors"});
-        this.conflicts = this.probe.counter({ name: "transaction_create_conflict", help: "Counter of the incremental transaction create conflicts"});
-        this.success = this.probe.counter({ name: "transaction_create_success", help: "Counter of the incremental transaction create success"});
+        this.error = Probe.counter({ name: "transaction_create_error", help: "Counter of the incremental transaction create errors"});
+        this.conflicts = Probe.counter({ name: "transaction_create_conflict", help: "Counter of the incremental transaction create conflicts"});
+        this.success = Probe.counter({ name: "transaction_create_success", help: "Counter of the incremental transaction create success"});
     }
 
     @Application.autowiring

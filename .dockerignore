@@ -3,5 +3,6 @@ build/
 coverage/
 .vscode/
 .github/
+.idea/
 etc/artifact/chart
 etc/env
