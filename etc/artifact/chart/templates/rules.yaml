@@ -47,14 +47,13 @@ spec:
     - expr: sum(rate(http_request_duration_seconds_sum{job="api-billing"}[5m])) / billing:traffic:total_rate_5m
       record: billing:traffic:duration_avg_5m
     - expr: |-
-        (
-          sum(rate(http_request_duration_seconds_bucket{le="0.3", job="api-billing"}[5m]))
-          +
-          sum(rate(http_request_duration_seconds_bucket{le="1.5", job="api-billing"}[5m]))
-        ) / 2 / billing:traffic:total_rate_5m
+        sum(rate(http_request_duration_seconds_bucket{le="0.3", job="api-billing"}[5m]))
+        + (sum(rate(http_request_duration_seconds_bucket{le="0.5", job="api-billing"}[5m])) / 2) 
+        / billing:traffic:total_rate_5m
       record: billing:traffic:apdex_global_5m
     - expr: |-
         sum(rate(http_request_duration_seconds_bucket{le="0.1", job="api-billing"}[5m])) by (method, path)
+        + (sum(rate(http_request_duration_seconds_bucket{le="0.5", job="api-billing"}[5m])) by (method, path)) / 2)
         / sum(rate(http_request_duration_seconds_count{job="api-billing"}[5m])) by (method, path)
       record: billing:traffic:apdex_by_method_path_5m
     - expr: |-
