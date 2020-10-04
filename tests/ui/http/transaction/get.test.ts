@@ -1,4 +1,4 @@
-import Transaction from "domain/transaction/transaction";
+import Transaction from "domain/transaction/Transaction";
 import Price from "domain/transaction/valueObject/price";
 import TransactionID from "domain/transaction/valueObject/transactionId";
 import { Framework } from "hollywood-js";
@@ -30,7 +30,7 @@ describe("GET /transaction/:uuid", () => {
     await transactionRepository.save(Transaction.create(new TransactionID(txnuuid), "uuu", new Price(1, "EUR")));
 
     const result: any = await request(
-        kernel.container.get<BillingAPI>("ui.httpServer").http
+        kernel.container.get<BillingAPI>("ui.httpServer").http,
     ).get("/transaction/" + txnuuid);
 
     const expectedResponse = {

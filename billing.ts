@@ -1,8 +1,8 @@
-#! /usr/bin/env -S node -r tsconfig-paths/register
+#! /usr/bin/env -S node -r ts-node/register -r tsconfig-paths/register
 
 import { program } from "commander";
-import AsyncEventBus from "./consumers/asyncEventBus/asyncEventBus";
-import http from "./http/index";
+import AsyncEventBus from "ui/consumers/asyncEventBus/asyncEventBus";
+import http from "ui/http";
 
 program
   .version("1.0.0")

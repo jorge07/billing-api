@@ -1,4 +1,4 @@
-import { currencies } from 'domain/transaction/valueObject/currencyList';
+import { currencies } from "domain/transaction/valueObject/currencyList";
 
 describe("Currency lists", () => {
     test("Known Currency", () => {

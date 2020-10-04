@@ -1,4 +1,4 @@
-import Transaction from "domain/transaction/transaction";
+import Transaction from "domain/transaction/Transaction";
 import TransactionID from "domain/transaction/valueObject/transactionId";
 import { Framework } from "hollywood-js";
 import * as prom from "prom-client";

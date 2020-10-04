@@ -1,9 +1,9 @@
 import InMemoryMiddlewareCache from "application/middlewares/InMemoryMiddlewareCache";
-import LoggerMiddleware from "application/middlewares/loggerMiddleware";
-import Create from "application/useCase/transaction/create/handler";
-import Get from "application/useCase/transaction/get/handler";
-import TransactionWasCreated from "domain/transaction/events/transactionWasCreated";
-import Transaction from "domain/transaction/transaction";
+import LoggerMiddleware from "application/middlewares/LoggerMiddleware";
+import Create from "application/useCase/transaction/create/Handler";
+import Get from "application/useCase/transaction/get/Handler";
+import TransactionWasCreated from "domain/transaction/events/TransactionWasCreated";
+import Transaction from "domain/transaction/Transaction";
 import { EventStore, Framework } from "hollywood-js";
 import Log from "infrastructure/shared/audit/logger";
 import Probe from "infrastructure/shared/audit/probe";
@@ -91,6 +91,7 @@ export const services: Framework.ServiceList = new Map([
                 try {
                     await connection.connect();
                 } catch (err) {
+                    console.error(`PG connection to read model error: ${err.message}`);
                     throw new Error(`PG connection to read model error: ${err.message}`);
                 }
 

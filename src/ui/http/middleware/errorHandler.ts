@@ -1,6 +1,6 @@
 import ConflictException from "domain/shared/exceptions/ConflictException";
-import InvalidArgumentException from "domain/shared/exceptions/invalidArgumentException";
-import NotFoundException from "domain/shared/exceptions/notFoundException";
+import InvalidArgumentException from "domain/shared/exceptions/InvalidArgumentException";
+import NotFoundException from "domain/shared/exceptions/NotFoundException";
 import type { Request, Response } from "express";
 import type {ILog} from "infrastructure/shared/audit/logger";
 

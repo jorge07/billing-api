@@ -1,4 +1,4 @@
-import GetOne from "application/useCase/transaction/get/query";
+import GetOne from "application/useCase/transaction/get/Query";
 import { Request, Response } from "express";
 import { Framework } from "hollywood-js";
 import { IRoute } from "../index";

@@ -1,9 +1,9 @@
-import NotFoundException from "domain/shared/exceptions/notFoundException";
-import IRepository from "domain/transaction/repository";
+import NotFoundException from "domain/shared/exceptions/NotFoundException";
+import IRepository from "domain/transaction/Repository";
 import { Application } from "hollywood-js";
 import { EventStore } from "hollywood-js";
 import { inject, injectable } from "inversify";
-import GetOne from "./query";
+import GetOne from "./Query";
 
 @injectable()
 export default class Get implements Application.IQueryHandler {

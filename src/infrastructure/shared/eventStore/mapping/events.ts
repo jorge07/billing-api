@@ -1,5 +1,5 @@
 import type { DomainMessage } from "hollywood-js/src/Domain";
-import { Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, Index, PrimaryGeneratedColumn} from "typeorm";
 
 @Entity()
 export class Events {
@@ -11,7 +11,7 @@ export class Events {
         event.playhead = message.playhead;
         event.event = message.event;
         event.metadata = message.metadata;
-        event.ocurredOn = message.ocurredOn;
+        event.occurred = message.occurred;
         event.eventType = message.eventType;
 
         return event;
@@ -20,7 +20,8 @@ export class Events {
     @PrimaryGeneratedColumn("uuid")
     public id: string;
 
-    @Column("uuid")
+    @Index({ unique: true })
+    @Column({ unique: true })
     public uuid: string;
 
     @Column({
@@ -36,7 +37,7 @@ export class Events {
     public metadata: any;
 
     @Column("timestamptz")
-    public ocurredOn: Date;
+    public occurred: Date;
 
     @Column("varchar")
     public eventType: string;

@@ -15,13 +15,13 @@ export default class PostgresEventStoreDBAL implements EventStore.IEventStoreDBA
         @inject("infrastructure.eventStore.postgresRepository") private readonly repository: Repository<Events>,
     ) {
         this.write = Probe.histogram({
-            buckets: [0.01, 0.03, 0.1, 0.3],
+            buckets: [0.001, 0.003, 0.01, 0.03],
             help: "Write duration in Write Model",
             labelNames: [],
             name: "event_store_postgres_write_duration_seconds",
         });
         this.read = Probe.histogram({
-            buckets: [0.01, 0.03, 0.1, 0.3],
+            buckets: [0.001, 0.003, 0.01, 0.03],
             help: "Read duration in Write Model",
             labelNames: [],
             name: "event_store_postgres_read_duration_seconds",
