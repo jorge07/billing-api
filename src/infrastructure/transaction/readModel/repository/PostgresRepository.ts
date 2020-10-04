@@ -1,5 +1,5 @@
-import NotFoundException from "domain/shared/exceptions/notFoundException";
-import IRepository from "domain/transaction/repository";
+import NotFoundException from "domain/shared/exceptions/NotFoundException";
+import IRepository from "domain/transaction/Repository";
 import TransactionID from "domain/transaction/valueObject/transactionId";
 import { inject, injectable } from "inversify";
 import { Repository } from "typeorm";

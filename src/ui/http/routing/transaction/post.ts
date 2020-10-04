@@ -1,4 +1,4 @@
-import CreateCommand from "application/useCase/transaction/create/command";
+import CreateCommand from "application/useCase/transaction/create/Command";
 import { Request, Response } from "express";
 import { Framework } from "hollywood-js";
 import { IRoute } from "../index";

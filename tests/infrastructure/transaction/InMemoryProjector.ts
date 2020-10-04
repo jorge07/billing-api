@@ -1,12 +1,13 @@
-import { injectable, inject } from 'inversify';
-import { ReadModel } from 'hollywood-js';
-import { Transactions } from 'infrastructure/transaction/readModel/mapping/transactions';
-import TransactionWasCreated from 'domain/transaction/events/transactionWasCreated';
+import TransactionWasCreated from "domain/transaction/events/TransactionWasCreated";
+import { ReadModel } from "hollywood-js";
+import { Transactions } from "infrastructure/transaction/readModel/mapping/transactions";
+import { inject, injectable } from "inversify";
 
 @injectable()
 export default class TransactionInMemoryProjector extends ReadModel.Projector {
     constructor(
-        @inject('infrastructure.transaction.readModel.repository') private readonly readModel: ReadModel.InMemoryReadModelRepository,
+        @inject("infrastructure.transaction.readModel.repository")
+        private readonly readModel: ReadModel.InMemoryReadModelRepository,
     ) {
         super();
     }

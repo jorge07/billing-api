@@ -22,8 +22,6 @@ export default class PostgresClient {
         }
 
         this.connection = await createConnection(this.config);
-
-
         this.signals.forEach((sig: any) => process.on(sig, () => this.close()));
 
         return this.connection;

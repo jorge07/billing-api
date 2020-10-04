@@ -1,6 +1,6 @@
-import InMemoryMiddlewareCache from 'application/middlewares/InMemoryMiddlewareCache';
-import CreateCommand from 'application/useCase/transaction/create/command';
-import { v4 } from 'uuid';
+import InMemoryMiddlewareCache from "application/middlewares/InMemoryMiddlewareCache";
+import CreateCommand from "application/useCase/transaction/create/Command";
+import { v4 } from "uuid";
 
 describe("Cache middleware test", () => {
 
@@ -40,7 +40,7 @@ describe("Cache middleware test", () => {
 
         const exec = async () => {
             return await middelware.execute(new CreateCommand(txuuid, "2", { amount: 1, currency: "EUR"}), ( ) => {
-                hit = true
+                hit = true;
                 return "Nope!";
             });
         };

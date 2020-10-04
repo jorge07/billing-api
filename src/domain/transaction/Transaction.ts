@@ -1,9 +1,9 @@
 import { Domain } from "hollywood-js";
-import TransactionWasCreated from "./events/transactionWasCreated";
+import TransactionWasCreated from "./events/TransactionWasCreated";
 import type Price from "./valueObject/price";
 import type TransactionID from "./valueObject/transactionId";
 
-export default class Transaction extends Domain.EventSourced {
+export default class Transaction extends Domain.EventSourcedAggregateRoot {
 
     public static create(uuid: TransactionID, product: string, price: Price): Transaction {
         const instance = new Transaction(uuid.toString());

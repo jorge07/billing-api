@@ -1,5 +1,5 @@
-import Price from 'domain/transaction/valueObject/price';
-import InvalidArgumentException from 'domain/shared/exceptions/invalidArgumentException';
+import InvalidArgumentException from "domain/shared/exceptions/InvalidArgumentException";
+import Price from "domain/transaction/valueObject/price";
 
 describe("Price", () => {
     test("Create Price VO from Scalars", () => {
