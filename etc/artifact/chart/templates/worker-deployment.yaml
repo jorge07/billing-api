@@ -35,7 +35,7 @@ spec:
               containerPort: 9800
               protocol: TCP
           env:
-{{ tpl ($.Files.Get "config/parameters.yaml") $ | indent 10 }}
+{{ tpl ($.Files.GetOne "config/parameters.yaml") $ | indent 10 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

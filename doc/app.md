@@ -64,6 +64,6 @@ src/
   ui/
     console/      -> Queue workers od CLI commands 
     http/         -> HTTP Server
-  kernel.ts       -> Project Kernel
+  Kernel.ts       -> Project Kernel
 tests/            -> Tests directory
 ```

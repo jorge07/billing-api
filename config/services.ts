@@ -1,27 +1,29 @@
-import InMemoryMiddlewareCache from "application/middlewares/InMemoryMiddlewareCache";
-import LoggerMiddleware from "application/middlewares/LoggerMiddleware";
-import Create from "application/useCase/transaction/create/Handler";
-import Get from "application/useCase/transaction/get/Handler";
-import TransactionWasCreated from "domain/transaction/events/TransactionWasCreated";
-import Transaction from "domain/transaction/Transaction";
+import InMemoryMiddlewareCache from "Application/Middlewares/InMemoryMiddlewareCache";
+import LoggerMiddleware from "Application/Middlewares/LoggerMiddleware";
+import Create from "Application/UseCase/Transaction/Create/Handler";
+import GetOne from "Application/UseCase/Transaction/GetOne/Handler";
+import TransactionWasCreated from "Domain/Transaction/Events/TransactionWasCreated";
+import Transaction from "Domain/Transaction/Transaction";
 import { EventStore, Framework } from "hollywood-js";
-import Log from "infrastructure/shared/audit/logger";
-import Probe from "infrastructure/shared/audit/probe";
-import RabbitMQEventPublisher from "infrastructure/shared/eventListener/RabbitMQEventPublisher";
-import PostgresEventStoreDBAL from "infrastructure/shared/eventStore/dbal";
-import { Events } from "infrastructure/shared/eventStore/mapping/events";
-import { Snapshots } from "infrastructure/shared/eventStore/mapping/snapshots";
-import PostgresEventStoreSnapshotDBAL from "infrastructure/shared/eventStore/snapshotDbal";
-import PostgresClient from "infrastructure/shared/postgres/postgresClient";
-import AMPQChannel from "infrastructure/shared/rabbitmq/channel";
-import RabbitMQChannelClientFactory from "infrastructure/shared/rabbitmq/channelFactory";
-import { Transactions } from "infrastructure/transaction/readModel/mapping/transactions";
-import TransactionPostgresProjector from "infrastructure/transaction/readModel/projections/transactionsPostgresProjector";
-import PostgresRepository from "infrastructure/transaction/readModel/repository/PostgresRepository";
+import Log from "Infrastructure/Shared/Audit/Logger";
+import Probe from "Infrastructure/Shared/Audit/Probe";
+import RabbitMQEventPublisher from "Infrastructure/Shared/EventListener/RabbitMQEventPublisher";
+import PostgresEventStoreDBAL from "Infrastructure/Shared/EventStore/DBAL";
+import {Events} from "Infrastructure/Shared/EventStore/Mapping/Events";
+import {Snapshots} from "Infrastructure/Shared/EventStore/Mapping/Snapshots";
+import PostgresEventStoreSnapshotDBAL from "Infrastructure/Shared/EventStore/SnapshotDbal";
+import PostgresClient from "Infrastructure/Shared/Postgres/PostgresClient";
+import AMPQChannel from "Infrastructure/Shared/Rabbitmq/Channel";
+import RabbitMQChannelClientFactory from "Infrastructure/Shared/Rabbitmq/ChannelFactory";
+import {Transactions} from "Infrastructure/Transaction/ReadModel/Mapping/Transactions";
+// tslint:disable-next-line:import-spacing
+import TransactionPostgresProjector
+    from "Infrastructure/Transaction/ReadModel/Projections/TransactionsPostgresProjector";
+import PostgresRepository from "Infrastructure/Transaction/ReadModel/Repository/PostgresRepository";
 import type { interfaces } from "inversify";
-import { getRepository } from "typeorm";
-import BillingAPI from "ui/http/BillingAPI";
-import Monitor from "ui/http/Monitor";
+import {getRepository} from "typeorm";
+import BillingAPI from "UI/HTTP/BillingAPI";
+import Monitor from "UI/HTTP/Monitor";
 import { parameters } from "./parameters";
 
 export const services: Framework.ServiceList = new Map([
@@ -38,7 +40,7 @@ export const services: Framework.ServiceList = new Map([
     [
         Framework.SERVICES_ALIAS.QUERY_HANDLERS,
         { collection: [
-            Get,
+            GetOne,
         ]},
     ],
     [

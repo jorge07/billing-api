@@ -14,7 +14,7 @@ async function call() {
         });
 
         console.log("Code: ", response.status);
-        console.log(`http://127.0.0.1:8070/transaction/${uuid}`);
+        console.log(`http://127.1:8070/transaction/${uuid}`);
 
         setTimeout(async () => {
             await axios.get(`http://127.0.0.1:8070/transaction/${uuid}`);
@@ -29,11 +29,11 @@ async function call() {
     }
 }
 
-(function loop(iteration) {
+(function loop(iteration: number) {
     setTimeout(async () => {
         if (--iteration) {
             await call();
             loop(iteration);
         }
-    }, 300);
-})(100);
+    }, 150);
+})(100); // Generate 500 transactions

@@ -2167,10 +2167,10 @@ expect@^26.4.2:
     jest-message-util "^26.3.0"
     jest-regex-util "^26.0.0"
 
-express-prom-bundle@^6.0.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/express-prom-bundle/-/express-prom-bundle-6.1.0.tgz#8fd72e5bedbbd686b8e7c49e0aecbc1b14b28743"
-  integrity sha512-krlvp5r6sgJ1IwL6M6/coMrNbAlwtpk+uyivfeyRMCupTK4HzIEQHH0gwrNhLiKyPmSbtZcSmtO6s+PRumRp5g==
+express-prom-bundle@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/express-prom-bundle/-/express-prom-bundle-6.2.0.tgz#c3e037ed117d51697a14c1ffc08a3dbb7fa9a1f4"
+  integrity sha512-dqufa4MKprbx5wMDAAuIuhvoXon8f6exqfjosSn9R9KKXO1mIEImRzx9QzYgBpSAQbLAt1aqBrZ3ls0vsd+pEw==
   dependencies:
     on-finished "^2.3.0"
     url-value-parser "^2.0.0"
