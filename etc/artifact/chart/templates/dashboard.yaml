@@ -14,7 +14,7 @@ metadata:
     {{ index $.Values "prometheus-operator" "grafana" "sidecar" "dashboards" "label" }}: "1"
 {{- end }}
 data:
-  {{ $dashboardName }}.json: {{ $.Files.Get $path | toJson | indent 6 }}
+  {{ $dashboardName }}.json: {{ $.Files.GetOne $path | toJson | indent 6 }}
 {{ end }}
 {{ end }}
 {{ end }}

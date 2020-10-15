@@ -5,11 +5,11 @@
       ],
       "baseUrl": ".",
       "paths": {
-         "application/*": [ "src/application/*" ],
-         "domain/*": [ "src/domain/*" ],
-         "infrastructure/*": [ "src/infrastructure/*" ],
-         "tests/infrastructure/*": [ "tests/infrastructure/*" ],
-         "ui/*": [ "src/ui/*" ]
+         "Application/*": [ "src/Application/*" ],
+         "Domain/*": [ "src/Domain/*" ],
+         "Infrastructure/*": [ "src/Infrastructure/*" ],
+         "tests/Infrastructure/*": [ "tests/Infrastructure/*" ],
+         "UI/*": [ "src/UI/*" ]
       },
       "target": "es6",
       "module": "commonjs",

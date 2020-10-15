@@ -1,9 +1,9 @@
-import TransactionWasCreated from "domain/transaction/events/TransactionWasCreated";
+import TransactionWasCreated from "Domain/Transaction/Events/TransactionWasCreated";
 import { EventStore, Framework, ReadModel } from "hollywood-js";
-import EventCollectorListener from "../tests/infrastructure/shared/EventCollectorListener";
-import GenericInMemoryRepository from "../tests/infrastructure/shared/GenericInMemoryRepository";
-import TransactionInMemoryProjector from "../tests/infrastructure/transaction/InMemoryProjector";
-import InMemoryTransactionRepository from "../tests/infrastructure/transaction/InMemoryRepository";
+import EventCollectorListener from "../tests/Infrastructure/Shared/EventCollectorListener";
+import GenericInMemoryRepository from "../tests/Infrastructure/Shared/GenericInMemoryRepository";
+import TransactionInMemoryProjector from "../tests/Infrastructure/Transaction/InMemoryProjector";
+import InMemoryTransactionRepository from "../tests/Infrastructure/Transaction/InMemoryRepository";
 
 export const testServices: Framework.ServiceList = new Map([
     [
@@ -23,7 +23,7 @@ export const testServices: Framework.ServiceList = new Map([
         { instance: GenericInMemoryRepository },
     ],
     [
-        "infrastructure.orm.readModel.postgresConnection",  // Fake connection on tests to avoid connections
+        "infrastructure.orm.readModel.postgresConnection",  // Fake connection on tests
         {
             constant: true,
             async: async () => {
@@ -32,7 +32,7 @@ export const testServices: Framework.ServiceList = new Map([
         },
     ],
     [
-        "infrastructure.orm.writeModel.postgresConnection",  // Fake connection on tests to avoid connections
+        "infrastructure.orm.writeModel.postgresConnection",  // Fake connection on tests
         {
             constant: true,
             async: async () => {
@@ -43,6 +43,7 @@ export const testServices: Framework.ServiceList = new Map([
     [
         "infrastructure.eventBus.publisher",
         {
+            // tslint:disable-next-line:no-empty
             instance: class { public on() {}},
             bus: Framework.SERVICES_ALIAS.DEFAULT_EVENT_BUS,
             listener: true,
