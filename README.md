@@ -22,6 +22,19 @@ TODO
 
 [Dev and Minikube environments](doc/envs.md)
 
+Requirements:
+
+- Nodejs
+- yarn
+- Docker
+- Docker Compose
+
+Start the project:
+
+```sh
+yarn install && yarn dev
+```
+
 ## Stack
 
 - Billing API and Worker/s
