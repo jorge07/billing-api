@@ -49,21 +49,79 @@ App:
 ## Project Structure
 
 ```
-config/           -> Project configuration for parameters and DI services
-etc/
-   artifact/
-      chart/      -> Kubernetes helm chart
-      Dockerfile  -> The artifact to deploy
-   env/
-      dev/        -> Dev Stack
-      minikube/   -> Minikube Stack
-src/
-  application/    -> Application layer (Use Cases)
-  domain/         -> Domain Logic
-  infrastructure  -> Implementation details
-  ui/
-    console/      -> Queue workers od CLI commands 
-    http/         -> HTTP Server
-  Kernel.ts       -> Project Kernel
-tests/            -> Tests directory
+.
+├── config -> Project configuration for parameters and DI services
+│   └── packages
+│       ├── orm
+│       │   ├── readModel
+│       │   └── writeModel
+│       └── rabbitmq
+├── doc
+├── etc
+│   ├── artifact --> Deployment artifact and orchestration
+│   │   └── chart
+│   │       ├── charts
+│   │       ├── config
+│   │       ├── dashboards
+│   │       └── templates
+│   │           └── tests
+│   └── env --> Per env configuration
+│       ├── dev
+│       │   ├── kibana
+│       │   └── postgres
+│       └── minikube
+├── src
+│   ├── Application
+│   │   ├── Middlewares
+│   │   └── UseCase
+│   │       └── Transaction
+│   │           ├── Create
+│   │           └── GetOne
+│   ├── Domain
+│   │   ├── Shared
+│   │   │   ├── Exceptions
+│   │   │   └── ValueObject
+│   │   └── Transaction
+│   │       ├── Events
+│   │       └── ValueObject
+│   ├── Infrastructure
+│   │   ├── Shared
+│   │   │   ├── Audit
+│   │   │   ├── EventListener
+│   │   │   ├── EventStore
+│   │   │   │   └── Mapping
+│   │   │   ├── Postgres
+│   │   │   │   ├── ReadModel
+│   │   │   │   │   └── Migrations
+│   │   │   │   └── WriteModel
+│   │   │   │       └── Migrations
+│   │   │   └── Rabbitmq
+│   │   └── Transaction
+│   │       └── ReadModel
+│   │           ├── Mapping
+│   │           ├── Projections
+│   │           └── Repository
+│   └── UI
+│       ├── Consumers
+│       │   └── AsyncEventBus
+│       └── HTTP
+│           ├── Middleware
+│           └── Routing
+│               ├── Monitor
+│               └── Transaction
+└── tests
+    ├── Application
+    │   ├── Middlewares
+    │   └── UseCase
+    │       └── Transaction
+    ├── Domain
+    │   └── Transaction
+    │       └── ValueObject
+    ├── Infrastructure
+    │   ├── Shared
+    │   └── Transaction
+    └── UI
+        └── HTTP
+            └── Transaction
+
 ```
