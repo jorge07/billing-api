@@ -11,11 +11,11 @@ Built following:
 - **Create Transaction**: Any user can create a transaction given:
     - A valid uuidv4
     - A valid price 
-        - Numberic >= 0
+        - Numeric >= 0
         - String Currency 
     - A product name, any string
 
-- **Get Transaction**: Any user can retreive a transaction given a valid uuidv4
+- **Get Transaction**: Any user can retrieve a transaction given a valid uuidv4
 
 ## Exposed metrics
 
