@@ -5,11 +5,12 @@
       ],
       "baseUrl": ".",
       "paths": {
-         "Application/*": [ "src/Application/*" ],
-         "Domain/*": [ "src/Domain/*" ],
-         "Infrastructure/*": [ "src/Infrastructure/*" ],
-         "tests/Infrastructure/*": [ "tests/Infrastructure/*" ],
-         "UI/*": [ "src/UI/*" ]
+         "@Tests/Transaction/*": [ "tests/Billing/Transaction/*" ],
+         "@Tests/Shared/*": [ "tests/Billing/Shared/*" ],
+         "@Tests/Apps/*": [ "tests/Apps/*" ],
+         "@Transaction/*": [ "src/Billing/Transaction/*" ],
+         "@Shared/*": [ "src/Billing/Shared/*" ],
+         "@Apps/*": [ "src/Apps/*" ]
       },
       "target": "es6",
       "module": "commonjs",

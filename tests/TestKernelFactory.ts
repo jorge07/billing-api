@@ -1,12 +1,12 @@
 import { EventSourcing, Framework, ReadModel } from "hollywood-js";
-import { TransactionModule } from "Infrastructure/Transaction/TransactionModule";
+import { TransactionModule } from "@Transaction/Infrastructure/TransactionModule";
 import { parameters } from "../config/parameters";
-import { testParameters } from "../config/paramaters.test";
-import { InMemoryTransactionRepository } from "./Infrastructure/Transaction/InMemoryRepository";
-import { GenericInMemoryRepository } from "./Infrastructure/Shared/GenericInMemoryRepository";
-import { EventCollectorListener } from "./Infrastructure/Shared/EventCollectorListener";
-import { TransactionInMemoryProjector } from "./Infrastructure/Transaction/InMemoryProjector";
-import TransactionWasCreated from "Domain/Transaction/Events/TransactionWasCreated";
+import { testParameters } from "../config/paramaters-test";
+import TransactionWasCreated from "@Transaction/Domain/Events/TransactionWasCreated";
+import {GenericInMemoryRepository} from "@Tests/Shared/Infrastructure/GenericInMemoryRepository";
+import {TransactionInMemoryProjector} from "@Tests/Transaction/Infrastructure/InMemoryProjector";
+import {EventCollectorListener} from "@Tests/Shared/Infrastructure/EventCollectorListener";
+import {InMemoryTransactionRepository} from "@Tests/Transaction/Infrastructure/InMemoryRepository";
 
 const testServices = new Map([
     [
