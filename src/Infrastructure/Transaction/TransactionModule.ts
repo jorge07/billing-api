@@ -5,12 +5,12 @@ import GetOne from "Application/UseCase/Transaction/GetOne/Handler";
 import TransactionWasCreated from "Domain/Transaction/Events/TransactionWasCreated";
 import Transaction from "Domain/Transaction/Transaction";
 import { EventSourcing, Framework} from "hollywood-js";
-import {SharedModule} from "Infrastructure/Shared/SharedModule";
-import {Transactions} from "Infrastructure/Transaction/ReadModel/Mapping/Transactions";
+import { SharedModule } from "Infrastructure/Shared/SharedModule";
+import { Transactions } from "Infrastructure/Transaction/ReadModel/Mapping/Transactions";
 import TransactionPostgresProjector from "Infrastructure/Transaction/ReadModel/Projections/TransactionsPostgresProjector";
 import PostgresRepository from "Infrastructure/Transaction/ReadModel/Repository/PostgresRepository";
-import {interfaces} from "inversify";
-import {getRepository} from "typeorm";
+import { interfaces } from "inversify";
+import { getRepository } from "typeorm";
 
 export const services = (new Map())
     .set("infrastructure.transaction.async.eventBus", { instance: EventSourcing.EventBus })
