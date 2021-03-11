@@ -1,5 +1,5 @@
 import { Domain } from "hollywood-js";
-import type { AggregateRootId } from "hollywood-js/src/Domain";
+import type { AggregateRootId } from "hollywood-js/src/Domain/AggregateRoot";
 import type Price from "../ValueObject/Price";
 
 export default class TransactionWasCreated extends Domain.DomainEvent {

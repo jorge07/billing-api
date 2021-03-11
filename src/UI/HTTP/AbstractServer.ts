@@ -25,7 +25,7 @@ export default abstract class HTTPServer {
         this.stopWatch(server);
     }
 
-    protected async abstract preUp();
+    protected abstract preUp();
 
 
     protected wrapAsyncRoutes(action: (req: Request, res: Response) => Promise<void>) {

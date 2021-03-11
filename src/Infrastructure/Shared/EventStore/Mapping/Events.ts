@@ -1,10 +1,10 @@
-import type { DomainMessage } from "hollywood-js/src/Domain";
+import type { Domain } from "hollywood-js";
 import {Column, Entity, Index, PrimaryGeneratedColumn} from "typeorm";
 
 @Entity()
 export class Events {
 
-    public static fromDomainMessage(message: DomainMessage): Events {
+    public static fromDomainMessage(message: Domain.DomainMessage): Events {
         const event = new Events();
 
         event.uuid = message.uuid;

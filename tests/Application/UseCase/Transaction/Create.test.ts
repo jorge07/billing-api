@@ -3,17 +3,17 @@ import TransactionWasCreated from "Domain/Transaction/Events/TransactionWasCreat
 import Transaction from "Domain/Transaction/Transaction";
 import TransactionId from "Domain/Transaction/ValueObject/TransactionId";
 import { Framework } from "hollywood-js";
-import EventCollectorListener from "tests/Infrastructure/Shared/EventCollectorListener";
-import InMemoryTransactionRepository from "tests/Infrastructure/Transaction/InMemoryRepository";
+import { EventCollectorListener}  from "tests/Infrastructure/Shared/EventCollectorListener";
+import { InMemoryTransactionRepository } from "tests/Infrastructure/Transaction/InMemoryRepository";
 import { v4 } from "uuid";
-import KernelFactory from "../../../../src/Kernel";
+import { TestKernelFactory } from "../../../TestKernelFactory";
 
 
 describe("Create Transaction", () => {
     let kernel: Framework.Kernel;
 
     beforeEach(async () => {
-        kernel = await KernelFactory(false);
+        kernel = await TestKernelFactory(false);
         kernel.container.snapshot();
     });
     afterEach(() => {

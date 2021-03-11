@@ -3,17 +3,19 @@ import TransactionId from "Domain/Transaction/ValueObject/TransactionId";
 import { Framework } from "hollywood-js";
 import * as prom from "prom-client";
 import * as request from "supertest";
-import InMemoryTransactionRepository from "tests/Infrastructure/Transaction/InMemoryRepository";
+import { InMemoryTransactionRepository } from "tests/Infrastructure/Transaction/InMemoryRepository";
 import BillingAPI from "UI/HTTP/BillingAPI";
 import * as v4 from "uuid/v4";
-import KernelFactory from "../../../../src/Kernel";
+import { TestKernelFactory } from "../../../TestKernelFactory";
 
 describe("POST /transaction", () => {
   let kernel: Framework.Kernel;
+  let api: BillingAPI;
   let transactionRepository: InMemoryTransactionRepository;
 
   beforeEach(async () => {
-    kernel = await KernelFactory(false);
+    kernel = await TestKernelFactory(false);
+    api = new BillingAPI(kernel);
     prom.register.clear();
     transactionRepository = kernel.container.get<InMemoryTransactionRepository>("domain.transaction.repository");
     kernel.container.snapshot();
@@ -26,7 +28,7 @@ describe("POST /transaction", () => {
   it("Create a transaction", async () => {
     const txuuid = v4();
 
-    await request(kernel.container.get<BillingAPI>("ui.httpServer").http)
+    await request(api.http)
       .post("/transaction")
       .send({
         uuid: txuuid,

@@ -3,7 +3,7 @@ import { ReadModel } from "hollywood-js";
 import { inject, injectable } from "inversify";
 
 @injectable()
-export default class GenericInMemoryRepository {
+export class GenericInMemoryRepository {
     constructor(
         @inject("infrastructure.test.inMemory.dbal") private readonly dbal: ReadModel.InMemoryReadModelRepository,
     ) {

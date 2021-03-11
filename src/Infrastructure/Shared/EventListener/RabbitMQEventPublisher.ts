@@ -1,10 +1,10 @@
-import { Domain, EventStore } from "hollywood-js";
+import { Domain, EventSourcing } from "hollywood-js";
 import Probe from "Infrastructure/Shared/Audit/Probe";
 import AMPQChannel from "Infrastructure/Shared/Rabbitmq/Channel";
 import { inject } from "inversify";
 import type { Counter } from "prom-client";
 
-export default class RabbitMQEventPublisher extends EventStore.EventListener {
+export default class RabbitMQEventPublisher extends EventSourcing.EventListener {
 
     private published: Counter<string>;
 

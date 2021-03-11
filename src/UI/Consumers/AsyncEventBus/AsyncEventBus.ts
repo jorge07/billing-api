@@ -1,5 +1,5 @@
 import type { Message } from "amqplib";
-import type { Domain, EventStore, Framework } from "hollywood-js";
+import type { Domain, EventSourcing } from "hollywood-js";
 import type { ILog } from "Infrastructure/Shared/Audit/Logger";
 import Probe from "Infrastructure/Shared/Audit/Probe";
 import type AMPQChannel from "Infrastructure/Shared/Rabbitmq/Channel";
@@ -32,13 +32,13 @@ export default class AsyncEventBus {
 
     public async consume() {
         let counter: number  = 0;
-        const kernel: Framework.Kernel = await KernelFactory(false);
+        const kernel = await KernelFactory(false);
         // Start server to report metrics in monitor port
         if (this.monitor) {
             await kernel.container.get<Monitor>("ui.monitor").up();
         }
         const amqpChannel = kernel.container.get<AMPQChannel>("infrastructure.rabbitmq.connection");
-        const eventBus = kernel.container.get<EventStore.EventBus>("infrastructure.transaction.async.eventBus");
+        const eventBus = kernel.container.get<EventSourcing.EventBus>("infrastructure.transaction.async.eventBus");
         const logger = kernel.container.get<ILog>("logger");
 
         await this.stopWatch(amqpChannel, logger);

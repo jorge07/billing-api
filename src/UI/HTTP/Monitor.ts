@@ -2,17 +2,15 @@ import type { RequestHandler } from "express";
 import * as prometheus from "express-prom-bundle";
 import { Middleware } from "express-prom-bundle";
 import type {ILog} from "Infrastructure/Shared/Audit/Logger";
-import { inject, injectable } from "inversify";
 import HTTPServer from "UI/HTTP/AbstractServer";
 
-@injectable()
 export default class Monitor extends HTTPServer {
 
     public readonly middleware: RequestHandler;
 
     constructor(
-        @inject("metrics.port") port: number,
-        @inject("logger") logger: ILog,
+        port: number,
+        logger: ILog,
     ) {
         super(port, logger);
         this.middleware = this.bindMonitor();

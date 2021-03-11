@@ -6,7 +6,8 @@ export default async function http(debug: boolean = false) {
 
     try {
         const kernel = await KernelFactory(debug);
-        await kernel.container.get<BillingAPI>("ui.httpServer").up();
+        const server = new BillingAPI(kernel);
+        await server.up();
     } catch (err) {
         console.error(err);
     }
