@@ -2,8 +2,8 @@
 
 import "reflect-metadata";
 import { program } from "commander";
-import AsyncEventBus from "UI/Consumers/AsyncEventBus/AsyncEventBus";
-import http from "UI/HTTP";
+import AsyncEventBus from "./src/Apps/Consumers/AsyncEventBus/AsyncEventBus";
+import http from "./src/Apps/HTTP";
 
 program
   .version("1.0.0")
