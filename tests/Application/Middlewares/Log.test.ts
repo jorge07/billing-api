@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import LoggerMiddleware from "Application/Middlewares/LoggerMiddleware";
 import type {ILog} from "Infrastructure/Shared/Audit/Logger";
 

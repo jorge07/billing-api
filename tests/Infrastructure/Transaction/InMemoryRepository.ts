@@ -1,13 +1,13 @@
 import IRepository from "Domain/Transaction/Repository";
 import Transaction from "Domain/Transaction/Transaction";
 import TransactionId from "Domain/Transaction/ValueObject/TransactionId";
-import { EventStore } from "hollywood-js";
+import { EventSourcing } from "hollywood-js";
 import { inject, injectable } from "inversify";
 
 @injectable()
-export default class InMemoryTransactionRepository implements IRepository {
+export class InMemoryTransactionRepository implements IRepository {
     constructor(
-       @inject("infrastructure.transaction.eventStore") private readonly eventStore: EventStore.EventStore<Transaction>,
+       @inject("infrastructure.transaction.eventStore") private readonly eventStore: EventSourcing.EventStore<Transaction>,
     ) {}
 
     public async save(transaction: Transaction): Promise<void> {

@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import AppBridge from "hollywood-js/src/Framework/AppBridge";
+import { Framework } from "hollywood-js";
 import health from "./Monitor/Health";
 import get from "./Transaction/Get";
 import create from "./Transaction/Post";
 
-type Context = (app: AppBridge) => IRoute;
+type Context = (app: Framework.Kernel) => IRoute;
 
 export interface IRoute {
     path: string;

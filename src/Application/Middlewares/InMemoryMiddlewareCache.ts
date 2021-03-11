@@ -1,7 +1,10 @@
 import IMiddleware from "hollywood-js/src/Application/Bus/Middelware";
 import Probe from "Infrastructure/Shared/Audit/Probe";
-import {Counter} from "prom-client";
+import { injectable } from "inversify";
+import { Counter } from "prom-client";
+import "reflect-metadata";
 
+@injectable()
 export default class InMemoryMiddlewareCache implements IMiddleware {
 
     private cache: {[key: string]: any} =  {};

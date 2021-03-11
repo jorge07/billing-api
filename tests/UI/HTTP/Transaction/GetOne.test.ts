@@ -4,17 +4,19 @@ import TransactionId from "Domain/Transaction/ValueObject/TransactionId";
 import { Framework } from "hollywood-js";
 import * as prom from "prom-client";
 import * as request from "supertest";
-import InMemoryTransactionRepository from "tests/Infrastructure/Transaction/InMemoryRepository";
+import { InMemoryTransactionRepository } from "tests/Infrastructure/Transaction/InMemoryRepository";
 import BillingAPI from "UI/HTTP/BillingAPI";
-import KernelFactory from "../../../../src/Kernel";
+import { TestKernelFactory } from "../../../TestKernelFactory";
 
 describe("GET /transaction/:uuid", () => {
 
   let transactionRepository: InMemoryTransactionRepository;
   let kernel: Framework.Kernel;
+  let api: BillingAPI;
 
   beforeEach(async () => {
-      kernel = await KernelFactory(false);
+      kernel = await TestKernelFactory(false);
+      api = new BillingAPI(kernel);
       prom.register.clear();
       transactionRepository = kernel.container.get<InMemoryTransactionRepository>("domain.transaction.repository");
       kernel.container.snapshot();
@@ -29,7 +31,7 @@ describe("GET /transaction/:uuid", () => {
     await transactionRepository.save(Transaction.create(new TransactionId(txnuuid), "uuu", new Price(1, "EUR")));
 
     const result: any = await request(
-        kernel.container.get<BillingAPI>("ui.httpServer").http,
+        api.http,
     ).get("/transaction/" + txnuuid);
 
     const expectedResponse = {
@@ -51,7 +53,7 @@ describe("GET /transaction/:uuid", () => {
   });
 
   it("GetOne /ae081e7a-ec8c-4ff1-9de5-f70383fe03a7 expect status 404", async () => {
-    await request(kernel.container.get<BillingAPI>("ui.httpServer").http)
+    await request(api.http)
       .get("/transaction/ae081e7a-ec8c-4ff1-9de5-f70383fe03a7")
       .expect(404)
     ;

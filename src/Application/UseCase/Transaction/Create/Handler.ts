@@ -1,6 +1,7 @@
 import ConflictException from "Domain/Shared/Exceptions/ConflictException";
 import Transaction from "Domain/Transaction/Transaction";
-import { Application, EventStore } from "hollywood-js";
+import { Application, EventSourcing } from "hollywood-js";
+import type { IAppError } from "hollywood-js/src/Application/Bus/CallbackArg";
 import Probe from "Infrastructure/Shared/Audit/Probe";
 import { inject, injectable } from "inversify";
 import type { Counter } from "prom-client";
@@ -15,7 +16,7 @@ export default class Create implements Application.ICommandHandler {
     constructor(
         @inject(
             "infrastructure.transaction.eventStore",
-        ) private readonly writeModel: EventStore.EventStore<Transaction>,
+        ) private readonly writeModel: EventSourcing.EventStore<Transaction>,
     ) {
         this.error = Probe.counter({ name: "transaction_create_error", help: "Counter of the incremental transaction create errors"});
         this.conflicts = Probe.counter({ name: "transaction_create_conflict", help: "Counter of the incremental transaction create conflicts"});
@@ -23,7 +24,7 @@ export default class Create implements Application.ICommandHandler {
     }
 
     @Application.autowiring
-    public async handle(command: CreateCommand): Promise<void | Application.IAppError> {
+    public async handle(command: CreateCommand): Promise<void | IAppError> {
 
         try {
             await this.writeModel.load(command.uuid.toString());
@@ -31,7 +32,7 @@ export default class Create implements Application.ICommandHandler {
             this.error.inc(1);
             throw new ConflictException("Already exists");
         } catch (err) {
-            if (!(err instanceof EventStore.AggregateRootNotFoundException)) {
+            if (!(err instanceof EventSourcing.AggregateRootNotFoundException)) {
                 this.error.inc(1);
                 throw err;
             }

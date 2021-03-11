@@ -4,7 +4,7 @@ import {Transactions} from "Infrastructure/Transaction/ReadModel/Mapping/Transac
 import { inject, injectable } from "inversify";
 
 @injectable()
-export default class TransactionInMemoryProjector extends ReadModel.Projector {
+export class TransactionInMemoryProjector extends ReadModel.Projector {
     constructor(
         @inject("infrastructure.transaction.readModel.repository")
         private readonly readModel: ReadModel.InMemoryReadModelRepository,

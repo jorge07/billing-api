@@ -1,10 +1,9 @@
-import type { Framework } from "hollywood-js";
 import { Parameter, UniqueParameterIdentifier } from "hollywood-js/src/Framework/Container/Items/Parameter";
 import * as readModel from "./packages/orm/readModel/config";
 import * as writeModel from "./packages/orm/writeModel/config";
 import rabbitmq from "./packages/rabbitmq/config";
 
-export const parameters: Framework.ParametersList = new Map<UniqueParameterIdentifier, Parameter>([
+export const parameters = new Map<UniqueParameterIdentifier, Parameter>([
     [
         "appName",
         "billing-api",

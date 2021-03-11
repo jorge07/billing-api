@@ -1,5 +1,6 @@
 #! /usr/bin/env -S node -r ts-node/register -r tsconfig-paths/register
 
+import "reflect-metadata";
 import { program } from "commander";
 import AsyncEventBus from "UI/Consumers/AsyncEventBus/AsyncEventBus";
 import http from "UI/HTTP";

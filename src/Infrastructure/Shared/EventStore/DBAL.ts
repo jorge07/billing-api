@@ -1,4 +1,4 @@
-import { Domain, EventStore } from "hollywood-js";
+import { Domain, EventSourcing } from "hollywood-js";
 import Probe from "Infrastructure/Shared/Audit/Probe";
 import { inject, injectable } from "inversify";
 import {Histogram} from "prom-client";
@@ -6,7 +6,7 @@ import { Repository, SelectQueryBuilder } from "typeorm";
 import { Events } from "./Mapping/Events";
 
 @injectable()
-export default class PostgresEventStoreDBAL implements EventStore.IEventStoreDBAL {
+export default class PostgresEventStoreDBAL implements EventSourcing.IEventStoreDBAL {
 
     private write: Histogram<string>;
     private read: Histogram<string>;

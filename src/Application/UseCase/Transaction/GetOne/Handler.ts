@@ -1,7 +1,8 @@
 import NotFoundException from "Domain/Shared/Exceptions/NotFoundException";
 import IRepository from "Domain/Transaction/Repository";
 import { Application } from "hollywood-js";
-import { EventStore } from "hollywood-js";
+import { EventSourcing } from "hollywood-js";
+import { IAppError, IAppResponse } from "hollywood-js/src/Application/Bus/CallbackArg";
 import { inject, injectable } from "inversify";
 import GetOneQuery from "./Query";
 
@@ -12,7 +13,7 @@ export default class GetOne implements Application.IQueryHandler {
     ) {}
 
     @Application.autowiring
-    public async handle(request: GetOneQuery): Promise<Application.IAppResponse | Application.IAppError> {
+    public async handle(request: GetOneQuery): Promise<IAppResponse | IAppError> {
         try {
             const transaction = await this.repository.get(request.uuid);
 
@@ -22,7 +23,7 @@ export default class GetOne implements Application.IQueryHandler {
             };
 
         } catch (err) {
-            if (err instanceof EventStore.AggregateRootNotFoundException) {
+            if (err instanceof EventSourcing.AggregateRootNotFoundException) {
                 throw new NotFoundException();
             }
 

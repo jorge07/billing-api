@@ -1,30 +1,35 @@
+import { EventSourcing, Framework, ReadModel } from "hollywood-js";
+import { TransactionModule } from "Infrastructure/Transaction/TransactionModule";
+import { parameters } from "../config/parameters";
+import { testParameters } from "../config/paramaters.test";
+import { InMemoryTransactionRepository } from "./Infrastructure/Transaction/InMemoryRepository";
+import { GenericInMemoryRepository } from "./Infrastructure/Shared/GenericInMemoryRepository";
+import { EventCollectorListener } from "./Infrastructure/Shared/EventCollectorListener";
+import { TransactionInMemoryProjector } from "./Infrastructure/Transaction/InMemoryProjector";
 import TransactionWasCreated from "Domain/Transaction/Events/TransactionWasCreated";
-import { EventStore, Framework, ReadModel } from "hollywood-js";
-import EventCollectorListener from "../tests/Infrastructure/Shared/EventCollectorListener";
-import GenericInMemoryRepository from "../tests/Infrastructure/Shared/GenericInMemoryRepository";
-import TransactionInMemoryProjector from "../tests/Infrastructure/Transaction/InMemoryProjector";
-import InMemoryTransactionRepository from "../tests/Infrastructure/Transaction/InMemoryRepository";
 
-export const testServices: Framework.ServiceList = new Map([
+const testServices = new Map([
     [
         "domain.transaction.repository",
-        { instance: InMemoryTransactionRepository },
+
+        { overwrite: true, instance: InMemoryTransactionRepository },
     ],
     [
         Framework.SERVICES_ALIAS.DEFAULT_EVENT_STORE_SNAPSHOT_DBAL,
-        { instance: EventStore.InMemorySnapshotStoreDBAL },
+        { overwrite: true, instance: EventSourcing.InMemorySnapshotStoreDBAL },
     ],
     [
         Framework.SERVICES_ALIAS.DEFAULT_EVENT_STORE_DBAL,
-        { instance: EventStore.InMemoryEventStore },
+        { overwrite: true, instance: EventSourcing.InMemoryEventStore },
     ],
     [
         "infrastructure.transaction.readModel.repository",
-        { instance: GenericInMemoryRepository },
+        { overwrite: true, instance: GenericInMemoryRepository },
     ],
     [
         "infrastructure.orm.readModel.postgresConnection",  // Fake connection on tests
         {
+            overwrite: true,
             constant: true,
             async: async () => {
                 return { connected: true };
@@ -34,6 +39,7 @@ export const testServices: Framework.ServiceList = new Map([
     [
         "infrastructure.orm.writeModel.postgresConnection",  // Fake connection on tests
         {
+            overwrite: true,
             constant: true,
             async: async () => {
                 return { connected: true };
@@ -47,12 +53,14 @@ export const testServices: Framework.ServiceList = new Map([
             instance: class { public on() {}},
             bus: Framework.SERVICES_ALIAS.DEFAULT_EVENT_BUS,
             listener: true,
+            overwrite: true,
         },
     ],
     [
         "infrastructure.rabbitmq.connection",
         {
             constant: true,
+            overwrite: true,
             async: async () => {
                 return {};
             },
@@ -76,6 +84,21 @@ export const testServices: Framework.ServiceList = new Map([
     ],
     [
         "infrastructure.test.inMemory.dbal",
-        { instance: ReadModel.InMemoryReadModelRepository },
+        { overwrite: true, instance: ReadModel.InMemoryReadModelRepository },
     ],
 ]);
+
+export async function TestKernelFactory(debug: boolean): Promise<Framework.Kernel> {
+    const TestModule = new Framework.ModuleContext({
+        services: testServices,
+        modules: [TransactionModule]
+    })
+
+    return await Framework.Kernel.createFromModuleContext(
+        process.env.NODE_ENV,
+        debug,
+        parameters,
+        TestModule,
+        testParameters,
+    );
+}

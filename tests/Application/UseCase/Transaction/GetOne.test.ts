@@ -3,16 +3,16 @@ import Transaction from "Domain/Transaction/Transaction";
 import Price from "Domain/Transaction/ValueObject/Price";
 import TransactionId from "Domain/Transaction/ValueObject/TransactionId";
 import {  Framework } from "hollywood-js";
-import InMemoryTransactionRepository from "tests/Infrastructure/Transaction/InMemoryRepository";
+import { InMemoryTransactionRepository } from "tests/Infrastructure/Transaction/InMemoryRepository";
 import { getConnectionManager } from "typeorm";
-import KernelFactory from "../../../../src/Kernel";
+import { TestKernelFactory } from "../../../TestKernelFactory";
 
 describe("GetOne Transaction", () => {
 
     let kernel: Framework.Kernel;
 
     beforeEach(async () => {
-        kernel = await KernelFactory(false);
+        kernel = await TestKernelFactory(false);
         const repository = kernel.container.get<InMemoryTransactionRepository>("domain.transaction.repository");
         await repository.save(Transaction.create(
             new TransactionId("ae081e7a-ec8c-4ff1-9de5-f70383fe03a7"),

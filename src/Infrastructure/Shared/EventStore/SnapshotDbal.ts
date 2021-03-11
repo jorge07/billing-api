@@ -1,10 +1,10 @@
-import type { Domain, EventStore } from "hollywood-js";
+import type { Domain, EventSourcing } from "hollywood-js";
 import { inject, injectable } from "inversify";
 import { Repository } from "typeorm";
 import { Snapshots } from "./Mapping/Snapshots";
 
 @injectable()
-export default class PostgresEventStoreSnapshotDBAL implements EventStore.ISnapshotStoreDBAL {
+export default class PostgresEventStoreSnapshotDBAL implements EventSourcing.ISnapshotStoreDBAL {
 
     constructor(
         @inject(
