@@ -3,7 +3,7 @@ import TransactionWasCreated from "Domain/Transaction/Events/TransactionWasCreat
 import Transaction from "Domain/Transaction/Transaction";
 import TransactionId from "Domain/Transaction/ValueObject/TransactionId";
 import { Framework } from "hollywood-js";
-import {EventCollectorListener} from "tests/Infrastructure/Shared/EventCollectorListener";
+import { EventCollectorListener}  from "tests/Infrastructure/Shared/EventCollectorListener";
 import { InMemoryTransactionRepository } from "tests/Infrastructure/Transaction/InMemoryRepository";
 import { v4 } from "uuid";
 import { TestKernelFactory } from "../../../TestKernelFactory";
