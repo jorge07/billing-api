@@ -1,4 +1,4 @@
-const migrationsDir = "src/Infrastructure/Shared/Postgres/ReadModel/Migrations";
+const migrationsDir = "src/Billing/Shared/Infrastructure/Postgres/ReadModel/Migrations";
 
 module.exports = {
    name: "readModel",
@@ -9,7 +9,7 @@ module.exports = {
    password: process.env.PG_READ_PASS || "changeme",
    database: "read_model",
    entities: [
-      "src/Infrastructure/Transaction/ReadModel/Mapping/*",
+      "src/Billing/Transaction/Infrastructure/ReadModel/Mapping/*",
    ],
    migrations: [
       migrationsDir,

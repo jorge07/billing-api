@@ -1,18 +1,21 @@
+import type {ILog} from "@Shared/Infrastructure/Audit/Logger";
+import Probe from "@Shared/Infrastructure/Audit/Probe";
+import type AMPQChannel from "@Shared/Infrastructure/Rabbitmq/Channel";
 import type { Message } from "amqplib";
-import type { Domain, EventSourcing } from "hollywood-js";
+import type { Domain, EventSourcing, Framework } from "hollywood-js";
 import type {Histogram} from "prom-client";
 import Monitor from "src/Apps/HTTP/Monitor";
-import type {ILog} from "../../../Billing/Shared/Infrastructure/Audit/Logger";
-import Probe from "../../../Billing/Shared/Infrastructure/Audit/Probe";
-import type AMPQChannel from "../../../Billing/Shared/Infrastructure/Rabbitmq/Channel";
-import KernelFactory from "../../../Kernel";
 
 const MAX_MESSAGES_BEFORE_RESTART = 100;
 
 export default class AsyncEventBus {
     private readonly histogram: Histogram<string>;
+    private readonly amqpChannel: AMPQChannel;
+    private readonly eventBus: EventSourcing.EventBus;
+    private readonly logger: ILog;
 
     constructor(
+        private readonly kernel: Framework.Kernel,
         private readonly queue: string,
         private readonly pattern: string,
         private readonly monitor: boolean = false,
@@ -28,24 +31,22 @@ export default class AsyncEventBus {
             labelNames: labelsNames,
             name: "events_worker_duration_seconds",
         });
+        this.amqpChannel = kernel.container.get<AMPQChannel>("infrastructure.rabbitmq.connection");
+        this.eventBus = kernel.container.get<EventSourcing.EventBus>("infrastructure.transaction.async.eventBus");
+        this.logger = kernel.container.get<ILog>("logger");
     }
 
     public async consume() {
         let counter: number  = 0;
-        const kernel = await KernelFactory(false);
         // Start server to report metrics in monitor port
         if (this.monitor) {
-            await (new Monitor(kernel.container.get("metrics.port"), kernel.container.get("logger"))).up();
+            await (new Monitor(this.kernel.container.get("metrics.port"), this.logger)).up();
         }
-        const amqpChannel = kernel.container.get<AMPQChannel>("infrastructure.rabbitmq.connection");
-        const eventBus = kernel.container.get<EventSourcing.EventBus>("infrastructure.transaction.async.eventBus");
-        const logger = kernel.container.get<ILog>("logger");
-
-        await this.stopWatch(amqpChannel, logger);
+        await this.stopWatch(this.amqpChannel, this.logger);
 
         try {
-            logger.info(`Waiting for a message in ${this.queue} for topic ${this.pattern}...`);
-            await amqpChannel.consume("events", this.queue, this.pattern, async (message: Message) => {
+            this.logger.info(`Waiting for a message in ${this.queue} for topic ${this.pattern}...`);
+            await this.amqpChannel.consume("events", this.queue, this.pattern, async (message: Message) => {
                 try {
                     const domainMessage = (JSON.parse(message.content.toString()) as Domain.DomainMessage);
                     const timer = this.histogram.startTimer({
@@ -53,22 +54,22 @@ export default class AsyncEventBus {
                         queue: "events",
                     });
 
-                    logger.info(`Received: ${domainMessage.uuid} ${domainMessage.eventType}`);
-                    await eventBus.publish(domainMessage);
-                    logger.info(`Processed: ${domainMessage.uuid} ${domainMessage.eventType}`);
+                    this.logger.info(`Received: ${domainMessage.uuid} ${domainMessage.eventType}`);
+                    await this.eventBus.publish(domainMessage);
+                    this.logger.info(`Processed: ${domainMessage.uuid} ${domainMessage.eventType}`);
                     counter++;
 
                     timer();
-                    await this.limit(counter, amqpChannel, logger);
+                    await this.limit(counter, this.amqpChannel, this.logger);
                     return true;
 
                 } catch (error) {
-                    logger.error(error.message);
+                    this.logger.error(error.message);
                     return false;
                 }
             });
         } catch (error) {
-            logger.error(error.message);
+            this.logger.error(error.message);
             process.exit(1);
         }
     }

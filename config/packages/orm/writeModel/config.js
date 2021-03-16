@@ -1,4 +1,4 @@
-const migrationsDir = "src/Infrastructure/Shared/Postgres/WriteModel/Migrations";
+const migrationsDir = "src/Billing/Shared/Infrastructure/Postgres/WriteModel/Migrations";
 
 module.exports = {
    name: "default",
@@ -9,7 +9,7 @@ module.exports = {
    password: process.env.PG_WRITE_PASS || "changeme",
    database: "write_model",
    entities: [
-      "src/Infrastructure/Shared/EventStore/Mapping/*",
+      "src/Billing/Shared/Infrastructure/EventStore/Mapping/*",
    ],
    migrations: [
       migrationsDir,

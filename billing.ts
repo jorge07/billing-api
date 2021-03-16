@@ -4,6 +4,7 @@ import "reflect-metadata";
 import { program } from "commander";
 import AsyncEventBus from "./src/Apps/Consumers/AsyncEventBus/AsyncEventBus";
 import http from "./src/Apps/HTTP";
+import KernelFactory from "./src/Kernel";
 
 program
   .version("1.0.0")
@@ -16,7 +17,9 @@ program
     .option("-p, --pattern [Topic pattern]", "Topic filter")
     .option("-m, --monitor [Moitor]", "Moitoring server")
     .action(async (options) => {
+        const kernel = await KernelFactory(false)
         const bus = new AsyncEventBus(
+            kernel,
             options.queue || "events",
             options.pattern || "#",
             options.monitor || false,
@@ -35,4 +38,3 @@ program
 ;
 
 program.parse(process.argv);
-
