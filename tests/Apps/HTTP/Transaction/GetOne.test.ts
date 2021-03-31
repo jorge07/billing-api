@@ -15,7 +15,7 @@ describe("GET /transaction/:uuid", () => {
   let api: BillingAPI;
 
   beforeEach(async () => {
-      kernel = await TestKernelFactory(false);
+      kernel = await TestKernelFactory();
       api = new BillingAPI(kernel);
       prom.register.clear();
       transactionRepository = kernel.container.get<InMemoryTransactionRepository>("domain.transaction.repository");

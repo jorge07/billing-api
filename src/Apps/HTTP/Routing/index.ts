@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { Framework } from "hollywood-js";
+import { Application } from "hollywood-js";
 import health from "./Monitor/Health";
 import get from "./Transaction/Get";
 import create from "./Transaction/Post";
 
-type Context = (app: Framework.Kernel) => IRoute;
+type Context = (app: Application.App) => IRoute;
 
 export interface IRoute {
     path: string;

@@ -15,9 +15,9 @@ program
     .description("Consume queues")
     .option("-q, --queue [Queue Name]", "Name of the queue to consume")
     .option("-p, --pattern [Topic pattern]", "Topic filter")
-    .option("-m, --monitor [Moitor]", "Moitoring server")
+    .option("-m, --monitor [Monitor]", "Monitoring server")
     .action(async (options) => {
-        const kernel = await KernelFactory(false)
+        const kernel = await KernelFactory()
         const bus = new AsyncEventBus(
             kernel,
             options.queue || "events",
@@ -31,9 +31,8 @@ program
 program
     .command("http")
     .description("Start http server")
-    .option("-d, --debug [Debug mode]", "Enable debug mode")
     .action(async (options) => {
-        await http(options.debug || false);
+        await http();
     })
 ;
 

@@ -1,9 +1,9 @@
 import CreateCommand from "@Transaction/Application/Create/Command";
 import { Request, Response } from "express";
-import { Framework } from "hollywood-js";
+import { Application } from "hollywood-js";
 import { IRoute } from "../index";
 
-export default function create(app: Framework.Kernel): IRoute {
+export default function create(app: Application.App): IRoute {
     return {
         action: async (req: Request, res: Response) => {
             const { uuid, product, price } = req.body;

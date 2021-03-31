@@ -1,12 +1,11 @@
-import {TransactionModule} from "@Transaction/Infrastructure/TransactionModule";
+import { TransactionModule } from "@Transaction/Infrastructure/TransactionModule";
 import { Framework } from "hollywood-js";
-import { testParameters } from "../config/paramaters-test";
+import { testParameters } from "../config/parameters-test";
 import { parameters } from "../config/parameters";
 
-export default async function KernelFactory(debug: boolean): Promise<Framework.Kernel> {
+export default async function KernelFactory(): Promise<Framework.Kernel> {
      return Framework.Kernel.createFromModuleContext(
         process.env.NODE_ENV,
-        debug,
         parameters,
         TransactionModule,
         testParameters,

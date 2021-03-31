@@ -1,7 +1,7 @@
 {
    "compilerOptions": {
       "lib": [
-         "es6"
+         "es2017"
       ],
       "baseUrl": ".",
       "paths": {
@@ -12,8 +12,8 @@
          "@Shared/*": [ "src/Billing/Shared/*" ],
          "@Apps/*": [ "src/Apps/*" ]
       },
-      "target": "es6",
-      "module": "commonjs",
+      "target": "esnext",
+      "module": "none",
       "moduleResolution": "node",
       "outDir": "./build",
       "allowSyntheticDefaultImports": true,

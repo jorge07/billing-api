@@ -31,7 +31,7 @@ export default class BillingAPI extends HTTPServer {
 
     private bindRouting(): void {
         routes.forEach((context) => {
-            const route: IRoute = context(this.kernel);
+            const route: IRoute = context(this.kernel.app);
 
             switch (route.method.toLocaleLowerCase()) {
                 case "get":

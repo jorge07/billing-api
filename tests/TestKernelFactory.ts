@@ -1,7 +1,7 @@
 import { EventSourcing, Framework, ReadModel } from "hollywood-js";
 import { TransactionModule } from "@Transaction/Infrastructure/TransactionModule";
 import { parameters } from "../config/parameters";
-import { testParameters } from "../config/paramaters-test";
+import { testParameters } from "../config/parameters-test";
 import TransactionWasCreated from "@Transaction/Domain/Events/TransactionWasCreated";
 import {GenericInMemoryRepository} from "@Tests/Shared/Infrastructure/GenericInMemoryRepository";
 import {TransactionInMemoryProjector} from "@Tests/Transaction/Infrastructure/InMemoryProjector";
@@ -88,7 +88,7 @@ const testServices = new Map([
     ],
 ]);
 
-export async function TestKernelFactory(debug: boolean): Promise<Framework.Kernel> {
+export async function TestKernelFactory(): Promise<Framework.Kernel> {
     const TestModule = new Framework.ModuleContext({
         services: testServices,
         modules: [TransactionModule]
@@ -96,7 +96,6 @@ export async function TestKernelFactory(debug: boolean): Promise<Framework.Kerne
 
     return await Framework.Kernel.createFromModuleContext(
         process.env.NODE_ENV,
-        debug,
         parameters,
         TestModule,
         testParameters,

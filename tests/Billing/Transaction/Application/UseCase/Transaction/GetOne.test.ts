@@ -12,7 +12,7 @@ describe("GetOne Transaction", () => {
     let kernel: Framework.Kernel;
 
     beforeEach(async () => {
-        kernel = await TestKernelFactory(false);
+        kernel = await TestKernelFactory();
         const repository = kernel.container.get<InMemoryTransactionRepository>("domain.transaction.repository");
         await repository.save(Transaction.create(
             new TransactionId("ae081e7a-ec8c-4ff1-9de5-f70383fe03a7"),
@@ -27,7 +27,7 @@ describe("GetOne Transaction", () => {
 
     test("GetOne a valid transaction", async () => {
         expect.assertions(3);
-        const transaction: any = await kernel.ask(new GetOneQuery("ae081e7a-ec8c-4ff1-9de5-f70383fe03a7"));
+        const transaction: any = await kernel.app.ask(new GetOneQuery("ae081e7a-ec8c-4ff1-9de5-f70383fe03a7"));
         expect(transaction).not.toBe(null);
         expect(transaction).not.toBe(undefined);
         expect(transaction.data.uuid).toBe("ae081e7a-ec8c-4ff1-9de5-f70383fe03a7");
