@@ -8,7 +8,6 @@ import Price from "@Transaction/Domain/ValueObject/Price";
 import {InMemoryTransactionRepository} from "../../../Infrastructure/InMemoryRepository";
 
 describe("GetOne Transaction", () => {
-
     let kernel: Framework.Kernel;
 
     beforeEach(async () => {

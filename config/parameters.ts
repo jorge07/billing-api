@@ -10,7 +10,7 @@ export const parameters = new Map<UniqueParameterIdentifier, Parameter>([
     ],
     [
         "logLevel",
-        process.env.LOG_LEVEL || "info",
+        process.env.LOG_LEVEL || "warn",
     ],
     [
         "orm.writeModel",

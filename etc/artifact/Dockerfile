@@ -1,4 +1,4 @@
-FROM node:13.12-buster-slim as base
+FROM node:15.12-buster-slim as base
 
 ENV NODE_ENV dev
 
@@ -34,7 +34,4 @@ RUN yarn install --production
 
 COPY --from=build /tmp/build .
 
-RUN chmod +x billing.js \
-	&& ln -s /app/billing.js /usr/local/bin/api
-
-CMD [ "api", "http" ]
+CMD [ "node", "-r", "ts-node/register/transpile-only", "-r", "tsconfig-paths/register", "billing.js", "http" ]

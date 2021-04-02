@@ -1,9 +1,9 @@
-#! /usr/bin/env -S node -r ts-node/register -r tsconfig-paths/register
+#! /usr/bin/env -S node -r ts-node/register/transpile-only -r tsconfig-paths/register
 
 import "reflect-metadata";
 import { program } from "commander";
-import AsyncEventBus from "./src/Apps/Consumers/AsyncEventBus/AsyncEventBus";
-import http from "./src/Apps/HTTP";
+import AsyncEventBus from "@Apps/Consumers/AsyncEventBus/AsyncEventBus";
+import http from "@Apps/HTTP";
 import KernelFactory from "./src/Kernel";
 
 program
@@ -15,6 +15,7 @@ program
     .description("Consume queues")
     .option("-q, --queue [Queue Name]", "Name of the queue to consume")
     .option("-p, --pattern [Topic pattern]", "Topic filter")
+    .option("-l, --limit [Message Limit]", "Define the max number of messages the worker can consume before graceful exit. Default 100")
     .option("-m, --monitor [Monitor]", "Monitoring server")
     .action(async (options) => {
         const kernel = await KernelFactory()
@@ -22,6 +23,7 @@ program
             kernel,
             options.queue || "events",
             options.pattern || "#",
+            options.limit || 1000,
             options.monitor || false,
         );
         await bus.consume();

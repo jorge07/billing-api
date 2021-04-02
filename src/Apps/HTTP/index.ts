@@ -1,5 +1,5 @@
+import BillingAPI from "@Apps/HTTP/BillingAPI";
 import "reflect-metadata";
-import BillingAPI from "src/Apps/HTTP/BillingAPI";
 import KernelFactory from "../../Kernel";
 
 export default async function http(): Promise<void> {

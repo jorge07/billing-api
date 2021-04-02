@@ -1,10 +1,10 @@
+import Monitor from "@Apps/HTTP/Monitor";
 import type {ILog} from "@Shared/Infrastructure/Audit/Logger";
 import Probe from "@Shared/Infrastructure/Audit/Probe";
 import type AMPQChannel from "@Shared/Infrastructure/Rabbitmq/Channel";
 import type { Message } from "amqplib";
 import type { Domain, EventSourcing, Framework } from "hollywood-js";
 import type {Histogram} from "prom-client";
-import Monitor from "src/Apps/HTTP/Monitor";
 
 const MAX_MESSAGES_BEFORE_RESTART = 100;
 
@@ -18,6 +18,7 @@ export default class AsyncEventBus {
         private readonly kernel: Framework.Kernel,
         private readonly queue: string,
         private readonly pattern: string,
+        private readonly maxMessages: number = MAX_MESSAGES_BEFORE_RESTART,
         private readonly monitor: boolean = false,
     ) {
         const labelsNames = [
@@ -46,7 +47,7 @@ export default class AsyncEventBus {
 
         try {
             this.logger.info(`Waiting for a message in ${this.queue} for topic ${this.pattern}...`);
-            await this.amqpChannel.consume("events", this.queue, this.pattern, async (message: Message) => {
+            await this.amqpChannel.consume("events", this.queue, this.pattern, async (message: Message | null) => {
                 try {
                     const domainMessage = (JSON.parse(message.content.toString()) as Domain.DomainMessage);
                     const timer = this.histogram.startTimer({
@@ -76,9 +77,9 @@ export default class AsyncEventBus {
 
     private async limit(counter: number, amqpChannel: AMPQChannel, logger: ILog) {
         const STOP_MARGIN = 10000;
-        if (counter >= MAX_MESSAGES_BEFORE_RESTART) {
+        if (counter >= this.maxMessages) {
             await amqpChannel.close();
-            logger.warn(`Max messages processed (${MAX_MESSAGES_BEFORE_RESTART}). Channel closed. Shutting down in 10 seconds.`);
+            logger.warn(`Max messages processed (${this.maxMessages}). Channel closed. Shutting down in 10 seconds.`);
             setTimeout(() => {
                 logger.warn(`Shut down.`);
                 process.exit(0);

@@ -9,11 +9,14 @@ export default class LoggerMiddleware implements IMiddleware {
     constructor(@inject("logger") private readonly logger: ILog) {}
 
     public async execute(command: any, next: (command: any) => any) {
-
         this.logger.info(`Starting ${command.constructor.name}`);
-        const result = await next(command);
-        this.logger.info(`${command.constructor.name} finished without errors`);
-
-        return result;
+        try {
+            const result = await next(command);
+            this.logger.info(`${command.constructor.name} finished without errors`);
+            return result;
+        } catch (err) {
+            this.logger.warn(`${command.constructor.name} finished with error: ${err.message}`);
+            throw err;
+        }
     }
 }

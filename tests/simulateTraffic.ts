@@ -1,11 +1,11 @@
 import axios from "axios";
-import * as v4 from "uuid/v4";
+import v4 from "uuid/v4";
 
 async function call() {
     let uuid: string;
 
     try {
-        const response = await axios.post("http://127.0.0.1:8070/transaction", {
+        const response = await axios.post("http://127.0.0.1:8080/transaction", {
             price: {
                 amount: Math.floor(Math.random() * (40 - 30)) + 30,
                 currency: "EUR" },
@@ -14,15 +14,17 @@ async function call() {
         });
 
         console.log("Code: ", response.status);
-        console.log(`http://127.1:8070/transaction/${uuid}`);
+        console.log(`http://127.1:8080/transaction/${uuid}`);
 
         setTimeout(async () => {
-            await axios.get(`http://127.0.0.1:8070/transaction/${uuid}`);
-            await axios.get(`http://127.0.0.1:8070/transaction/${uuid}`);
-            await axios.get(`http://127.0.0.1:8070/transaction/${uuid}`);
-            await axios.get(`http://127.0.0.1:8070/transaction/${uuid}`);
-            await axios.get(`http://127.0.0.1:8070/transaction/${uuid}`);
-        }, 100);
+            await Promise.all([
+                axios.get(`http://127.0.0.1:8080/transaction/${uuid}`),
+                axios.get(`http://127.0.0.1:8080/transaction/${uuid}`),
+                axios.get(`http://127.0.0.1:8080/transaction/${uuid}`),
+                axios.get(`http://127.0.0.1:8080/transaction/${uuid}`),
+                axios.get(`http://127.0.0.1:8080/transaction/${uuid}`),
+            ])
+         }, 80);
 
     } catch (err) {
         console.log(err.message);
@@ -35,5 +37,5 @@ async function call() {
             await call();
             loop(iteration);
         }
-    }, 150);
-})(100); // Generate 500 transactions
+    }, 50);
+})(500); // Generate 500 transactions
