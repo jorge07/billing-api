@@ -1,14 +1,14 @@
 # Billing API
 
 ![Lint Status](https://github.com/jorge07/billing-api/workflows/Lint/badge.svg)
-![Tests Status](https://github.com/jorge07/billing-api/workflows/Tests/badge.svg)
+[![Tests](https://github.com/jorge07/billing-api/actions/workflows/test.yml/badge.svg)](https://github.com/jorge07/billing-api/actions/workflows/test.yml)
 
-A Typescript project to demostrate how to work with:
+A Typescript project to demostrate how to work withall of this while keeping ultra fast speed:
 
 - DDD & CQRS & Event Sourcing
 - Dependency injection
 - Mockless tests
-- Unit, Integration and E2E testing with jest and supertest
+- Unit, Integration and E2E testing
 - Kubernetes + Helm + Prometheus + Custom metrics + Grafana
 
 TODO
