@@ -1,4 +1,4 @@
-import type TransactionWasCreated from "src/Billing/Transaction/Domain/Events/TransactionWasCreated";
+import type TransactionWasCreated from "@Transaction/Domain/Events/TransactionWasCreated";
 import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity()

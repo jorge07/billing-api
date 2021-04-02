@@ -95,7 +95,7 @@ export async function TestKernelFactory(): Promise<Framework.Kernel> {
     })
 
     return await Framework.Kernel.createFromModuleContext(
-        process.env.NODE_ENV,
+        String(process.env.NODE_ENV),
         parameters,
         TestModule,
         testParameters,

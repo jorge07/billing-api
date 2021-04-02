@@ -1,9 +1,8 @@
 import { Framework } from "hollywood-js";
 import * as prom from "prom-client";
-import * as request from "supertest";
-import * as v4 from "uuid/v4";
+import v4 from "uuid/v4";
 import { TestKernelFactory } from "../../../TestKernelFactory";
-import {InMemoryTransactionRepository} from "../../../Billing/Transaction/Infrastructure/InMemoryRepository";
+import {InMemoryTransactionRepository} from "@Tests/Transaction/Infrastructure/InMemoryRepository";
 import BillingAPI from "@Apps/HTTP/BillingAPI";
 import TransactionId from "@Transaction/Domain/ValueObject/TransactionId";
 import Transaction from "@Transaction/Domain/Transaction";
@@ -28,18 +27,18 @@ describe("POST /transaction", () => {
   it("Create a transaction", async () => {
     const txuuid = v4();
 
-    await request(api.http)
-      .post("/transaction")
-      .send({
-        uuid: txuuid,
-        price: {
-          amount: 12,
-          currency: "EUR",
+    const response = await api.http.inject({
+        method: "POST", path: "/transaction", payload: {
+            uuid: txuuid,
+            price: {
+                amount: 12,
+                currency: "EUR",
+            },
+            product: "test",
         },
-        product: "test",
-      })
-      .set("Accept", "application/json")
-      .expect(201);
+        headers: {"Accept": "application/json"}
+    });
+    expect(response.statusCode).toBe(201);
 
     expect(await transactionRepository.get(new TransactionId(txuuid))).toBeInstanceOf(Transaction);
   });

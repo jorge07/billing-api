@@ -19,7 +19,7 @@ describe("Create Transaction", () => {
         kernel.container.restore();
     });
 
-    test("Create Transactiona valid and get collected by the event bus", async () => {
+    test("Create a Transaction valid and get collected by the event bus", async () => {
         expect.assertions(4);
         const txuuid = v4();
         await kernel.app.handle(new CreateCommand(txuuid, "", { amount: 12, currency: "EUR" }));

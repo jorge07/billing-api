@@ -1,5 +1,5 @@
 import type { Domain } from "hollywood-js";
-import * as validate from "uuid-validate";
+import validate from "uuid-validate";
 import v4 from "uuid/v4";
 import InvalidArgumentException from "../Exceptions/InvalidArgumentException";
 
@@ -11,23 +11,19 @@ export default abstract class Uuid {
         }
     }
 
-    private uuid: Domain.AggregateRootId;
+    private static validateUuid(value: string): string {
+        Uuid.isValid(value);
+        return value;
+    }
+
+    private readonly uuid: Domain.AggregateRootId;
 
     constructor(value?: string) {
-        if (! value) {
-            this.uuid = v4();
-        } else {
-            this.setUuid(value);
-        }
+        this.uuid = !value ? v4() : Uuid.validateUuid(value);
     }
 
     public toString(): Domain.AggregateRootId {
 
         return this.uuid;
-    }
-
-    private setUuid(value: string) {
-        Uuid.isValid(value);
-        this.uuid = value;
     }
 }

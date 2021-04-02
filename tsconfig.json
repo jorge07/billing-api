@@ -5,12 +5,12 @@
       ],
       "baseUrl": ".",
       "paths": {
-         "@Tests/Transaction/*": [ "tests/Billing/Transaction/*" ],
-         "@Tests/Shared/*": [ "tests/Billing/Shared/*" ],
-         "@Tests/Apps/*": [ "tests/Apps/*" ],
-         "@Transaction/*": [ "src/Billing/Transaction/*" ],
-         "@Shared/*": [ "src/Billing/Shared/*" ],
-         "@Apps/*": [ "src/Apps/*" ]
+         "@Tests/Transaction/*": [ "./tests/Billing/Transaction/*" ],
+         "@Tests/Shared/*": [ "./tests/Billing/Shared/*" ],
+         "@Tests/Apps/*": [ "./tests/Apps/*" ],
+         "@Transaction/*": [ "./src/Billing/Transaction/*" ],
+         "@Shared/*": [ "./src/Billing/Shared/*" ],
+         "@Apps/*": [ "./src/Apps/*" ]
       },
       "target": "esnext",
       "module": "none",
@@ -21,6 +21,7 @@
       "experimentalDecorators": true,
       "allowJs": true,
       "sourceMap": true,
-      "noUnusedLocals": true
+      "noUnusedLocals": true,
+      "esModuleInterop": true
    }
 }

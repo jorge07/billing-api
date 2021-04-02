@@ -1,8 +1,8 @@
+import NotFoundException from "@Shared/Domain/Exceptions/NotFoundException";
+import TransactionId from "@Transaction/Domain/ValueObject/TransactionId";
 import { inject, injectable } from "inversify";
-import TransactionId from "src/Billing/Transaction/Domain/ValueObject/TransactionId";
 import { Repository } from "typeorm";
 import { EntityNotFoundError } from "typeorm/error/EntityNotFoundError";
-import NotFoundException from "../../../../Shared/Domain/Exceptions/NotFoundException";
 import IRepository from "../../../Domain/Repository";
 import { Transactions } from "../Mapping/Transactions";
 
