@@ -34,4 +34,4 @@ RUN yarn install --production
 
 COPY --from=build /tmp/build .
 
-CMD [ "node", "-r", "ts-node/register/transpile-only", "-r", "tsconfig-paths/register", "billing.js", "http" ]
+CMD [ "node", "-r", "ts-node/register/transpile-only", "-r", "billing.js", "http" ]
