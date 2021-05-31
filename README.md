@@ -3,7 +3,7 @@
 ![Lint Status](https://github.com/jorge07/billing-api/workflows/Lint/badge.svg)
 [![Tests](https://github.com/jorge07/billing-api/actions/workflows/test.yml/badge.svg)](https://github.com/jorge07/billing-api/actions/workflows/test.yml)
 
-A Typescript project to demostrate how to work withall of this while keeping ultra fast speed:
+A Typescript project to demostrate how to work with all of this while keeping ultra fast speed:
 
 - DDD & CQRS & Event Sourcing
 - Dependency injection
@@ -27,7 +27,7 @@ Requirements:
 - Nodejs
 - yarn
 - Docker
-- Docker Compose
+- Docker Compose (sooner than later will be integrated on the docker cli) 
 
 Start the project:
 
