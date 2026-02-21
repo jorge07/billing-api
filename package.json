@@ -12,10 +12,10 @@
       "fastify-graceful-shutdown": "^3.1.0",
       "fastify-metrics": "^7.1.0",
       "fastify-swagger": "^4.4.2",
-      "hollywood-js": "^6.0.0",
+      "hollywood-js": "^6.0.1",
       "pg": "^8.0.3",
-      "tsconfig-paths": "^3.9.0",
       "ts-node": "9.0.0",
+      "tsconfig-paths": "^3.9.0",
       "typeorm": "^0.2.28",
       "uuid": "^9.0.0",
       "winston": "^3.2.1"
