@@ -1,4 +1,4 @@
-import IMiddleware from "hollywood-js/src/Application/Bus/Middelware";
+import type IMiddleware from "hollywood-js/src/Application/Bus/Middleware";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
 import { ILog } from "../../Infrastructure/Audit/Logger";

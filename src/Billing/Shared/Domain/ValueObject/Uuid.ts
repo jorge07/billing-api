@@ -1,29 +1,25 @@
-import type { Domain } from "hollywood-js";
-import validate from "uuid-validate";
-import v4 from "uuid/v4";
+import { Domain } from "hollywood-js";
 import InvalidArgumentException from "../Exceptions/InvalidArgumentException";
 
 export default abstract class Uuid {
 
-    public static isValid(candidate: string): void {
-        if (! validate(candidate, 4)) {
+    private readonly identity: Domain.Identity;
+
+    constructor(value?: string) {
+        try {
+            this.identity = value
+                ? Domain.Identity.fromString(value)
+                : Domain.Identity.generate();
+        } catch {
             throw new InvalidArgumentException("Invalid uuid");
         }
     }
 
-    private static validateUuid(value: string): string {
-        Uuid.isValid(value);
-        return value;
+    public toString(): string {
+        return this.identity.toString();
     }
 
-    private readonly uuid: Domain.AggregateRootId;
-
-    constructor(value?: string) {
-        this.uuid = !value ? v4() : Uuid.validateUuid(value);
-    }
-
-    public toString(): Domain.AggregateRootId {
-
-        return this.uuid;
+    public toIdentity(): Domain.Identity {
+        return this.identity;
     }
 }

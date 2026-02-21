@@ -1,5 +1,5 @@
 import axios from "axios";
-import v4 from "uuid/v4";
+import { v4 } from "uuid";
 
 async function call() {
     let uuid: string;

@@ -1,6 +1,6 @@
 import { Framework } from "hollywood-js";
 import * as prom from "prom-client";
-import v4 from "uuid/v4";
+import { v4 } from "uuid";
 import { TestKernelFactory } from "../../../TestKernelFactory";
 import {InMemoryTransactionRepository} from "@Tests/Transaction/Infrastructure/InMemoryRepository";
 import BillingAPI from "@Apps/HTTP/BillingAPI";

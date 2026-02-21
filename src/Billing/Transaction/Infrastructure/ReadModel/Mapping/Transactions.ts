@@ -8,7 +8,7 @@ export class Transactions {
 
         const instance = new Transactions();
 
-        instance.uuid = event.uuid;
+        instance.uuid = event.aggregateId;
         instance.product = event.product;
         instance.priceAmount = event.price.amount;
         instance.priceCurrency = event.price.currency;

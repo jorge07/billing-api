@@ -4,10 +4,10 @@ import { Column, Entity, PrimaryColumn } from "typeorm";
 @Entity()
 export class Snapshots {
 
-    public static fromAggregateRoot(aggregateRoot: Domain.AggregateRoot): Snapshots {
+    public static fromAggregateRoot(aggregateRoot: Domain.EventSourcedAggregateRoot): Snapshots {
         const instance = new Snapshots();
 
-        instance.uuid = instance.uuid;
+        instance.uuid = aggregateRoot.getAggregateRootId().toString();
         instance.aggregateRoot = aggregateRoot;
 
         return instance;
@@ -17,5 +17,5 @@ export class Snapshots {
     public uuid: string;
 
     @Column("jsonb")
-    public aggregateRoot: Domain.AggregateRoot;
+    public aggregateRoot: Domain.EventSourcedAggregateRoot;
 }
