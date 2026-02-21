@@ -15,6 +15,6 @@ export class InMemoryTransactionRepository implements IRepository {
     }
 
     public async get(id: TransactionId): Promise<Transaction | null> {
-        return await this.eventStore.load(id.toString());
+        return await this.eventStore.load(id.toIdentity());
     }
 }

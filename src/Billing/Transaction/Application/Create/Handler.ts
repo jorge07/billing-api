@@ -27,7 +27,7 @@ export default class Create implements Application.ICommandHandler {
     public async handle(command: CreateCommand): Promise<void | IAppError> {
 
         try {
-            await this.writeModel.load(command.uuid.toString());
+            await this.writeModel.load(command.uuid.toIdentity());
             this.conflicts.inc(1);
             this.error.inc(1);
             throw new ConflictException("Already exists");

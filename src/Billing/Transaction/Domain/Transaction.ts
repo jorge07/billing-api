@@ -1,5 +1,4 @@
 import { Domain } from "hollywood-js";
-import type {AggregateRootId} from "hollywood-js/src/Domain/AggregateRoot";
 import TransactionWasCreated from "./Events/TransactionWasCreated";
 import type Price from "./ValueObject/Price";
 import type TransactionId from "./ValueObject/TransactionId";
@@ -7,7 +6,7 @@ import type TransactionId from "./ValueObject/TransactionId";
 export default class Transaction extends Domain.EventSourcedAggregateRoot {
 
     public static create(uuid: TransactionId, product: string, price: Price): Transaction {
-        const instance = new Transaction(uuid.toString());
+        const instance = new Transaction(uuid.toIdentity());
 
         instance.raise(new TransactionWasCreated(
             uuid.toString(),
@@ -21,17 +20,18 @@ export default class Transaction extends Domain.EventSourcedAggregateRoot {
     private price?: Price;
     private product: string = "";
 
-    constructor(uuid: AggregateRootId) {
+    constructor(uuid: Domain.Identity) {
         super(uuid);
+        this.registerHandler(TransactionWasCreated, (event) => this.onTransactionWasCreated(event));
     }
 
-    protected applyTransactionWasCreated(event: TransactionWasCreated) {
+    private onTransactionWasCreated(event: TransactionWasCreated): void {
         this.product = event.product;
         this.price = event.price;
     }
 
     get pricing(): Price {
-        return this.price;
+        return this.price!;
     }
 
     get productName(): string {

@@ -29,7 +29,6 @@ export default class PostgresEventStoreDBAL implements EventSourcing.IEventStore
     }
 
     public async load(aggregateId: string, from?: number): Promise<Domain.DomainEventStream> {
-
         return await this.loadFromTo(aggregateId, from);
     }
 
@@ -38,11 +37,10 @@ export default class PostgresEventStoreDBAL implements EventSourcing.IEventStore
         const end = this.read.startTimer();
 
         try {
-            stream = new Domain.DomainEventStream(
-                await this.getManyQuery(aggregateId, from, to).getMany(),
-            );
+            const rows = await this.getManyQuery(aggregateId, from, to).getMany();
+            stream = new Domain.DomainEventStream(rows.map(this.rowToDomainMessage));
         } catch (err) {
-            throw new Error("Cant retrieve events: " + err.message);
+            throw new Error("Cant retrieve events: " + (err as Error).message);
         } finally {
             end();
         }
@@ -50,33 +48,59 @@ export default class PostgresEventStoreDBAL implements EventSourcing.IEventStore
         return stream;
     }
 
-    public async append(aggregateId: string, stream: Domain.DomainEventStream): Promise<void> {
+    public async append(aggregateId: string, stream: Domain.DomainEventStream, _expectedVersion?: number): Promise<void> {
         const end = this.write.startTimer();
         try {
             await this.repository.save(
-                stream.events.map((message) => (Events.fromDomainMessage(message))),
-                {
-                    transaction: true,
-                },
+                stream.events.map((message) => Events.fromDomainMessage(message)),
+                { transaction: true },
             );
-         } catch (err) {
-             throw new Error("Cant store events: " + err.message);
-         } finally {
+        } catch (err) {
+            throw new Error("Cant store events: " + (err as Error).message);
+        } finally {
             end();
         }
     }
 
-    private getManyQuery(aggregateId: Domain.AggregateRootId, from?: number, to?: number): SelectQueryBuilder<Events> {
+    public async *loadAll(fromPosition: number = 0): AsyncIterable<Domain.DomainMessage> {
+        const rows = await this.repository
+            .createQueryBuilder("events")
+            .where("events.playhead >= :playhead", { playhead: fromPosition })
+            .orderBy("events.occurred", "ASC")
+            .addOrderBy("events.playhead", "ASC")
+            .getMany();
+
+        for (const row of rows) {
+            yield this.rowToDomainMessage(row);
+        }
+    }
+
+    private rowToDomainMessage(row: Events): Domain.DomainMessage {
+        // Ensure stored event satisfies the DomainEvent interface
+        const event: Domain.DomainEvent = {
+            aggregateId: row.uuid,
+            occurredAt: row.occurred,
+            ...(row.event as object),
+        };
+
+        return Domain.DomainMessage.create(
+            row.uuid,
+            row.playhead,
+            event,
+            Array.isArray(row.metadata) ? row.metadata : [],
+            row.occurred,
+        );
+    }
+
+    private getManyQuery(aggregateId: string, from?: number, to?: number): SelectQueryBuilder<Events> {
         const query = this.repository
             .createQueryBuilder("events")
-            .where("events.uuid = :uuid",  {
-                uuid: aggregateId,
-            })
+            .where("events.uuid = :uuid", { uuid: aggregateId })
             .orderBy("playhead")
         ;
 
         if (from) {
-            query.andWhere("events.playhead >= :playhead",  { playhead: from });
+            query.andWhere("events.playhead >= :playhead", { playhead: from });
         }
 
         if (to) {

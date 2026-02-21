@@ -1,4 +1,4 @@
-import type { Domain, EventSourcing } from "hollywood-js";
+import { Domain, EventSourcing } from "hollywood-js";
 import { inject, injectable } from "inversify";
 import { Repository } from "typeorm";
 import { Snapshots } from "./Mapping/Snapshots";
@@ -13,13 +13,11 @@ export default class PostgresEventStoreSnapshotDBAL implements EventSourcing.ISn
     ) { }
 
     public async get(uuid: string): Promise<any> {
-
         const snapshot = await this.repository.findOne(uuid);
-
         return (snapshot && snapshot.uuid) ? snapshot.aggregateRoot : null;
     }
 
-    public async store(entity: Domain.AggregateRoot): Promise<void> {
+    public async store(entity: Domain.EventSourcedAggregateRoot): Promise<void> {
         await this.repository.save(Snapshots.fromAggregateRoot(entity));
     }
 }

@@ -5,7 +5,7 @@ import NotFoundException from "@Shared/Domain/Exceptions/NotFoundException";
 @injectable()
 export class GenericInMemoryRepository {
     constructor(
-        @inject("infrastructure.test.inMemory.dbal") private readonly dbal: ReadModel.InMemoryReadModelRepository,
+        @inject("infrastructure.test.inMemory.dbal") private readonly dbal: ReadModel.InMemoryReadModelRepository<any>,
     ) {
     }
 

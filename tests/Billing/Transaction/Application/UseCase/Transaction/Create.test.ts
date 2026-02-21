@@ -28,11 +28,11 @@ describe("Create Transaction", () => {
         const transaction = await repository.get(new TransactionId(txuuid)) as Transaction;
 
         expect(transaction).not.toBe(undefined);
-        expect(transaction.getAggregateRootId()).toBe(txuuid);
+        expect(transaction.getAggregateRootId().toString()).toBe(txuuid);
 
         const eventCollector = kernel.container.get<EventCollectorListener>("infrastructure.shared.eventCollector");
 
         expect(eventCollector.collected.length).toBe(1);
-        expect(eventCollector.collected[0].domainEventName()).toBe(TransactionWasCreated.name);
+        expect(eventCollector.collected[0].constructor.name).toBe(TransactionWasCreated.name);
     });
 });

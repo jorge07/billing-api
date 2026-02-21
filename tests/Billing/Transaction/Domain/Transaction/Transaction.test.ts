@@ -11,7 +11,7 @@ describe("Transaction", () => {
         const instance = Transaction.create(transactionID, "product", price);
         const stream = instance.getUncommittedEvents();
 
-        expect(instance.getAggregateRootId()).toBe("ae081e7a-ec8c-4ff1-9de5-f70383fe03a7");
+        expect(instance.getAggregateRootId().toString()).toBe("ae081e7a-ec8c-4ff1-9de5-f70383fe03a7");
         expect(stream.events[0]).toBeInstanceOf(Domain.DomainMessage);
         expect((stream.events[0].event as TransactionWasCreated).product).toBe("product");
         expect((stream.events[0].event as TransactionWasCreated).price).toBe(price);

@@ -1,5 +1,5 @@
 import Probe from "@Shared/Infrastructure/Audit/Probe";
-import IMiddleware from "hollywood-js/src/Application/Bus/Middelware";
+import type IMiddleware from "hollywood-js/src/Application/Bus/Middleware";
 import { injectable } from "inversify";
 import { Counter } from "prom-client";
 import "reflect-metadata";
