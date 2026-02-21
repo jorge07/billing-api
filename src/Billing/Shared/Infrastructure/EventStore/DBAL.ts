@@ -48,7 +48,11 @@ export default class PostgresEventStoreDBAL implements EventSourcing.IEventStore
         return stream;
     }
 
-    public async append(aggregateId: string, stream: Domain.DomainEventStream, _expectedVersion?: number): Promise<void> {
+    public async append(
+        aggregateId: string,
+        stream: Domain.DomainEventStream,
+        expectedVersion?: number,
+    ): Promise<void> {
         const end = this.write.startTimer();
         try {
             await this.repository.save(
