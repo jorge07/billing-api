@@ -31,6 +31,9 @@ export default class BillingAPI extends HTTPServer {
                 case "get":
                     this.http.get(route.path, route.options || {}, route.action);
                     break;
+                case "patch":
+                    this.http.patch(route.path, route.options || {}, route.action);
+                    break;
                 case "post":
                     this.http.post(route.path, route.options || {}, route.action);
                     break;

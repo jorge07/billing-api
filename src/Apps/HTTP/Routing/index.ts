@@ -2,6 +2,7 @@ import type {FastifyReply, FastifyRequest} from "fastify";
 import type { Application } from "hollywood-js";
 import health from "./Monitor/Health";
 import get from "./Transaction/Get";
+import { confirm, fail, refund } from "./Transaction/Patch";
 import create from "./Transaction/Post";
 
 type Context = (app: Application.App) => IRoute;
@@ -14,7 +15,10 @@ export interface IRoute {
 }
 
 export const routes: Context[] = [
-    get,
+    confirm,
     create,
+    fail,
+    get,
     health,
+    refund,
 ];

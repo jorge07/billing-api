@@ -1,5 +1,6 @@
 import NotFoundException from "@Shared/Domain/Exceptions/NotFoundException";
 import TransactionId from "@Transaction/Domain/ValueObject/TransactionId";
+import { TransactionStatus } from "@Transaction/Domain/ValueObject/TransactionStatus";
 import { inject, injectable } from "inversify";
 import { Repository } from "typeorm";
 import { EntityNotFoundError } from "typeorm/error/EntityNotFoundError";
@@ -14,12 +15,17 @@ export default class PostgresRepository implements IRepository {
 
     public async save(dto: ITransactionReadDTO): Promise<void> {
         const entity = new Transactions();
-        entity.uuid = dto.uuid;
-        entity.product = dto.product;
+        entity.createdAt = dto.createdAt;
         entity.priceAmount = dto.priceAmount;
         entity.priceCurrency = dto.priceCurrency;
-        entity.createdAt = dto.createdAt;
+        entity.product = dto.product;
+        entity.status = dto.status;
+        entity.uuid = dto.uuid;
         await this.connection.save(entity);
+    }
+
+    public async updateStatus(uuid: string, status: TransactionStatus): Promise<void> {
+        await this.connection.update({ uuid }, { status });
     }
 
     public async get(id: TransactionId): Promise<ITransactionReadDTO | null> {
@@ -30,6 +36,7 @@ export default class PostgresRepository implements IRepository {
                 priceAmount: entity.priceAmount,
                 priceCurrency: entity.priceCurrency,
                 product: entity.product,
+                status: entity.status,
                 uuid: entity.uuid,
             };
         } catch (err) {
