@@ -1,6 +1,11 @@
 import InvalidArgumentException from "../../../Shared/Domain/Exceptions/InvalidArgumentException";
 import { currencies } from "./CurrencyList";
 
+/**
+ * Money value object. Stores the amount as a decimal string to avoid
+ * IEEE 754 floating-point precision loss. Use string arithmetic or a
+ * dedicated decimal library (e.g., decimal.js) for money calculations.
+ */
 export default class Price {
 
     private static validateCurrency(currency: string): void {
@@ -9,21 +14,23 @@ export default class Price {
         }
     }
 
-    private static validateAmount(amount: number): void {
-        if (isNaN(amount)) {
+    private static validateAmount(amount: string): void {
+        const parsed = Number(amount);
+
+        if (isNaN(parsed)) {
             throw new InvalidArgumentException("Amount is not a number");
         }
 
-        if (Math.sign(amount) < 0) {
+        if (parsed < 0) {
             throw new InvalidArgumentException("Negative prices not allowed");
         }
     }
 
-    public readonly amount: number;
+    public readonly amount: string;
     public readonly currency: string;
 
     constructor(
-        amount: number,
+        amount: string,
         currency: string,
     ) {
         Price.validateAmount(amount);
