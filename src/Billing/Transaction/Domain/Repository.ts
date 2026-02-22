@@ -16,4 +16,5 @@ export interface ITransactionReadDTO {
 
 export default interface IRepository {
     get(id: TransactionId): Promise<ITransactionReadDTO | null>;
+    save(dto: ITransactionReadDTO): Promise<void>;
 }

@@ -12,8 +12,14 @@ export default class PostgresRepository implements IRepository {
         @inject("infrastructure.transaction.readModel.dbal") private readonly connection: Repository<Transactions>,
      ) {}
 
-     public async save(transaction: Transactions): Promise<void> {
-        await this.connection.save(transaction);
+    public async save(dto: ITransactionReadDTO): Promise<void> {
+        const entity = new Transactions();
+        entity.uuid = dto.uuid;
+        entity.product = dto.product;
+        entity.priceAmount = dto.priceAmount;
+        entity.priceCurrency = dto.priceCurrency;
+        entity.createdAt = dto.createdAt;
+        await this.connection.save(entity);
     }
 
     public async get(id: TransactionId): Promise<ITransactionReadDTO | null> {

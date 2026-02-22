@@ -1,7 +1,6 @@
 import { EventSourcing, ReadModel } from "hollywood-js";
 import { inject, injectable } from "inversify";
 import TransactionWasCreated from "@Transaction/Domain/Events/TransactionWasCreated";
-import {Transactions} from "@Transaction/Infrastructure/ReadModel/Mapping/Transactions";
 
 @injectable()
 export class TransactionInMemoryProjector extends EventSourcing.EventSubscriber {
@@ -13,8 +12,12 @@ export class TransactionInMemoryProjector extends EventSourcing.EventSubscriber 
     }
 
     protected onTransactionWasCreated(event: TransactionWasCreated): void {
-        this.readModel
-            .save(event.aggregateId, Transactions.fromCreated(event))
-        ;
+        this.readModel.save(event.aggregateId, {
+            createdAt: new Date(),
+            priceAmount: Number(event.amount),
+            priceCurrency: event.currency,
+            product: event.product,
+            uuid: event.aggregateId,
+        });
     }
 }
