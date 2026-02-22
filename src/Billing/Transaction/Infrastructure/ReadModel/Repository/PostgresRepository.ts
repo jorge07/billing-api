@@ -3,7 +3,7 @@ import TransactionId from "@Transaction/Domain/ValueObject/TransactionId";
 import { inject, injectable } from "inversify";
 import { Repository } from "typeorm";
 import { EntityNotFoundError } from "typeorm/error/EntityNotFoundError";
-import IRepository from "../../../Domain/Repository";
+import IRepository, { ITransactionReadDTO } from "../../../Domain/Repository";
 import { Transactions } from "../Mapping/Transactions";
 
 @injectable()
@@ -16,15 +16,20 @@ export default class PostgresRepository implements IRepository {
         await this.connection.save(transaction);
     }
 
-    public async get(id: TransactionId): Promise<Transactions> {
+    public async get(id: TransactionId): Promise<ITransactionReadDTO | null> {
         try {
-            return await this.connection.findOneOrFail(id.toString(), { cache: 60000 } );
+            const entity = await this.connection.findOneOrFail({ where: { uuid: id.toString() }, cache: 60000 });
+            return {
+                createdAt: entity.createdAt,
+                priceAmount: entity.priceAmount,
+                priceCurrency: entity.priceCurrency,
+                product: entity.product,
+                uuid: entity.uuid,
+            };
         } catch (err) {
-
             if (err instanceof EntityNotFoundError) {
                 throw new NotFoundException("Transaction not found");
             }
-
             throw err;
         }
     }
