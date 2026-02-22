@@ -10,7 +10,7 @@ export class Transactions {
 
         instance.uuid = event.aggregateId;
         instance.product = event.product;
-        instance.priceAmount = event.amount;
+        instance.priceAmount = Number(event.amount);
         instance.priceCurrency = event.currency;
         instance.createdAt = new Date();
 

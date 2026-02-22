@@ -16,7 +16,7 @@ describe("GetOne Transaction", () => {
         await repository.save(Transaction.create(
             new TransactionId("ae081e7a-ec8c-4ff1-9de5-f70383fe03a7"),
             "",
-            new Price(1, "EUR"),
+            new Price("1", "EUR"),
         ));
     });
 

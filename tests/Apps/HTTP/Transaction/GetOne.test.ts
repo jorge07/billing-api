@@ -27,7 +27,7 @@ describe("GET /transaction/:uuid", () => {
 
   it("GetOne /ae081e7a-ec8c-4ff1-9de5-f70383fe03a7", async () => {
     const txnuuid = "ae081e7a-ec8c-4ff1-9de5-f70383fe03a7";
-    await transactionRepository.save(Transaction.create(new TransactionId(txnuuid), "uuu", new Price(1, "EUR")));
+    await transactionRepository.save(Transaction.create(new TransactionId(txnuuid), "uuu", new Price("1", "EUR")));
 
     const result: any = await api.http.inject({
       method: "GET",

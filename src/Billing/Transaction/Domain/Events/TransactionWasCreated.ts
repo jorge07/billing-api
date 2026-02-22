@@ -16,7 +16,7 @@ export default class TransactionWasCreated implements Domain.DomainEvent {
     constructor(
         public readonly aggregateId: string,
         public readonly product: string,
-        public readonly amount: number,
+        public readonly amount: string,
         public readonly currency: string,
         occurredAt?: Date,
     ) {

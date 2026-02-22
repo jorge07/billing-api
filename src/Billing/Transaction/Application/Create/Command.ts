@@ -12,6 +12,6 @@ export default class CreateCommand implements ICommand {
         price: { amount: number, currency: string },
     ) {
         this.uuid = new TransactionId(uuid);
-        this.price = new Price(price.amount, price.currency);
+        this.price = new Price(String(price.amount), price.currency);
     }
 }

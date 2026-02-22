@@ -6,7 +6,7 @@ import TransactionWasCreated from "@Transaction/Domain/Events/TransactionWasCrea
 
 describe("Transaction", () => {
     test("Create transaction", () => {
-        const price = new Price(2, "EUR");
+        const price = new Price("2", "EUR");
         const transactionID = new TransactionId("ae081e7a-ec8c-4ff1-9de5-f70383fe03a7");
         const instance = Transaction.create(transactionID, "product", price);
         const stream = instance.getUncommittedEvents();
