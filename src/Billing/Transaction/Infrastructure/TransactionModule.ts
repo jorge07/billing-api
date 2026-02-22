@@ -14,6 +14,7 @@ import Transaction from "@Transaction/Domain/Transaction";
 import {Transactions} from "@Transaction/Infrastructure/ReadModel/Mapping/Transactions";
 import PostgresProjector from "@Transaction/Infrastructure/ReadModel/Projections/PostgresProjector";
 import PostgresRepository from "@Transaction/Infrastructure/ReadModel/Repository/PostgresRepository";
+import EventStoreTransactionRepository from "@Transaction/Infrastructure/WriteModel/EventStoreTransactionRepository";
 import { EventSourcing, Framework} from "hollywood-js";
 import type {interfaces} from "inversify";
 import {getRepository} from "typeorm";
@@ -38,6 +39,7 @@ export const services = (new Map())
         ],
     })
     .set("infrastructure.transaction.eventStore", { eventStore: Transaction })
+    .set("infrastructure.transaction.writeRepository", { instance: EventStoreTransactionRepository })
     .set(Framework.SERVICES_ALIAS.COMMAND_MIDDLEWARE, { collection: [
         LoggerMiddleware,
     ]})

@@ -8,6 +8,7 @@ import TransactionWasCreated from "@Transaction/Domain/Events/TransactionWasCrea
 import TransactionWasRefunded from "@Transaction/Domain/Events/TransactionWasRefunded";
 import {TransactionInMemoryProjector} from "@Tests/Transaction/Infrastructure/InMemoryProjector";
 import {InMemoryReadModelRepository} from "@Tests/Transaction/Infrastructure/InMemoryReadModelRepository";
+import {InMemoryWriteRepository} from "@Tests/Transaction/Infrastructure/InMemoryWriteRepository";
 import {EventCollectorListener} from "@Tests/Shared/Infrastructure/EventCollectorListener";
 import {InMemoryTransactionRepository} from "@Tests/Transaction/Infrastructure/InMemoryRepository";
 
@@ -27,6 +28,10 @@ const testServices = new Map([
     [
         "infrastructure.transaction.readModel.repository",
         { overwrite: true, instance: InMemoryReadModelRepository },
+    ],
+    [
+        "infrastructure.transaction.writeRepository",
+        { overwrite: true, instance: InMemoryWriteRepository },
     ],
     [
         "infrastructure.orm.readModel.postgresConnection",
