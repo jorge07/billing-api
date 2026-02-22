@@ -29,9 +29,11 @@ export default class Create implements Application.ICommandHandler {
         try {
             await this.writeModel.load(command.uuid.toIdentity());
             this.conflicts.inc(1);
-            this.error.inc(1);
             throw new ConflictException("Already exists");
         } catch (err) {
+            if (err instanceof ConflictException) {
+                throw err;
+            }
             if (!(err instanceof EventSourcing.AggregateRootNotFoundException)) {
                 this.error.inc(1);
                 throw err;
