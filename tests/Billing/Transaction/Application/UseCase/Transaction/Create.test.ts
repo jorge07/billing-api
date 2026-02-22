@@ -1,4 +1,5 @@
 import { Framework } from "hollywood-js";
+import * as prom from "prom-client";
 import { v4 } from "uuid";
 import {TestKernelFactory} from "../../../../../TestKernelFactory";
 import CreateCommand from "@Transaction/Application/Create/Command";
@@ -8,10 +9,17 @@ import TransactionWasCreated from "@Transaction/Domain/Events/TransactionWasCrea
 import {InMemoryTransactionRepository} from "@Tests/Transaction/Infrastructure/InMemoryRepository";
 import {EventCollectorListener} from "@Tests/Shared/Infrastructure/EventCollectorListener";
 
+function getCounterValue(name: string): number {
+    const metric = prom.register.getSingleMetric(name) as any;
+    if (!metric) { return 0; }
+    return metric.hashMap[""]?.value ?? 0;
+}
+
 describe("Create Transaction", () => {
     let kernel: Framework.Kernel;
 
     beforeEach(async () => {
+        prom.register.clear();
         kernel = await TestKernelFactory();
         kernel.container.snapshot();
     });
@@ -34,5 +42,21 @@ describe("Create Transaction", () => {
 
         expect(eventCollector.collected.length).toBe(1);
         expect(eventCollector.collected[0].constructor.name).toBe(TransactionWasCreated.name);
+    });
+
+    test("Duplicate transaction increments conflict counter only — error counter stays at zero", async () => {
+        expect.assertions(2);
+        const txuuid = v4();
+
+        await kernel.app.handle(new CreateCommand(txuuid, "", { amount: 12, currency: "EUR" }));
+
+        try {
+            await kernel.app.handle(new CreateCommand(txuuid, "", { amount: 12, currency: "EUR" }));
+        } catch (_) {
+            // ConflictException expected — we only care about the counters
+        }
+
+        expect(getCounterValue("transaction_create_conflict")).toBe(1);
+        expect(getCounterValue("transaction_create_error")).toBe(0);
     });
 });
