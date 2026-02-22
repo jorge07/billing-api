@@ -2,10 +2,14 @@ import { inject, injectable } from "inversify";
 import { EventSourcing } from "hollywood-js";
 import type Transaction from "@Transaction/Domain/Transaction";
 import type TransactionId from "@Transaction/Domain/ValueObject/TransactionId";
-import type IRepository from "@Transaction/Domain/Repository";
 
+/**
+ * Write-model test double. Loads the aggregate directly from the event store
+ * for use in command-side tests. Not an IRepository implementation — this is
+ * intentionally separate from the read model.
+ */
 @injectable()
-export class InMemoryTransactionRepository implements IRepository {
+export class InMemoryTransactionRepository {
     constructor(
        @inject("infrastructure.transaction.eventStore") private readonly eventStore: EventSourcing.EventStore<Transaction>,
     ) {}
