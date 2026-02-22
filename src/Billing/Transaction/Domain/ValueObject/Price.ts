@@ -39,4 +39,15 @@ export default class Price {
         this.amount = amount;
         this.currency = currency;
     }
+
+    /**
+     * Value Object equality — two Price instances are equal when they
+     * represent the same amount in the same currency.
+     *
+     * Source: Evans (Blue Book), p. 98 — "Value objects should be
+     * testable for equality."
+     */
+    public equals(other: Price): boolean {
+        return this.amount === other.amount && this.currency === other.currency;
+    }
 }

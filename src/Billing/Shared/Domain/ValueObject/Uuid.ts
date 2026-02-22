@@ -22,4 +22,15 @@ export default abstract class Uuid {
     public toIdentity(): Domain.Identity {
         return this.identity;
     }
+
+    /**
+     * Value Object equality — two UUID-based identities are equal when
+     * they represent the same UUID string value.
+     *
+     * Source: Evans (Blue Book), p. 98 — "Value objects should be
+     * testable for equality."
+     */
+    public equals(other: Uuid): boolean {
+        return this.toString() === other.toString();
+    }
 }
