@@ -1,3 +1,4 @@
+import { TransactionStatus } from "@Transaction/Domain/ValueObject/TransactionStatus";
 import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity()
@@ -17,4 +18,7 @@ export class Transactions {
 
     @Column("varchar", { name: "price.currency"})
     public priceCurrency: string;
+
+    @Column("varchar", { default: TransactionStatus.PENDING })
+    public status: TransactionStatus;
 }

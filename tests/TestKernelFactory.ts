@@ -1,17 +1,19 @@
-import { EventSourcing, Framework, ReadModel } from "hollywood-js";
+import { EventSourcing, Framework } from "hollywood-js";
 import { TransactionModule } from "@Transaction/Infrastructure/TransactionModule";
 import { parameters } from "../config/parameters";
 import { testParameters } from "../config/parameters-test";
+import TransactionFailed from "@Transaction/Domain/Events/TransactionFailed";
+import TransactionWasConfirmed from "@Transaction/Domain/Events/TransactionWasConfirmed";
 import TransactionWasCreated from "@Transaction/Domain/Events/TransactionWasCreated";
-import {GenericInMemoryRepository} from "@Tests/Shared/Infrastructure/GenericInMemoryRepository";
+import TransactionWasRefunded from "@Transaction/Domain/Events/TransactionWasRefunded";
 import {TransactionInMemoryProjector} from "@Tests/Transaction/Infrastructure/InMemoryProjector";
+import {InMemoryReadModelRepository} from "@Tests/Transaction/Infrastructure/InMemoryReadModelRepository";
 import {EventCollectorListener} from "@Tests/Shared/Infrastructure/EventCollectorListener";
 import {InMemoryTransactionRepository} from "@Tests/Transaction/Infrastructure/InMemoryRepository";
 
 const testServices = new Map([
     [
         "domain.transaction.repository",
-
         { overwrite: true, instance: InMemoryTransactionRepository },
     ],
     [
@@ -24,10 +26,10 @@ const testServices = new Map([
     ],
     [
         "infrastructure.transaction.readModel.repository",
-        { overwrite: true, instance: GenericInMemoryRepository },
+        { overwrite: true, instance: InMemoryReadModelRepository },
     ],
     [
-        "infrastructure.orm.readModel.postgresConnection",  // Fake connection on tests
+        "infrastructure.orm.readModel.postgresConnection",
         {
             overwrite: true,
             constant: true,
@@ -37,7 +39,7 @@ const testServices = new Map([
         },
     ],
     [
-        "infrastructure.orm.writeModel.postgresConnection",  // Fake connection on tests
+        "infrastructure.orm.writeModel.postgresConnection",
         {
             overwrite: true,
             constant: true,
@@ -79,20 +81,21 @@ const testServices = new Map([
         {
             instance: TransactionInMemoryProjector,
             bus: Framework.SERVICES_ALIAS.DEFAULT_EVENT_BUS,
-            subscriber: [TransactionWasCreated],
+            subscriber: [
+                TransactionFailed,
+                TransactionWasConfirmed,
+                TransactionWasCreated,
+                TransactionWasRefunded,
+            ],
         },
-    ],
-    [
-        "infrastructure.test.inMemory.dbal",
-        { overwrite: true, instance: ReadModel.InMemoryReadModelRepository },
     ],
 ]);
 
 export async function TestKernelFactory(): Promise<Framework.Kernel> {
     const TestModule = new Framework.ModuleContext({
         services: testServices,
-        modules: [TransactionModule]
-    })
+        modules: [TransactionModule],
+    });
 
     return await Framework.Kernel.createFromModuleContext(
         String(process.env.NODE_ENV),
